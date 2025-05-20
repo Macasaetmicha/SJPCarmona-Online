@@ -20,9 +20,9 @@ def create_app():
 
     # app.config['SECRET_KEY'] = 'secretkey'
     app.secret_key = os.urandom(32)  # Used for session.
-    app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI 
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{Config.DB_USER}:{Config.DB_PASSWORD}@{Config.DB_HOST}/{Config.DB_NAME}"
 
-    print("DATABASE_URL from app.config:", app.config.get('SQLALCHEMY_DATABASE_URI'))
+    print("DATABASE_URL from app.config:",  app.config['SQLALCHEMY_DATABASE_URI'])
 
     
     db.init_app(app)
