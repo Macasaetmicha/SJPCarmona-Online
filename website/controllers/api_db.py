@@ -1528,6 +1528,7 @@ def get_serializer():
 def reset_pass_req():
     try:
         data = request.get_json()
+        print("Received data:", data)
         email = data.get('email')
 
         if not email:
