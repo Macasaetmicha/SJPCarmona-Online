@@ -18,7 +18,7 @@ from ..fidosession import start_fido_session, close_fido_session, get_user_id
 from website.models.enums import UserRole
 # This information is sent to the client (browser + fido-token). The browser verifies that the id matches the domain of
 # the webpage.
-rp = PublicKeyCredentialRpEntity(name="Demo server", id="localhost")
+rp = PublicKeyCredentialRpEntity(name="St. Joseph Carmona", id="sjpcarmona-online-production.up.railway.app")
 fido_server = Fido2Server(rp)
 
 # Fido is a challenge-response authentication mechanism. To ensure that every challenge is only used once we store the
