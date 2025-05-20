@@ -7,6 +7,8 @@ from flask_migrate import Migrate
 from flask_mail import Mail
 
 from .config.config import Config
+from dotenv import load_dotenv
+load_dotenv()
 
 db = SQLAlchemy()
 migrate = Migrate()
