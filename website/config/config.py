@@ -1,9 +1,8 @@
 import os
 
 class Config:
-    DB_HOST = os.getenv('DB_HOST')
-    DB_NAME = os.getenv('DB_NAME')
-    DB_USER = os.getenv('DB_USER')
-    DB_PASSWORD = os.getenv('DB_PASSWORD')
-
-    
+    DB_HOST = os.getenv('MYSQLHOST')
+    DB_NAME = os.getenv('MYSQLDATABASE')
+    DB_USER = os.getenv('MYSQLUSER')
+    DB_PASSWORD = os.getenv('MYSQLPASSWORD')
+    DB_PORT = os.getenv('MYSQLPORT', '3306') 
