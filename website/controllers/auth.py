@@ -18,27 +18,32 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    logout_user()
-
-    if current_user.is_authenticated:
-        return redirect('/')
-
-    if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-
-        user = User.query.filter_by(email=email).first()
-
-        if user:
-            if check_password_hash(user.password, password):
-                start_fido_session(user.id)
-                return redirect('/login_fido')
+    try:
+        logout_user()
+    
+        if current_user.is_authenticated:
+            return redirect('/')
+    
+        if request.method == 'POST':
+            email = request.form.get('email')
+            password = request.form.get('password')
+    
+            user = User.query.filter_by(email=email).first()
+    
+            if user:
+                if check_password_hash(user.password, password):
+                    start_fido_session(user.id)
+                    return redirect('/login_fido')
+                else:
+                    flash('Incorrect password, try again.', category='error')
             else:
-                flash('Incorrect password, try again.', category='error')
-        else:
-            flash('Email does not exist.', category='error')
-
-    return render_template("login.html", active_page='login', user=current_user, UserRole=UserRole)
+                flash('Email does not exist.', category='error')
+    
+        return render_template("login.html", active_page='login', user=current_user, UserRole=UserRole)
+    except Exception as e:
+        import traceback
+        traceback.print_exc() 
+        return jsonify({"message": "Error sending email"}), 500
 
 @auth.route('/login_fido')
 def login_fido():
