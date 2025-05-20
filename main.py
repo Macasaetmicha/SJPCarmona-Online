@@ -2,6 +2,8 @@ from website import create_app
 from flask import Flask, request, redirect
 from flask_login import LoginManager, current_user
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 import os
 import fido2.features
