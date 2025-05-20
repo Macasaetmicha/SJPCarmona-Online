@@ -1,0 +1,874 @@
+{% extends "base.html" %}
+{% block title %}Wedding{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">Wedding</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" data-table="weddingTable" data-table-name="Wedding" class="btn btn-danger btn-pdf">
+                Export to PDF
+            </button>
+            <button type="button" id="addWeddingBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWeddingModal">
+                + Add Wedding Record
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="card">
+    <!-- <div class="card-header">
+        <h3>Church Records</h3>
+    </div> -->
+    <div class="card-body">
+        
+        <div class="table-responsive">
+            <table id="weddingTable" class="display table zero-configuration dataTable table-striped table-bordered rounded mt-2 w-100">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Action</th>
+                        <th rowspan="2">Wedding Date</th>
+                        <th colspan="3">Groom</th>
+                        <th colspan="3">Bride</th>
+                        <th rowspan="2">Priest</th>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Birthday</th>
+                        <th>Address</th>
+                        <th>Name</th>
+                        <th>Birthday</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-container">
+    <div class="modal fade" id="showWeddModal" tabindex="-1" role="dialog" aria-labelledby="WeddingModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="weddingModalTitle">Wedding Information
+                        <a href="#" id="editRecord" class="text-decoration-none ms-2">
+                            <i class="fa-solid fa-edit"></i>
+                        </a>                
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="weddingAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion1" aria-expanded="true" aria-controls="accordion1">
+                                    Groom Information
+                                </button>
+                            </h2>
+                            <div id="accordion1" class="accordion-collapse collapse" data-bs-parent="#weddingAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Name:</strong> <span id="weddGroomName"></span></p>
+                                    <p><strong>Birthday:</strong> <span id="weddGroomBday"></span></p>
+                                    <p><strong>Birthplace:</strong> <span id="weddGroomBplace"></span></p>
+                                    <p><strong>Ligitivity:</strong> <span id="weddGroomLigitivity"></span></p>
+                                    <p><strong>Address:</strong> 
+                                        <span id="weddGroomClientAddress"></span>, 
+                                        <span id="weddGroomClientBrgy"></span>,
+                                        <span id="weddGroomClientCityMun"></span>,
+                                        <span id="weddGroomClientProv"></span>,
+                                        <span id="weddGroomClientReg"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading2">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion2" aria-expanded="true" aria-controls="accordion2">
+                                    Bride Information
+                                </button>
+                            </h2>
+                            <div id="accordion2" class="accordion-collapse collapse" data-bs-parent="#weddingAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Name:</strong> <span id="weddBrideName"></span></p>
+                                    <p><strong>Birthday:</strong> <span id="weddBrideBday"></span></p>
+                                    <p><strong>Birthplace:</strong> <span id="weddBrideBplace"></span></p>
+                                    <p><strong>Ligitivity:</strong> <span id="weddBrideLigitivity"></span></p>
+                                    <p><strong>Address:</strong> 
+                                        <span id="weddBrideClientAddress"></span>, 
+                                        <span id="weddBrideClientBrgy"></span>,
+                                        <span id="weddBrideClientCityMun"></span>,
+                                        <span id="weddBrideClientProv"></span>,
+                                        <span id="weddBrideClientReg"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion3" aria-expanded="false" aria-controls="accordion3">
+                                    Wedding Information
+                                </button>
+                            </h2>
+                            <div id="accordion3" class="accordion-collapse collapse" data-bs-parent="#weddingAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Wedding Date:</strong> <span id="weddDate"></span></p>
+                                            <p><strong>Sponsor:</strong> <span id="weddSponsA"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Priest:</strong> <span id="weddPriest"></span></p>
+                                            <p><strong>Sponsor:</strong> <span id="weddSponsB"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p><strong>License Number:</strong> <span id="licenseNumber"></span></p>
+                                            <p><strong>Civil Date:</strong> <span id="civilDate"></span></p>
+                                            <p><strong>Place:</strong> <span id="civilPlace"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion4" aria-expanded="false" aria-controls="accordion4">
+                                    Client Records
+                                </button>
+                            </h2>
+                            <div id="accordion4" class="accordion-collapse collapse" data-bs-parent="#weddingAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p><strong>Index:</strong> <span id="weddIndex"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Book:</strong> <span id="weddBook"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Page:</strong> <span id="weddPage"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Line:</strong> <span id="weddLine"></span></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-step Modal -->
+    <div class="modal fade" id="addWeddingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addWeddingModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Wedding Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <!-- Progress Tracker -->
+                        <div class="progress-tracker">
+                            <div class="step active">
+                                <i class="fa-solid fa-person"></i>
+                                <span>Groom</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-person-dress"></i>
+                                <span>Bride</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-church"></i>
+                                <span>Wedding</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Step Form -->
+                        <div class="stepper-form">
+                            <form id="weddingAddForm">
+                                <!-- Step 1 -->
+                                <div class="step-content active">
+                                    <h3>Step 1: Groom Information</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddGroomFname">First Name:</label>
+                                            <input type="text" id="weddGroomFname" name="weddGroomFname" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddGroomMname">Middle Name:</label>
+                                            <input type="text" id="weddGroomMname" name="weddGroomMname" class="form-control">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddGroomLname">Last Name:</label>
+                                            <input type="text" id="weddGroomLname" name="weddGroomLname" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 mt-2">
+                                            <label for="weddGroomBirthdate">Birth Date:</label>
+                                            <input type="text" id="weddGroomBirthdate" name="weddGroomBirthdate" class="datepicker-custom form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2 check-records">
+                                            <button type="button" id="checkRecBtnWeddGroom" class="btn btn-primary mt-3">Check if record exists</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <input type="hidden" name="rec_GroomID" id="rec_GroomID">
+                                        <input type="hidden" name="rec_GroomMoID" id="rec_GroomMoID">
+                                        <input type="hidden" name="rec_GroomFaID" id="rec_GroomFaID">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddGroomBirthplace">Birth Place:</label>
+                                            <input type="text" id="weddGroomBirthplace" name="weddGroomBirthplace" class="form-control weddGroomBirthplace" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="GroomLigitivity">Ligitivity:</label><br>
+                                            <div class="radio-group mt-2">
+                                                <input type="radio" value="civil" id="civilLigitivity" name="GroomLigitivity"  required>
+                                                <label for="civilLigitivity">Civil</label>
+                                        
+                                                <input type="radio" value="catholic" id="catholicLigitivity" name="GroomLigitivity" required>
+                                                <label for="catholicLigitivity">Catholic</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="GroomCivilStatus">Civil Status:</label>
+                                            <select id="GroomCivilStatus" name="GroomCivilStatus" class="form-control" required>
+                                                <option value="" disabled selected>Select an option</option>
+                                                <option value="single">Single</option>
+                                                <option value="married">Married</option>
+                                                <option value="widowed">Widowed</option>
+                                                <option value="separated">Separated</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Address</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="GroomRegion">Region:</label>
+                                                <select id="GroomRegion" name="GroomRegion" class="form-control" required>
+                                                    <option region_id="" value="" selected disabled>Select Region</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="GroomProvince">Province:</label>
+                                                <select id="GroomProvince" name="GroomProvince" class="form-control" required>
+                                                    <option value="" selected disabled>Select Province</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="GroomCity">City/Municipality:</label>
+                                                <select id="GroomCity" name="GroomCity" class="form-control" required>
+                                                    <option value="" selected disabled>Select City/Municipality</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="GroomBarangay">Barangay:</label>
+                                                <select id="GroomBarangay" name="GroomBarangay" class="form-control" required>
+                                                    <option value="" selected disabled>Select Barangay</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">    
+                                            <label for="GroomAddressLine">Address Line:</label>
+                                            <input type="text" id="GroomAddressLine" name="GroomAddressLine" class="form-control GroomAddressLine" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row gx-5">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Parents</strong></p>
+                                        </div>
+
+                                        <!-- Father -->
+                                        <div class="col-lg-6 col-md-12 mt-2 parent-container middle-divider">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h6>Father</h6></p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="GroomFaFname">First Name:</label>
+                                                    <input type="text" id="GroomFaFname" name="GroomFaFname" class="form-control GroomFaFname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="GroomFaMname">Middle Name:</label>
+                                                    <input type="text" id="GroomFaMname" name="GroomFaMname" class="form-control GroomFaMname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="GroomFaLname">Last Name:</label>
+                                                    <input type="text" id="GroomFaLname" name="GroomFaLname" class="form-control GroomFaLname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="GroomFaBirthdate">Birth Date:</label>
+                                                    <input type="text" id="GroomFaBirthdate" name="GroomFaBirthdate" class="datepicker-custom form-control GroomFaBirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="GroomFaBirthplace">Birth Place:</label>
+                                                    <input type="text" id="GroomFaBirthplace" name="GroomFaBirthplace" class="form-control GroomFaBirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="GroomFaAddress">Address:</label>
+                                                    <input type="text" id="GroomFaAddress" name="GroomFaAddress" class="form-control GroomFaAddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mother -->
+                                        <div class="col-lg-6 col-md-12 parent-container">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h6>Mother</h6>
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="GroomMoFname">First Name:</label>
+                                                    <input type="text" id="GroomMoFname" name="GroomMoFname" class="form-control GroomMoFname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="GroomMoMname">Middle Name:</label>
+                                                    <input type="text" id="GroomMoMname" name="GroomMoMname" class="form-control GroomMoMname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="GroomMoLname">Last Name:</label>
+                                                    <input type="text" id="GroomMoLname" name="GroomMoLname" class="form-control GroomMoLname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="GroomMoBirthdate">Birth Date:</label>
+                                                    <input type="text" id="GroomMoBirthdate" name="GroomMoBirthdate" class="datepicker-custom form-control GroomMoBirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="GroomMoBirthplace">Birth Place:</label>
+                                                    <input type="text" id="GroomMoBirthplace" name="GroomMoBirthplace" class="form-control GroomMoBirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="GroomMoAddress">Address:</label>
+                                                    <input type="text" id="GroomMoAddress" name="GroomMoAddress" class="form-control GroomMoAddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+
+                                    
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="step-content active">
+                                    <h3>Step 2: Bride Information</h3>
+
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddBrideFname">First Name:</label>
+                                            <input type="text" id="weddBrideFname" name="weddBrideFname" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddBrideMname">Middle Name:</label>
+                                            <input type="text" id="weddBrideMname" name="weddBrideMname" class="form-control">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddBrideLname">Last Name:</label>
+                                            <input type="text" id="weddBrideLname" name="weddBrideLname" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 mt-2">
+                                            <label for="weddBrideBirthdate">Birth Date:</label>
+                                            <input type="text" id="weddBrideBirthdate" name="weddBrideBirthdate" class="datepicker-custom form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2 check-records">
+                                            <button type="button" id="checkRecBtnWeddBride" class="btn btn-primary mt-3">Check if record exists</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <input type="hidden" name="rec_BrideID" id="rec_BrideID">
+                                        <input type="hidden" name="rec_BrideMoID" id="rec_BrideMoID">
+                                        <input type="hidden" name="rec_BrideFaID" id="rec_BrideFaID">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="weddBrideBirthplace">Birth Place:</label>
+                                            <input type="text" id="weddBrideBirthplace" name="weddBrideBirthplace" class="form-control birthplace" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="BrideLigitivity">Ligitivity:</label><br>
+                                            <div class="radio-group mt-2">
+                                                <input type="radio" value="civil" id="civilLigitivity" name="BrideLigitivity"  required>
+                                                <label for="civilLigitivity">Civil</label>
+                                        
+                                                <input type="radio" value="catholic" id="catholicLigitivity" name="BrideLigitivity" required>
+                                                <label for="catholicLigitivity">Catholic</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="BrideCivilStatus">Civil Status:</label>
+                                            <select id="BrideCivilStatus" name="BrideCivilStatus" class="form-control" required>
+                                                <option value="" disabled selected>Select an option</option>
+                                                <option value="single">Single</option>
+                                                <option value="married">Married</option>
+                                                <option value="widowed">Widowed</option>
+                                                <option value="separated">Separated</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Address</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="BrideRegion">Region:</label>
+                                                <select id="BrideRegion" name="BrideRegion" class="form-control" required>
+                                                    <option region_id="" value="" selected disabled>Select Region</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="BrideProvince">Province:</label>
+                                                <select id="BrideProvince" name="BrideProvince" class="form-control" required>
+                                                    <option value="" selected disabled>Select Province</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="BrideCity">City/Municipality:</label>
+                                                <select id="BrideCity" name="BrideCity" class="form-control" required>
+                                                    <option value="" selected disabled>Select City/Municipality</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="BrideBarangay">Barangay:</label>
+                                                <select id="BrideBarangay" name="BrideBarangay" class="form-control" required>
+                                                    <option value="" selected disabled>Select Barangay</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">    
+                                            <label for="BrideAddressLine">Address Line:</label>
+                                            <input type="text" id="BrideAddressLine" name="BrideAddressLine" class="form-control addressLine" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row gx-5">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Parents</strong></p>
+                                        </div>
+
+                                        <!-- Father -->
+                                        <div class="col-lg-6 col-md-12 mt-2 parent-container middle-divider">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h6>Father</h6></p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="BrideFaFname">First Name:</label>
+                                                    <input type="text" id="BrideFaFname" name="BrideFaFname" class="form-control BrideFaFname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="BrideFaMname">Middle Name:</label>
+                                                    <input type="text" id="BrideFaMname" name="BrideFaMname" class="form-control BrideFaMname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="BrideFaLname">Last Name:</label>
+                                                    <input type="text" id="BrideFaLname" name="BrideFaLname" class="form-control BrideFaLname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="BrideFaBirthdate">Birth Date:</label>
+                                                    <input type="text" id="BrideFaBirthdate" name="BrideFaBirthdate" class="datepicker-custom form-control BrideFaBirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="BrideFaBirthplace">Birth Place:</label>
+                                                    <input type="text" id="BrideFaBirthplace" name="BrideFaBirthplace" class="form-control BrideFaBirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="BrideFaAddress">Address:</label>
+                                                    <input type="text" id="BrideFaAddress" name="BrideFaAddress" class="form-control BrideFaAddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mother -->
+                                        <div class="col-lg-6 col-md-12 parent-container">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h6>Mother</h6>
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="BrideMoFname">First Name:</label>
+                                                    <input type="text" id="BrideMoFname" name="BrideMoFname" class="form-control BrideMoFname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="BrideMoMname">Middle Name:</label>
+                                                    <input type="text" id="BrideMoMname" name="BrideMoMname" class="form-control BrideMoMname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="BrideMoLname">Last Name:</label>
+                                                    <input type="text" id="BrideMoLname" name="BrideMoLname" class="form-control BrideMoLname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="BrideMoBirthdate">Birth Date:</label>
+                                                    <input type="text" id="BrideMoBirthdate" name="BrideMoBirthdate" class="datepicker-custom form-control BrideMoBirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="BrideMoBirthplace">Birth Place:</label>
+                                                    <input type="text" id="BrideMoBirthplace" name="BrideMoBirthplace" class="form-control BrideMoBirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="BrideMoAddress">Address:</label>
+                                                    <input type="text" id="BrideMoAddress" name="BrideMoAddress" class="form-control BrideMoAddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                </div>
+    
+                                <!-- Step 3 -->
+                                <div class="step-content">
+                                    <h3>Step 3: Wedding Information</h3>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="weddDate">Wedding Date:</label>
+                                            <input type="text" id="weddDatePicker" name="weddDate" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="priest">Priest:</label>
+                                                <select id="priest" name="priest" class="form-control" required>
+                                                    <option value="" selected disabled>Select Priest</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Sponsors</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorA">Sponsor 1:</label>
+                                            <input type="text" id="sponsorA" name="sponsorA" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorB">Sponsor 2:</label>
+                                            <input type="text" id="sponsorB" name="sponsorB" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Civil Information</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="license_number">License Number:</label>
+                                            <input type="text" id="license_number" name="license_number" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="civilDatePicker">Date:</label>
+                                            <input type="text" id="civilDatePicker" name="civil_date" class="form-control">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="civil_place">Place:</label>
+                                            <input type="text" id="civil_place" name="civil_place" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                    
+                                </div>
+    
+                                <!-- Step 4 -->
+                                <div class="step-content">
+                                    <h3>Step 4: Records</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddIndex">Index:</label>
+                                            <input type="text" id="weddIndex" name="rec_index" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddBook">Book:</label>
+                                            <input type="text" id="weddBook" name="rec_book" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddPage">Page:</label>
+                                            <input type="text" id="weddPage" name="rec_page" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddLine">Line:</label>
+                                            <input type="text" id="weddLine" name="rec_line" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="submit" class="btn btn-primary next-btn mt-3">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editWeddingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editWeddingModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Wedding Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <!-- Progress Tracker -->
+                        <div class="progress-tracker">
+                            <div class="step">
+                                <i class="fa-solid fa-church"></i>
+                                <span>Wedding</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Step Form -->
+                        <div class="stepper-form">
+                            <form id="weddingEditForm">
+                                <!-- Step 3 -->
+                                <div class="step-content">
+                                    <h3>Wedding Information</h3>
+
+                                    <input type="hidden" name="id" id="id">
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="weddDate">Wedding Date:</label>
+                                            <input type="text" id="weddDate" name="weddDate" class="form-control datepicker DatePickerEdit" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="priestEdit">Priest:</label>
+                                                <select id="priestEdit" name="priestEdit" class="form-control" required>
+                                                    <option value="" selected disabled>Select Priest</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Sponsors</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorA">Sponsor 1:</label>
+                                            <input type="text" id="sponsorA" name="sponsorA" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorB">Sponsor 2:</label>
+                                            <input type="text" id="sponsorB" name="sponsorB" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Civil Information</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="license_number">License Number:</label>
+                                            <input type="text" id="license_number" name="license_number" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="civilDatePicker">Date:</label>
+                                            <input type="text" id="civilDatePicker" name="civil_date" class="form-control datepicker DatePickerEdit">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="civil_place">Place:</label>
+                                            <input type="text" id="civil_place" name="civil_place" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                    
+                                </div>
+    
+                                <!-- Step 4 -->
+                                <div class="step-content">
+                                    <h3>Step 4: Records</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddIndex">Index:</label>
+                                            <input type="text" id="weddIndex" name="rec_index" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddBook">Book:</label>
+                                            <input type="text" id="weddBook" name="rec_book" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddPage">Page:</label>
+                                            <input type="text" id="weddPage" name="rec_page" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="weddLine">Line:</label>
+                                            <input type="text" id="weddLine" name="rec_line" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="submit" class="btn btn-primary next-btn mt-3">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

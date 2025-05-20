@@ -1,0 +1,34 @@
+Names of datatables (based on id):
+
+records.html
+recordTable
+columns:
+    Action
+    Name
+        First
+        Middle
+        Last
+    Birth
+        Birthdate 
+        Ligitivity
+        Birthplace
+    Address
+
+
+
+
+baptism.html
+baptismTable
+columns:
+    Action
+    Baptism Date
+    Name    
+        First
+        Middle
+        Last
+    Birthdate
+    Address
+    Parents
+        Father
+        Mother
+    Priest

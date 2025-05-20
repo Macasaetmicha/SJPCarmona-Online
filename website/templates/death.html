@@ -1,0 +1,650 @@
+{% extends "base.html" %}
+{% block title %}Death{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">Death</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" data-table="deathTable" data-table-name="Death" class="btn btn-danger btn-pdf">
+                    Export to PDF
+            </button>
+            <button type="button" id="addDeathBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDeathModal">
+                + Add Death Record
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="card">
+    <!-- <div class="card-header">
+        <h3>Church Records</h3>
+    </div> -->
+    <div class="card-body">
+        
+        <div class="table-responsive">
+            <table id="deathTable" class="display table zero-configuration dataTable table-striped table-bordered rounded mt-2 w-100">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Action</th>
+                        <th rowspan="2">Death Date</th>
+                        <th colspan="3">Name</th>
+                        <th rowspan="2">Birthdate</th>
+                        <th rowspan="2">Address</th>
+                        <th colspan="2">Parents</th>
+                        <th rowspan="2">Priest</th>
+                    </tr>
+                    <tr>
+                        <th>First</th>
+                        <th>Middle</th>
+                        <th>Last</th>
+                        <th>Father</th>
+                        <th>Mother</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-container">
+    <div class="modal fade" id="showDeathModal" tabindex="-1" role="dialog" aria-labelledby="DeathModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deathModalTitle">Death Information
+                        <a href="#" id="editRecord" class="text-decoration-none ms-2">
+                            <i class="fa-solid fa-edit"></i>
+                        </a>                
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="deathAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion1" aria-expanded="true" aria-controls="accordion1">
+                                    Client Information
+                                </button>
+                            </h2>
+                            <div id="accordion1" class="accordion-collapse collapse" data-bs-parent="#deathAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Client Name:</strong> <span id="deathClientName"></span></p>
+                                    <p><strong>Birthday:</strong> <span id="deathClientBday"></span></p>
+                                    <p><strong>Birthplace:</strong> <span id="deathClientBplace"></span></p>
+                                    <p><strong>Ligitivity:</strong> <span id="deathClientLigitivity"></span></p>
+                                    <p><strong>Address:</strong> 
+                                        <span id="deathClientAddress"></span>, 
+                                        <span id="deathClientBrgy"></span>,
+                                        <span id="deathClientCityMun"></span>,
+                                        <span id="deathClientProv"></span>,
+                                        <span id="deathClientReg"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion2" aria-expanded="false" aria-controls="accordion2">
+                                    Death Information
+                                </button>
+                            </h2>
+                            <div id="accordion2" class="accordion-collapse collapse" data-bs-parent="#deathAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Death Date:</strong> <span id="deathDate"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Priest:</strong> <span id="deathPriest"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Contact Person:</strong> <span id="contact_person"></span></p>
+                                            <p><strong>Address:</strong> <span id="cp_address"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Date of Burial:</strong> <span id="burialDate"></span></p>
+                                            <p><strong>Burial Place:</strong> <span id="burialPlace"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p><strong>Cause of Death:</strong> <span id="deathCause"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion3" aria-expanded="false" aria-controls="accordion3">
+                                    Client Records
+                                </button>
+                            </h2>
+                            <div id="accordion3" class="accordion-collapse collapse" data-bs-parent="#deathAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p><strong>Index:</strong> <span id="deathIndex"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Book:</strong> <span id="deathBook"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Page:</strong> <span id="deathPage"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Line:</strong> <span id="deathLine"></span></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-step Modal -->
+    <div class="modal fade" id="addDeathModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addDeathModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Death Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <!-- Progress Tracker -->
+                        <div class="progress-tracker">
+                            <div class="step active">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Client</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-person-breastfeeding"></i>
+                                <span>Parent</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-church"></i>
+                                <span>Death</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Step Form -->
+                        <div class="stepper-form">
+                            <form id="deathAddForm">
+                                <!-- Step 1 -->
+                                <div class="step-content active">
+                                    <h3>Step 1: Personal Information</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="name">First Name:</label>
+                                            <input type="text" id="fname" name="fname" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="name">Middle Name:</label>
+                                            <input type="text" id="mname" name="mname" class="form-control">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="name">Last Name:</label>
+                                            <input type="text" id="lname" name="lname" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 mt-2">
+                                            <label for="birthdate">Birth Date:</label>
+                                            <input type="text" id="birthdate" name="birthdate" class="datepicker-custom form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2 check-records">
+                                            <button type="button" id="checkRecBtn" class="btn btn-primary mt-3">Check if record exists</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <input type="hidden" name="rec_id" id="rec_id">
+                                        <input type="hidden" name="rec_moID" id="rec_moID">
+                                        <input type="hidden" name="rec_faID" id="rec_faID">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="birthplace">Birth Place:</label>
+                                            <input type="text" id="birthplace" name="birthplace" class="form-control birthplace" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="ligitivity">Ligitivity:</label><br>
+                                            <div class="radio-group mt-2">
+                                                <input type="radio" value="civil" id="civilLigitivity" name="ligitivity"  required>
+                                                <label for="civilLigitivity">Civil</label>
+                                        
+                                                <input type="radio" value="catholic" id="catholicLigitivity" name="ligitivity" required>
+                                                <label for="catholicLigitivity">Catholic</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="civilStatus">Civil Status:</label>
+                                            <select id="civilStatus" name="civilStatus" class="form-control" required>
+                                                <option value="" disabled selected>Select an option</option>
+                                                <option value="single">Single</option>
+                                                <option value="married">Married</option>
+                                                <option value="widowed">Widowed</option>
+                                                <option value="separated">Separated</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Address</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="region">Region:</label>
+                                                <select id="region" name="region" class="form-control" required>
+                                                    <option region_id="" value="" selected disabled>Select Region</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="province">Province:</label>
+                                                <select id="province" name="province" class="form-control" required>
+                                                    <option value="" selected disabled>Select Province</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="city">City/Municipality:</label>
+                                                <select id="city" name="cityMun" class="form-control" required>
+                                                    <option value="" selected disabled>Select City/Municipality</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="barangay">Barangay:</label>
+                                                <select id="barangay" name="barangay" class="form-control" required>
+                                                    <option value="" selected disabled>Select Barangay</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">    
+                                            <label for="addressLine">Address Line:</label>
+                                            <input type="text" id="addressLine" name="addressLine" class="form-control addressLine" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+
+                                    
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="step-content active">
+                                    <h3>Step 2: Parents Information</h3>
+
+                                    <div class="row gx-5">
+                                        <!-- Father -->
+                                        <div class="col-lg-6 col-md-12 mt-2 parent-container middle-divider">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h5>Father</h5></p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="fafname">First Name:</label>
+                                                    <input type="text" id="fafname" name="fafname" class="form-control fafname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="famname">Middle Name:</label>
+                                                    <input type="text" id="famname" name="famname" class="form-control famname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="falname">Last Name:</label>
+                                                    <input type="text" id="falname" name="falname" class="form-control falname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="fabirthdate">Birth Date:</label>
+                                                    <input type="text" id="fabirthdate" name="fabirthdate" class="datepicker-custom form-control fabirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="fabirthplace">Birth Place:</label>
+                                                    <input type="text" id="fabirthplace" name="fabirthplace" class="form-control fabirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="faaddress">Address:</label>
+                                                    <input type="text" id="faaddress" name="faaddress" class="form-control faaddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mother -->
+                                        <div class="col-lg-6 col-md-12 parent-container">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h5>Mother</h5>
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="mofname">First Name:</label>
+                                                    <input type="text" id="mofname" name="mofname" class="form-control mofname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="momname">Middle Name:</label>
+                                                    <input type="text" id="momname" name="momname" class="form-control momname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="molname">Last Name:</label>
+                                                    <input type="text" id="molname" name="molname" class="form-control molname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="mobirthdate">Birth Date:</label>
+                                                    <input type="text" id="mobirthdate" name="mobirthdate" class="datepicker-custom form-control mobirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="mobirthplace">Birth Place:</label>
+                                                    <input type="text" id="mobirthplace" name="mobirthplace" class="form-control mobirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="moaddress">Address:</label>
+                                                    <input type="text" id="moaddress" name="moaddress" class="form-control moaddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                </div>
+    
+                                <!-- Step 3 -->
+                                <div class="step-content">
+                                    <h3>Step 3: Death Information</h3>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="deathDate">Death Date:</label>
+                                            <input type="text" id="deathDatePicker" name="deathDate" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="priest">Priest:</label>
+                                                <select id="priest" name="priest" class="form-control" required>
+                                                    <option value="" selected disabled>Select Priest</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="burialDate">Burial Date:</label>
+                                            <input type="text" id="burialDatePicker" name="burialDate" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="burialPlace">Burial Place:</label>
+                                            <input type="text" id="burialPlace" name="burialPlace" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <label for="cause_death">Cause of Death:</label>
+                                            <input type="text" id="cause_death" name="cause_death" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Contact Person</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="contact_person">Name:</label>
+                                            <input type="text" id="contact_person" name="contact_person" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <label for="cp_address">Address:</label>
+                                            <input type="text" id="cp_address" name="cp_address" class="form-control">
+                                       </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                    
+                                </div>
+    
+                                <!-- Step 4 -->
+                                <div class="step-content">
+                                    <h3>Step 4: Records</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathIndex">Index:</label>
+                                            <input type="text" id="deathIndex" name="rec_index" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathBook">Book:</label>
+                                            <input type="text" id="deathBook" name="rec_book" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathPage">Page:</label>
+                                            <input type="text" id="deathPage" name="rec_page" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathLine">Line:</label>
+                                            <input type="text" id="deathLine" name="rec_line" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="submit" class="btn btn-primary next-btn mt-3">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editDeathModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editDeathModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Death Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <!-- Progress Tracker -->
+                        <div class="progress-tracker">
+                            <div class="step">
+                                <i class="fa-solid fa-church"></i>
+                                <span>Death</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Step Form -->
+                        <div class="stepper-form">
+                            <form id="deathEditForm">
+                                <!-- Step 3 -->
+                                <div class="step-content">
+                                    <h3>Death Information</h3>
+
+                                    <input type="hidden" name="id" id="id">
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="deathDate">Death Date:</label>
+                                            <input type="text" id="deathDatePicker" name="deathDate" class="form-control datepicker DatePickerEdit" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="priestEdit">Priest:</label>
+                                                <select id="priestEdit" name="priestEdit" class="form-control" required>
+                                                    <option value="" selected disabled>Select Priest</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="burialDate">Burial Date:</label>
+                                            <input type="text" id="burialDatePicker" name="burialDate" class="form-control datepicker DatePickerEdit" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="burialPlace">Burial Place:</label>
+                                            <input type="text" id="burialPlace" name="burialPlace" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <label for="cause_death">Cause of Death:</label>
+                                            <input type="text" id="cause_death" name="cause_death" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Contact Person</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="contact_person">Name:</label>
+                                            <input type="text" id="contact_person" name="contact_person" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <label for="cp_address">Address:</label>
+                                            <input type="text" id="cp_address" name="cp_address" class="form-control">
+                                       </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                    
+                                </div>
+    
+                                <!-- Step 4 -->
+                                <div class="step-content">
+                                    <h3>Records</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathIndex">Index:</label>
+                                            <input type="text" id="deathIndex" name="rec_index" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathBook">Book:</label>
+                                            <input type="text" id="deathBook" name="rec_book" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathPage">Page:</label>
+                                            <input type="text" id="deathPage" name="rec_page" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="deathLine">Line:</label>
+                                            <input type="text" id="deathLine" name="rec_line" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="submit" class="btn btn-primary next-btn mt-3">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

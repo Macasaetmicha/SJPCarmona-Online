@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+{% block title %}Records{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">Records</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" data-table="recordTable" data-table-name="Records" class="btn btn-danger btn-pdf">
+                Export to PDF
+            </button>
+        </div>
+    </div>
+</header>
+
+
+
+<div class="card">
+    <!-- <div class="card-header">
+        <h3>Church Records</h3>
+    </div> -->
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="recordTable" class="display table zero-configuration dataTable table-striped table-bordered rounded mt-2 w-100">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Action</th>
+                        <th colspan="3">Name</th>
+                        <th colspan="3">Birth</th>
+                        <th rowspan="2">Address</th>
+                    </tr>
+                    <tr>
+                        <th>First</th>
+                        <th>Middle</th>
+                        <th>Last</th>
+                        <th>Birthdate</th>
+                        <th>Ligitivity</th>
+                        <th>Birth Place</th> 
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-container">
+    <div class="modal fade" id="recordsModal" tabindex="-1" role="dialog" aria-labelledby="RecordsModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="recordsModalTitle">Record Information
+                        <a href="#" id="editRecord" class="text-decoration-none ms-2">
+                            <i class="fa-solid fa-edit"></i>
+                        </a>                
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="recordAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion1" aria-expanded="true" aria-controls="accordion1">
+                                    Client Information
+                                </button>
+                            </h2>
+                            <div id="accordion1" class="accordion-collapse collapse" data-bs-parent="#recordAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Client Name:</strong> <span id="recClientName"></span></p>
+                                    <p><strong>Birthday:</strong> <span id="recClientBday"></span></p>
+                                    <p><strong>Birthplace:</strong> <span id="recClientBplace"></span></p>
+                                    <p><strong>Ligitivity:</strong> <span id="recClientLigitivity"></span></p>
+                                    <p><strong>Address:</strong> 
+                                        <span id="recClientAddress"></span>, 
+                                        <span id="recClientBrgy"></span>,
+                                        <span id="recClientCityMun"></span>,
+                                        <span id="recClientProv"></span>,
+                                        <span id="recClientReg"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion2" aria-expanded="false" aria-controls="accordion2">
+                                    Parents Information
+                                </button>
+                            </h2>
+                            <div id="accordion2" class="accordion-collapse collapse" data-bs-parent="#recordAccordion">
+                                <div class="accordion-body">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Parent</th>
+                                                <th>Name</th>
+                                                <th>Birthday</th>
+                                                <th>Birthplace</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Mother</strong></td>
+                                                <td id="recMoName"></td>
+                                                <td id="recMoBday"></td>
+                                                <td id="recMoBplace"></td>
+                                                <td id="recMoAddress"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Father</strong></td>
+                                                <td id="recFaName"></td>
+                                                <td id="recFaBday"></td>
+                                                <td id="recFaBplace"></td>
+                                                <td id="recFaAddress"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion3" aria-expanded="false" aria-controls="accordion3">
+                                    Client Records
+                                </button>
+                            </h2>
+                            <div id="accordion3" class="accordion-collapse collapse" data-bs-parent="#recordAccordion">
+                                <div class="accordion-body">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Ceremony</th>
+                                                <th>Index</th>
+                                                <th>Book</th>
+                                                <th>Page</th>
+                                                <th>Line</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Baptism</strong></td>
+                                                <td id="baptIndex"></td>
+                                                <td id="baptBook"></td>
+                                                <td id="baptPage"></td>
+                                                <td id="baptLine"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Confirmation</strong></td>
+                                                <td id="confIndex"></td>
+                                                <td id="confBook"></td>
+                                                <td id="confPage"></td>
+                                                <td id="confLine"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Wedding</strong></td>
+                                                <td id="wedIndex"></td>
+                                                <td id="wedBook"></td>
+                                                <td id="wedPage"></td>
+                                                <td id="wedLine"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Death</strong></td>
+                                                <td id="deathIndex"></td>
+                                                <td id="deathBook"></td>
+                                                <td id="deathPage"></td>
+                                                <td id="deathLine"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editRecordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editRecordModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Baptism Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <!-- Progress Tracker -->
+                        <div class="progress-tracker">
+                            <div class="step active">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Client</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-person-breastfeeding"></i>
+                                <span>Parent</span>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Step Form -->
+                        <div class="stepper-form">
+                            <form id="recordEditForm">
+                                <!-- Step 1 -->
+                                <div class="step-content active">
+                                    <h3>Personal Information</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="fname">First Name:</label>
+                                            <input type="text" id="fname" name="fname" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="mname">Middle Name:</label>
+                                            <input type="text" id="mname" name="mname" class="form-control">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="lname">Last Name:</label>
+                                            <input type="text" id="lname" name="lname" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="birthdate">Birth Date:</label>
+                                            <input type="text" id="birthdate" name="birthdate" class="datepicker-custom form-control datepicker DatePickerEdit" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="birthplace">Birth Place:</label>
+                                            <input type="text" id="birthplace" name="birthplace" class="form-control birthplace" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <input type="hidden" name="rec_id" id="rec_id">
+                                        <input type="hidden" name="rec_moID" id="rec_moID">
+                                        <input type="hidden" name="rec_faID" id="rec_faID">
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="ligitivity">Ligitivity:</label><br>
+                                            <div class="radio-group mt-2">
+                                                <input type="radio" value="CIVIL" id="civilLigitivity" name="ligitivity"  required>
+                                                <label for="civilLigitivity">Civil</label>
+                                        
+                                                <input type="radio" value="CATHOLIC" id="catholicLigitivity" name="ligitivity" required>
+                                                <label for="catholicLigitivity">Catholic</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="civilStatus">Civil Status:</label>
+                                            <select id="civilStatus" name="civilStatus" class="form-control" required>
+                                                <option value="" disabled selected>Select an option</option>
+                                                <option value="SINGLE">Single</option>
+                                                <option value="MARRIED">Married</option>
+                                                <option value="WIDOWED">Widowed</option>
+                                                <option value="SEPARATED">Separated</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Address</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="region">Region:</label>
+                                                <select id="region" name="region" class="form-control region-dropdown" required>
+                                                    <option region_id="" value="" selected disabled>Select Region</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="province">Province:</label>
+                                                <select id="province" name="province" class="form-control province-dropdown" required>
+                                                    <option value="" selected disabled>Select Province</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="city">City/Municipality:</label>
+                                                <select id="city" name="cityMun" class="form-control city-dropdown" required>
+                                                    <option value="" selected disabled>Select City/Municipality</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="barangay">Barangay:</label>
+                                                <select id="barangay" name="barangay" class="form-control barangay-dropdown" required>
+                                                    <option value="" selected disabled>Select Barangay</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">    
+                                            <label for="addressLine">Address Line:</label>
+                                            <input type="text" id="addressLine" name="addressLine" class="form-control addressLine" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+
+                                    
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="step-content active">
+                                    <h3>Parents Information</h3>
+
+                                    <div class="row gx-5">
+                                        <!-- Father -->
+                                        <div class="col-lg-6 col-md-12 mt-2 parent-container middle-divider">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h5>Father</h5></p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="fafname">First Name:</label>
+                                                    <input type="text" id="fafname" name="fafname" class="form-control fafname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="famname">Middle Name:</label>
+                                                    <input type="text" id="famname" name="famname" class="form-control famname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="falname">Last Name:</label>
+                                                    <input type="text" id="falname" name="falname" class="form-control falname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="fabirthdate">Birth Date:</label>
+                                                    <input type="text" id="fabirthdate" name="fabirthdate" class="datepicker-custom form-control fabirthdate datepicker DatePickerEdit" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="fabirthplace">Birth Place:</label>
+                                                    <input type="text" id="fabirthplace" name="fabirthplace" class="form-control fabirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="faaddress">Address:</label>
+                                                    <input type="text" id="faaddress" name="faaddress" class="form-control faaddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mother -->
+                                        <div class="col-lg-6 col-md-12 mt-2 parent-container">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h5>Mother</h5>
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="mofname">First Name:</label>
+                                                    <input type="text" id="mofname" name="mofname" class="form-control mofname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="momname">Middle Name:</label>
+                                                    <input type="text" id="momname" name="momname" class="form-control momname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="molname">Last Name:</label>
+                                                    <input type="text" id="molname" name="molname" class="form-control molname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="mobirthdate">Birth Date:</label>
+                                                    <input type="text" id="mobirthdate" name="mobirthdate" class="datepicker-custom form-control mobirthdate datepicker DatePickerEdit" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="mobirthplace">Birth Place:</label>
+                                                    <input type="text" id="mobirthplace" name="mobirthplace" class="form-control mobirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="moaddress">Address:</label>
+                                                    <input type="text" id="moaddress" name="moaddress" class="form-control moaddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="submit" class="btn btn-primary next-btn mt-3">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

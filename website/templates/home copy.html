@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Background Image and Fade -->
+
+
+<!-- Main Content Section -->
+<div class="container main-content">
+    <div class="row">
+        <!-- Left: Description -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">Our Parish</h4>
+                    <p class="card-text">
+                        Welcome to our church's online portal. Here, you can request sacramental records, track your
+                        submissions, and stay in touch with the parish community. We’re honored to serve you.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Request Card -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Your Requests
+                </div>
+                <div class="card-body">
+                    {% if user_requests %}
+                        <ul class="list-group list-group-flush">
+                            {% for request in user_requests %}
+                            <li class="list-group-item">
+                                <strong>{{ request.type }}</strong> – {{ request.status }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">You have no requests yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
