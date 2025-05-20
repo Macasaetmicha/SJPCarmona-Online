@@ -19,6 +19,8 @@ def create_app():
     # app.config['SECRET_KEY'] = 'secretkey'
     app.secret_key = os.urandom(32)  # Used for session.
     app.config.from_object(Config)
+    print("DATABASE_URL =", app.config['SQLALCHEMY_DATABASE_URI'])
+
     
     db.init_app(app)
     migrate.init_app(app, db)
