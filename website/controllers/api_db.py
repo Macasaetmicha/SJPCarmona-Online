@@ -1265,7 +1265,7 @@ def get_requests():
 @api_db.route('/request-client')
 def get_ClientRequests():
 
-    requests = Request.query.all()
+    requests = Request.query.filter_by(user_id=current_user.id)
     print(str(Request.query.filter_by(user_id=current_user.id)))
 
     print("Total requests found for current user:", len(requests))
