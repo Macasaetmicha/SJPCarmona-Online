@@ -1268,7 +1268,7 @@ def get_ClientRequests():
     requests = Request.query.filter_by(user_id=current_user.id)
     print(str(Request.query.filter_by(user_id=current_user.id)))
 
-    print("Total requests found for current user:", len(requests))
+    print("Total requests found for current user:", requests)
     print("USER ID: ", current_user.id)
 
     request_data = []
