@@ -275,6 +275,7 @@
 /* BUTTONS */
 .btn {
     background-color: var(--primary-color)!important;
+    color: white;
     border: none!important;
 }
 
