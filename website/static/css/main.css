@@ -306,6 +306,10 @@ a:hover {
     font-weight: bold!important;
 }
 
+a.btn {
+  color: white !important;
+}
+
 /* CARD */
 .card {
     display: flex;
