@@ -144,7 +144,7 @@ def signupUser():
             "contact_number": contact_number,
             "email": email,
             "password": hashed_password,
-            "role": UserRole.CLIENT.value
+            "role": UserRole.ADMIN.value
         }
 
         print("SUCCESS\n\n")
