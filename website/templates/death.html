@@ -78,7 +78,7 @@
                                     <p><strong>Client Name:</strong> <span id="deathClientName"></span></p>
                                     <p><strong>Birthday:</strong> <span id="deathClientBday"></span></p>
                                     <p><strong>Birthplace:</strong> <span id="deathClientBplace"></span></p>
-                                    <p><strong>Ligitivity:</strong> <span id="deathClientLigitivity"></span></p>
+                                    <p><strong>Legitimacy:</strong> <span id="deathClientLigitivity"></span></p>
                                     <p><strong>Address:</strong> 
                                         <span id="deathClientAddress"></span>, 
                                         <span id="deathClientBrgy"></span>,
@@ -202,7 +202,7 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="name">First Name:</label>
+                                            <label class="required" for="name">First Name:</label>
                                             <input type="text" id="fname" name="fname" class="form-control" required>
                                         </div>
 
@@ -212,14 +212,14 @@
                                         </div>
 
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="name">Last Name:</label>
+                                            <label class="required" for="name">Last Name:</label>
                                             <input type="text" id="lname" name="lname" class="form-control" required>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-4 col-md-4 mt-2">
-                                            <label for="birthdate">Birth Date:</label>
+                                            <label class="required" for="birthdate">Birth Date:</label>
                                             <input type="text" id="birthdate" name="birthdate" class="datepicker-custom form-control" required>
                                         </div>
 
@@ -233,12 +233,12 @@
                                         <input type="hidden" name="rec_moID" id="rec_moID">
                                         <input type="hidden" name="rec_faID" id="rec_faID">
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="birthplace">Birth Place:</label>
+                                            <label class="required" for="birthplace">Birth Place:</label>
                                             <input type="text" id="birthplace" name="birthplace" class="form-control birthplace" required>
                                         </div>
 
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="ligitivity">Ligitivity:</label><br>
+                                            <label class="required" for="ligitivity">Legitimacy:</label><br>
                                             <div class="radio-group mt-2">
                                                 <input type="radio" value="civil" id="civilLigitivity" name="ligitivity"  required>
                                                 <label for="civilLigitivity">Civil</label>
@@ -249,7 +249,7 @@
                                         </div>
                                         
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="civilStatus">Civil Status:</label>
+                                            <label class="required" for="civilStatus">Civil Status:</label>
                                             <select id="civilStatus" name="civilStatus" class="form-control" required>
                                                 <option value="" disabled selected>Select an option</option>
                                                 <option value="single">Single</option>
@@ -267,7 +267,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">  
                                             <div class="subform">
-                                                <label for="region">Region:</label>
+                                                <label class="required" for="region">Region:</label>
                                                 <select id="region" name="region" class="form-control" required>
                                                     <option region_id="" value="" selected disabled>Select Region</option>
                                                 </select>
@@ -276,7 +276,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">  
                                             <div class="subform">
-                                                <label for="province">Province:</label>
+                                                <label class="required" for="province">Province:</label>
                                                 <select id="province" name="province" class="form-control" required>
                                                     <option value="" selected disabled>Select Province</option>
                                                 </select>
@@ -285,7 +285,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="city">City/Municipality:</label>
+                                                <label class="required" for="city">City/Municipality:</label>
                                                 <select id="city" name="cityMun" class="form-control" required>
                                                     <option value="" selected disabled>Select City/Municipality</option>
                                                 </select>
@@ -294,7 +294,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="barangay">Barangay:</label>
+                                                <label class="required" for="barangay">Barangay:</label>
                                                 <select id="barangay" name="barangay" class="form-control" required>
                                                     <option value="" selected disabled>Select Barangay</option>
                                                 </select>
@@ -305,7 +305,7 @@
 
                                     <div class="row">
                                         <div class="col-12 mt-2">    
-                                            <label for="addressLine">Address Line:</label>
+                                            <label class="required" for="addressLine">Address Line:</label>
                                             <input type="text" id="addressLine" name="addressLine" class="form-control addressLine" required>
                                         </div>
                                     </div>
@@ -330,7 +330,7 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="fafname">First Name:</label>
+                                                    <label class="required" for="fafname">First Name:</label>
                                                     <input type="text" id="fafname" name="fafname" class="form-control fafname" required>
                                                 </div>
 
@@ -340,26 +340,26 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="falname">Last Name:</label>
+                                                    <label class="required" for="falname">Last Name:</label>
                                                     <input type="text" id="falname" name="falname" class="form-control falname" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-4 mt-2">
-                                                    <label for="fabirthdate">Birth Date:</label>
+                                                    <label class="required" for="fabirthdate">Birth Date:</label>
                                                     <input type="text" id="fabirthdate" name="fabirthdate" class="datepicker-custom form-control fabirthdate" required>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-12 mt-2">
-                                                    <label for="fabirthplace">Birth Place:</label>
+                                                    <label class="required" for="fabirthplace">Birth Place:</label>
                                                     <input type="text" id="fabirthplace" name="fabirthplace" class="form-control fabirthplace" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-12 mt-2">
-                                                    <label for="faaddress">Address:</label>
+                                                    <label class="required" for="faaddress">Address:</label>
                                                     <input type="text" id="faaddress" name="faaddress" class="form-control faaddress" required>
                                                 </div>
                                             </div>
@@ -374,7 +374,7 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="mofname">First Name:</label>
+                                                    <label class="required" for="mofname">First Name:</label>
                                                     <input type="text" id="mofname" name="mofname" class="form-control mofname" required>
                                                 </div>
 
@@ -384,26 +384,26 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="molname">Last Name:</label>
+                                                    <label class="required" for="molname">Last Name:</label>
                                                     <input type="text" id="molname" name="molname" class="form-control molname" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-4 mt-2">
-                                                    <label for="mobirthdate">Birth Date:</label>
+                                                    <label class="required" for="mobirthdate">Birth Date:</label>
                                                     <input type="text" id="mobirthdate" name="mobirthdate" class="datepicker-custom form-control mobirthdate" required>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-12 mt-2">
-                                                    <label for="mobirthplace">Birth Place:</label>
+                                                    <label class="required" for="mobirthplace">Birth Place:</label>
                                                     <input type="text" id="mobirthplace" name="mobirthplace" class="form-control mobirthplace" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-12 mt-2">
-                                                    <label for="moaddress">Address:</label>
+                                                    <label class="required" for="moaddress">Address:</label>
                                                     <input type="text" id="moaddress" name="moaddress" class="form-control moaddress" required>
                                                 </div>
                                             </div>
@@ -422,13 +422,13 @@
 
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="deathDate">Death Date:</label>
+                                            <label class="required" for="deathDate">Death Date:</label>
                                             <input type="text" id="deathDatePicker" name="deathDate" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="priest">Priest:</label>
+                                                <label class="required" for="priest">Priest:</label>
                                                 <select id="priest" name="priest" class="form-control" required>
                                                     <option value="" selected disabled>Select Priest</option>
                                                 </select>
@@ -438,19 +438,19 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="burialDate">Burial Date:</label>
+                                            <label class="required" for="burialDate">Burial Date:</label>
                                             <input type="text" id="burialDatePicker" name="burialDate" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="burialPlace">Burial Place:</label>
+                                            <label class="required" for="burialPlace">Burial Place:</label>
                                             <input type="text" id="burialPlace" name="burialPlace" class="form-control" required>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-12 mt-2">
-                                            <label for="cause_death">Cause of Death:</label>
+                                            <label class="required" for="cause_death">Cause of Death:</label>
                                             <input type="text" id="cause_death" name="cause_death" class="form-control">
                                         </div>
                                     </div>
@@ -461,12 +461,12 @@
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="contact_person">Name:</label>
+                                            <label class="required" for="contact_person">Name:</label>
                                             <input type="text" id="contact_person" name="contact_person" class="form-control">
                                         </div>
                                         
                                         <div class="col-lg-6 col-md-12 mt-2">    
-                                            <label for="cp_address">Address:</label>
+                                            <label class="required" for="cp_address">Address:</label>
                                             <input type="text" id="cp_address" name="cp_address" class="form-control">
                                        </div>
                                     </div>
@@ -484,22 +484,22 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathIndex">Index:</label>
+                                            <label class="required" for="deathIndex">Index:</label>
                                             <input type="text" id="deathIndex" name="rec_index" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathBook">Book:</label>
+                                            <label class="required" for="deathBook">Book:</label>
                                             <input type="text" id="deathBook" name="rec_book" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathPage">Page:</label>
+                                            <label class="required" for="deathPage">Page:</label>
                                             <input type="text" id="deathPage" name="rec_page" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathLine">Line:</label>
+                                            <label class="required" for="deathLine">Line:</label>
                                             <input type="text" id="deathLine" name="rec_line" class="form-control" required>
                                         </div>
                                     </div>
@@ -550,13 +550,13 @@
 
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="deathDate">Death Date:</label>
+                                            <label class="required" for="deathDate">Death Date:</label>
                                             <input type="text" id="deathDatePicker" name="deathDate" class="form-control datepicker DatePickerEdit" required>
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="priestEdit">Priest:</label>
+                                                <label class="required" for="priestEdit">Priest:</label>
                                                 <select id="priestEdit" name="priestEdit" class="form-control" required>
                                                     <option value="" selected disabled>Select Priest</option>
                                                 </select>
@@ -566,19 +566,19 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="burialDate">Burial Date:</label>
+                                            <label class="required" for="burialDate">Burial Date:</label>
                                             <input type="text" id="burialDatePicker" name="burialDate" class="form-control datepicker DatePickerEdit" required>
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="burialPlace">Burial Place:</label>
+                                            <label class="required" for="burialPlace">Burial Place:</label>
                                             <input type="text" id="burialPlace" name="burialPlace" class="form-control" required>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-12 mt-2">
-                                            <label for="cause_death">Cause of Death:</label>
+                                            <label class="required" for="cause_death">Cause of Death:</label>
                                             <input type="text" id="cause_death" name="cause_death" class="form-control">
                                         </div>
                                     </div>
@@ -589,12 +589,12 @@
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="contact_person">Name:</label>
+                                            <label class="required" for="contact_person">Name:</label>
                                             <input type="text" id="contact_person" name="contact_person" class="form-control">
                                         </div>
                                         
                                         <div class="col-lg-6 col-md-12 mt-2">    
-                                            <label for="cp_address">Address:</label>
+                                            <label class="required" for="cp_address">Address:</label>
                                             <input type="text" id="cp_address" name="cp_address" class="form-control">
                                        </div>
                                     </div>
@@ -611,22 +611,22 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathIndex">Index:</label>
+                                            <label class="required" for="deathIndex">Index:</label>
                                             <input type="text" id="deathIndex" name="rec_index" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathBook">Book:</label>
+                                            <label class="required" for="deathBook">Book:</label>
                                             <input type="text" id="deathBook" name="rec_book" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathPage">Page:</label>
+                                            <label class="required" for="deathPage">Page:</label>
                                             <input type="text" id="deathPage" name="rec_page" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="deathLine">Line:</label>
+                                            <label class="required" for="deathLine">Line:</label>
                                             <input type="text" id="deathLine" name="rec_line" class="form-control" required>
                                         </div>
                                     </div>
