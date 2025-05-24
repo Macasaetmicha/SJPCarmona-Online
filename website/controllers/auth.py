@@ -101,6 +101,12 @@ def signupUser():
 
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
 
+        if len(password) < 8:
+            return jsonify({
+                "error": "Password must be at least 8 characters long.",
+                "type": "warning"
+            }), 400
+
         existing_user = User.query.filter(
             and_(
                 User.first_name.ilike(first_name),
@@ -215,6 +221,12 @@ def submit_account():
                 User.last_name.ilike(last_name)
             )
         ).first()
+
+        if len(password) < 8:
+            return jsonify({
+                "error": "Password must be at least 8 characters long.",
+                "type": "warning"
+            }), 400
 
         if existing_user:
             return jsonify({
