@@ -130,6 +130,12 @@
     transition: all .3s ease-in-out;
 }
 
+/* FOOTER */
+.footer {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+}
+
 /* NAVBAR */
 .navbar-brand {
     display: flex;
