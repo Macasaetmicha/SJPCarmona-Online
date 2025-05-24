@@ -285,6 +285,62 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Show the edit modal
                 new bootstrap.Modal(document.getElementById('editEventModal')).show();
             });
+        },
+        eventClick: function(info) {
+            info.jsEvent.preventDefault();
+
+            const event = info.event;
+            const sourceUrl = event.source?.url || '';
+            const isRequest = sourceUrl.includes('/get-request');
+
+            let modalTitle = '';
+            let modalBody = '';
+
+            if (isRequest) {
+                modalTitle = "Document Request Details";
+
+                const requestor = event.extendedProps.requestor || 'N/A';
+                const relation = event.extendedProps.relationship || 'N/A';
+                const recName = event.extendedProps.rec_name || 'N/A';
+                const ceremony = event.extendedProps.ceremony || 'N/A';
+                const cerDate = event.extendedProps.cer_date
+                    ? new Date(event.extendedProps.cer_date).toLocaleDateString()
+                    : 'N/A';
+                const status = event.extendedProps.status || 'N/A';
+                const remarks = event.extendedProps.remarks || null;
+
+                modalBody = `
+                    <p><strong>Requestor:</strong> ${requestor}</p>
+                    <p><strong>Relation to the owner:</strong> ${relation}</p>
+                    <p><strong>Name on Document:</strong> ${recName}</p>
+                    <p><strong>Ceremony:</strong> ${ceremony}</p>
+                    <p><strong>Ceremony Date:</strong> ${cerDate}</p>
+                    <hr>
+                    <p><strong>Status:</strong> ${status}</p>
+                    ${remarks ? `<hr><p><strong>Remarks:</strong> ${remarks}</p>` : ''}
+                `;
+            } else {
+                modalTitle = "Event Details";
+
+                const title = event.title || 'Untitled Event';
+                const start = event.start ? event.start.toLocaleString() : 'N/A';
+                const end = event.end ? event.end.toLocaleString() : 'N/A';
+                const status = event.extendedProps.status || 'Scheduled';
+                const description = event.extendedProps.description || null;
+
+                modalBody = `
+                    <p><strong style="font-size: 1.2em;">${title}</strong></p>
+                    <p><strong>Date & Time:</strong> ${start} - ${end}</p>
+                    <hr>
+                    <p><strong>Status:</strong> ${status}</p>
+                    ${description ? `<hr><p><strong>Description:</strong> ${description}</p>` : ''}
+                `;
+            }
+
+            document.getElementById('eventDetailLabel').textContent = modalTitle;
+            document.getElementById('eventDetailBody').innerHTML = modalBody;
+            const modal = new bootstrap.Modal(document.getElementById('eventDetailModal'));
+            modal.show();
         }
 
     });
