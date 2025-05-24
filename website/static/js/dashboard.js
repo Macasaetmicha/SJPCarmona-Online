@@ -275,12 +275,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 const start = event.start ? event.start.toLocaleString() : 'N/A';
                 const end = event.end ? event.end.toLocaleString() : 'N/A';
                 const status = event.extendedProps.status || 'Scheduled';
+                const description = event.extendedProps.description || null;
 
                 modalBody = `
                     <p><strong style="font-size: 1.2em;">${title}</strong></p>
                     <p><strong>Date & Time:</strong> ${start} - ${end}</p>
                     <hr>
                     <p><strong>Status:</strong> ${status}</p>
+                    ${description ? `<hr><p><strong>Description:</strong> ${description}</p>` : ''}
                 `;
             }
 
