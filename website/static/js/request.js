@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 new bootstrap.Modal(document.getElementById('editEventModal')).show();
             });
         },
-        eventClick: function(info) {
+                eventClick: function(info) {
             info.jsEvent.preventDefault();
 
             const event = info.event;
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const description = event.extendedProps.description || null;
 
                 modalBody = `
-                    <p><strong>${title}</strong></p>
+                    <p><strong style="font-size: 1.2em;">${title}</strong></p>
                     <p><strong>Date & Time:</strong> ${start} - ${end}</p>
                     <hr>
                     <p><strong>Status:</strong> ${status}</p>
@@ -337,9 +337,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
             }
 
-            document.getElementById('eventDetailRequestLabel').textContent = modalTitle;
-            document.getElementById('eventDetailRequestBody').innerHTML = modalBody;
-            const modal = new bootstrap.Modal(document.getElementById('eventDetailRequestModal'));
+            document.getElementById('eventDetailLabel').textContent = modalTitle;
+            document.getElementById('eventDetailBody').innerHTML = modalBody;
+            const modal = new bootstrap.Modal(document.getElementById('eventDetailModal'));
             modal.show();
         }
 
