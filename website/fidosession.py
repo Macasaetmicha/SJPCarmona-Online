@@ -15,7 +15,7 @@ import secrets
 
 FIDO_SESSION_KEY = "fido-session"
 
-cache = TTLCache(maxsize=10000, ttl=5 * 60)  # fido-sessions expire after 5 minutes
+cache = TTLCache(maxsize=10000, ttl=10 * 60)  # fido-sessions expire after 5 minutes
 
 
 def start_fido_session(user_id: int):
