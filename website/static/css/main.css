@@ -5,6 +5,7 @@
     --accent-color: #BCD5C5;  
     --background-color: #f4f4f4; 
     --text-color: #333333; 
+    --warning: #f12812;
 }
 
 body {
@@ -426,6 +427,13 @@ input[type="radio"] {
 .custom-form-label {
     text-emphasis: none;
     margin: 0px;
+}
+
+label.required::after {
+  content: " *";
+  color: var(--warning);
+  margin-left: 2px;
+  font-weight: bolder;
 }
 
 
