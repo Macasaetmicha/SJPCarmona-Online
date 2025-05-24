@@ -269,19 +269,19 @@
                         <form id="eventAddForm">
                             <div class="row">
                                 <div class="col-12 mt-2">
-                                    <label for="eventTitle">Event Title:</label>
+                                    <label class="required" for="eventTitle">Event Title:</label>
                                     <input type="text" id="eventTitle" name="eventTitle" class="form-control" required>
                                 </div>
                             </div>
                             
                             <div class="row">
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventStart">Start:</label>
+                                    <label class="required" for="eventStart">Start:</label>
                                     <input type="datetime-local" class="form-control" id="eventStart" name="eventStart" required>
                                 </div>
 
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventEnd">End:</label>
+                                    <label class="required" for="eventEnd">End:</label>
                                     <input type="datetime-local" class="form-control" id="eventEnd" name="eventEnd" required>
                                 </div>
                             </div>
@@ -293,7 +293,7 @@
 
                             <div class="row">
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventCategory">Category:</label>
+                                    <label class="required" for="eventCategory">Category:</label>
                                     <select id="eventCategory" name="eventCategory" class="form-control" required>
                                         <option value="" disabled selected>Select category</option>
                                         <option value="parish">Parish</option>
@@ -302,7 +302,7 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventStatus">Status:</label>
+                                    <label class="required" for="eventStatus">Status:</label>
                                     <select id="eventStatus" name="eventStatus" class="form-control" required>
                                         <option value="" disabled selected>Select status</option>
                                         <option value="active">Active</option>
@@ -345,19 +345,19 @@
                             <div class="row">
                                 <input type="hidden" name="schedId" id="schedId">
                                 <div class="col-12 mt-2">
-                                    <label for="eventTitleEdit">Event Title:</label>
+                                    <label class="required" for="eventTitleEdit">Event Title:</label>
                                     <input type="text" id="eventTitleEdit" name="eventTitleEdit" class="form-control" required>
                                 </div>
                             </div>
                             
                             <div class="row">
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventStartEdit">Start:</label>
+                                    <label class="required" for="eventStartEdit">Start:</label>
                                     <input type="datetime-local" class="form-control" id="eventStartEdit" name="eventStartEdit" required>
                                 </div>
 
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventEndEdit">End:</label>
+                                    <label class="required" for="eventEndEdit">End:</label>
                                     <input type="datetime-local" class="form-control" id="eventEndEdit" name="eventEndEdit" required>
                                 </div>
                             </div>
@@ -369,7 +369,7 @@
 
                             <div class="row">
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventCategoryEdit">Category:</label>
+                                    <label class="required" for="eventCategoryEdit">Category:</label>
                                     <select id="eventCategoryEdit" name="eventCategoryEdit" class="form-control" required>
                                         <option value="" disabled selected>Select category</option>
                                         <option value="parish">Parish</option>
@@ -379,7 +379,7 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-12 mt-2">
-                                    <label for="eventStatusEdit">Status:</label>
+                                    <label class="required" for="eventStatusEdit">Status:</label>
                                     <select id="eventStatusEdit" name="eventStatusEdit" class="form-control" required>
                                         <option value="" disabled selected>Select status</option>
                                         <option value="active">Active</option>
@@ -425,7 +425,7 @@
                                 <strong>Name on Document</strong>
                             </div>
                             <div class="col-lg-4 col-md-12 mt-2">
-                                <label for="recFirstName">First Name:</label>
+                                <label class="required" for="recFirstName">First Name:</label>
                                 <input type="text" id="recFirstName" name="recFirstName" class="form-control" required>
                             </div>
                             <div class="col-lg-4 col-md-12 mt-2">
@@ -433,19 +433,19 @@
                                 <input type="text" id="recMiddleName" name="recMiddleName" class="form-control">
                             </div>
                             <div class="col-lg-4 col-md-12 mt-2">
-                                <label for="recLastName">Last Name:</label>
+                                <label class="required" for="recLastName">Last Name:</label>
                                 <input type="text" id="recLastName" name="recLastName" class="form-control" required>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-lg-6 col-md-12 mt-2">
-                                <label for="relationship">Relationship to Document Holder:</label>
+                                <label class="required" for="relationship">Relationship to Document Holder:</label>
                                 <input type="text" id="relationship" name="relationship" class="form-control" required>
                             </div>
 
                             <div class="col-lg-6 col-md-12 mt-2">
-                                <label for="ceremony">Ceremony:</label>
+                                <label class="required" for="ceremony">Ceremony:</label>
                                 <select id="ceremony" name="ceremony" class="form-control" required>
                                     <option value="" disabled selected>Select ceremony</option>
                                     <option value="baptism">Baptism</option>
@@ -501,7 +501,7 @@
 
                         <div class="row">
                             <div class="col-12 mt-2">
-                                <label for="pickupDate">Pickup Date:</label>
+                                <label class="required" for="pickupDate">Pickup Date:</label>
                                 <input type="date" id="pickupDate" name="pickup_date" class="form-control" required>
                             </div>
                         </div>
