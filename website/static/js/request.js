@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (info.event.classNames.includes('event-request')) {
                 return; // Prevent double-click from working
             }
-            info.el.addEventListener('dblclick', function() {
+            info.el.addEventListener('contextmenu', function() {
                 const event = info.event;
 
                 // Store for editing later
