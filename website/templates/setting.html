@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block title %}Setting{% endblock %}
+{% if current_user.role == UserRole.CLIENT %}
+    <h5>Show header</h5>
+    {% set showFooter = True %}
+{% else %}
+    {% set showFooter = False %}
+{% endif %}
 
 {% block content %}
 <header class="p-3">
