@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 modalTitle = "Document Request Details";
 
                 const requestor = event.extendedProps.requestor || 'N/A';
-                const relation = event.extendedProps.relation || 'N/A';
+                const relation = event.extendedProps.relationship || 'N/A';
                 const recName = event.extendedProps.rec_name || 'N/A';
                 const ceremony = event.extendedProps.ceremony || 'N/A';
                 const cerDate = event.extendedProps.cer_date
