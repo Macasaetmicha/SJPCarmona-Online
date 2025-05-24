@@ -258,6 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ? new Date(event.extendedProps.cer_date).toLocaleDateString()
                     : 'N/A';
                 const status = event.extendedProps.status || 'N/A';
+                const remarks = event.extendedProps.remarks || null;
 
                 modalBody = `
                     <p><strong>Requestor:</strong> ${requestor}</p>
@@ -267,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p><strong>Ceremony Date:</strong> ${cerDate}</p>
                     <hr>
                     <p><strong>Status:</strong> ${status}</p>
+                    ${remarks ? `<hr><p><strong>Remarks:</strong> ${remarks}</p>` : ''}
                 `;
             } else {
                 modalTitle = "Event Details";
