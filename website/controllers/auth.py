@@ -222,29 +222,23 @@ def submit_account():
             )
         ).first()
 
-        if len(password) < 8:
-            return jsonify({
-                "error": "Password must be at least 8 characters long.",
-                "type": "warning"
-            }), 400
-
         if existing_user:
             return jsonify({
                 "error": "A user with the same name already exists.",
                 "type": "warning"
             }), 409
 
-        if not re.match(r'^09\d{9}$', contact_number):
-            return jsonify({
-                "error": "Invalid contact number format. Use 09XXXXXXXXX.",
-                "type": "warning"
-            }), 400
-
         if User.query.filter_by(username=username).first():
             return jsonify({
                 "error": "Username already exists.",
                 "type": "warning"
             }), 409
+
+         if not re.match(r'^09\d{9}$', contact_number):
+            return jsonify({
+                "error": "Invalid contact number format. Use 09XXXXXXXXX.",
+                "type": "warning"
+            }), 400
 
         if User.query.filter_by(contact_number=contact_number).first():
             return jsonify({
@@ -258,6 +252,12 @@ def submit_account():
                 "type": "warning"
             }), 409
 
+        if len(password) < 8:
+            return jsonify({
+                "error": "Password must be at least 8 characters long.",
+                "type": "warning"
+            }), 400
+            
         if password != confirm_password:
             return jsonify({
                 "error": "Passwords do not match.",
