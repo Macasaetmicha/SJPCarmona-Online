@@ -97,6 +97,7 @@ def signupUser():
         contact_number = request.form.get('contact_number')
         email = request.form.get('email')
         password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
 
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
 
@@ -125,10 +126,22 @@ def signupUser():
                 "error": "Username already exists.",
                 "type": "warning"
             }), 409
+            
+        if User.query.filter_by(contact_number=contact_number).first():
+            return jsonify({
+                "error": "Contact Number already used.",
+                "type": "warning"
+            }), 409
 
         if User.query.filter_by(email=email).first():
             return jsonify({
                 "error": "Email already exists.",
+                "type": "warning"
+            }), 409
+
+        if password != confirm_password:
+            return jsonify({
+                "error": "Passwords do not match.",
                 "type": "warning"
             }), 409
 
