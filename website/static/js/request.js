@@ -337,9 +337,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
             }
 
-            document.getElementById('eventDetailLabel').textContent = modalTitle;
-            document.getElementById('eventDetailBody').innerHTML = modalBody;
-            const modal = new bootstrap.Modal(document.getElementById('eventDetailModal'));
+            document.getElementById('eventDetailRequestLabel').textContent = modalTitle;
+            document.getElementById('eventDetailRequestBody').innerHTML = modalBody;
+            const modal = new bootstrap.Modal(document.getElementById('eventDetailRequestModal'));
             modal.show();
         }
 
