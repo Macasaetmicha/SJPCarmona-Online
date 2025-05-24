@@ -234,7 +234,7 @@ def submit_account():
                 "type": "warning"
             }), 409
 
-         if not re.match(r'^09\d{9}$', contact_number):
+        if not re.match(r'^09\d{9}$', contact_number):
             return jsonify({
                 "error": "Invalid contact number format. Use 09XXXXXXXXX.",
                 "type": "warning"
