@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const description = event.extendedProps.description || null;
 
                 modalBody = `
-                    <p><strong style="font-size: 1.2em;">${title}</strong></p>
+                    <p><strong>${title}</strong></p>
                     <p><strong>Date & Time:</strong> ${start} - ${end}</p>
                     <hr>
                     <p><strong>Status:</strong> ${status}</p>
