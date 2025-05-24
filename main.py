@@ -73,7 +73,10 @@ def apply_caching(response):
                                                   "form-action 'self'; " \
                                                   "upgrade-insecure-requests; " \
                                                   "frame-ancestors 'none'; " \
-                                                  "base-uri 'self';"
+                                                  "frame-src https://www.google.com https://www.google.com/maps/embed; " \
+                                                  "child-src https://www.google.com https://www.google.com/maps/embed; " \
+                                                  "base-uri 'self'; " \
+                                                  "upgrade-insecure-requests;"
 
     return response
 
