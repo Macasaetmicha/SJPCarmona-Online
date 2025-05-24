@@ -56,12 +56,12 @@ def apply_caching(response):
     """This function adds security headers to every response that is sent to the client. The security headers are
     based on the recommendations of owasp (see https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html)"""
 
-    response.headers["X-Frame-Options"] = "DENY"
+    # response.headers["X-Frame-Options"] = "DENY"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
     response.headers["Cross-Origin-Resource-Policy"] = "same-site"
-    response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
+    # response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
 
     # Allowing 'data' scheme for images (e.g., for background-image with SVG)
     response.headers["Content-Security-Policy"] = "default-src 'none'; " \
