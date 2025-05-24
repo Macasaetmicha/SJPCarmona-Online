@@ -197,7 +197,7 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="name">First Name:</label>
+                                            <label for="name" class="required">First Name:</label>
                                             <input type="text" id="fname" name="fname" class="form-control" required>
                                         </div>
 
@@ -207,14 +207,14 @@
                                         </div>
 
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="name">Last Name:</label>
+                                            <label for="name" class="required">Last Name:</label>
                                             <input type="text" id="lname" name="lname" class="form-control" required>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-4 col-md-4 mt-2">
-                                            <label for="birthdate">Birth Date:</label>
+                                            <label for="birthdate" class="required">Birth Date:</label>
                                             <input type="text" id="birthdate" name="birthdate" class="datepicker-custom form-control" required>
                                         </div>
 
@@ -228,12 +228,12 @@
                                         <input type="hidden" name="rec_moID" id="rec_moID">
                                         <input type="hidden" name="rec_faID" id="rec_faID">
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="birthplace">Birth Place:</label>
+                                            <label for="birthplace" class="required">Birth Place:</label>
                                             <input type="text" id="birthplace" name="birthplace" class="form-control birthplace" required>
                                         </div>
 
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="ligitivity">Ligitivity:</label><br>
+                                            <label for="ligitivity" class="required">Legitimacy:</label><br>
                                             <div class="radio-group mt-2">
                                                 <input type="radio" value="civil" id="civilLigitivity" name="ligitivity"  required>
                                                 <label for="civilLigitivity">Civil</label>
@@ -244,7 +244,7 @@
                                         </div>
                                         
                                         <div class="col-lg-4 col-md-12 mt-2">
-                                            <label for="civilStatus">Civil Status:</label>
+                                            <label for="civilStatus" class="required">Civil Status:</label>
                                             <select id="civilStatus" name="civilStatus" class="form-control" required>
                                                 <option value="" disabled selected>Select an option</option>
                                                 <option value="single">Single</option>
@@ -262,7 +262,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">  
                                             <div class="subform">
-                                                <label for="region">Region:</label>
+                                                <label for="region" class="required">Region:</label>
                                                 <select id="region" name="region" class="form-control" required>
                                                     <option region_id="" value="" selected disabled>Select Region</option>
                                                 </select>
@@ -271,7 +271,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">  
                                             <div class="subform">
-                                                <label for="province">Province:</label>
+                                                <label for="province" class="required">Province:</label>
                                                 <select id="province" name="province" class="form-control" required>
                                                     <option value="" selected disabled>Select Province</option>
                                                 </select>
@@ -280,7 +280,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="city">City/Municipality:</label>
+                                                <label for="city" class="required">City/Municipality:</label>
                                                 <select id="city" name="cityMun" class="form-control" required>
                                                     <option value="" selected disabled>Select City/Municipality</option>
                                                 </select>
@@ -289,7 +289,7 @@
 
                                         <div class="col-lg-3 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="barangay">Barangay:</label>
+                                                <label for="barangay" class="required">Barangay:</label>
                                                 <select id="barangay" name="barangay" class="form-control" required>
                                                     <option value="" selected disabled>Select Barangay</option>
                                                 </select>
@@ -300,7 +300,7 @@
 
                                     <div class="row">
                                         <div class="col-12 mt-2">    
-                                            <label for="addressLine">Address Line:</label>
+                                            <label for="addressLine" class="required">Address Line:</label>
                                             <input type="text" id="addressLine" name="addressLine" class="form-control addressLine" required>
                                         </div>
                                     </div>
@@ -325,7 +325,7 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="fafname">First Name:</label>
+                                                    <label for="fafname" class="required">First Name:</label>
                                                     <input type="text" id="fafname" name="fafname" class="form-control fafname" required>
                                                 </div>
 
@@ -335,26 +335,26 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="falname">Last Name:</label>
+                                                    <label for="falname" class="required">Last Name:</label>
                                                     <input type="text" id="falname" name="falname" class="form-control falname" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-4 mt-2">
-                                                    <label for="fabirthdate">Birth Date:</label>
+                                                    <label for="fabirthdate" class="required">Birth Date:</label>
                                                     <input type="text" id="fabirthdate" name="fabirthdate" class="datepicker-custom form-control fabirthdate" required>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-12 mt-2">
-                                                    <label for="fabirthplace">Birth Place:</label>
+                                                    <label for="fabirthplace" class="required">Birth Place:</label>
                                                     <input type="text" id="fabirthplace" name="fabirthplace" class="form-control fabirthplace" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-12 mt-2">
-                                                    <label for="faaddress">Address:</label>
+                                                    <label for="faaddress" class="required">Address:</label>
                                                     <input type="text" id="faaddress" name="faaddress" class="form-control faaddress" required>
                                                 </div>
                                             </div>
@@ -369,7 +369,7 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="mofname">First Name:</label>
+                                                    <label for="mofname" class="required">First Name:</label>
                                                     <input type="text" id="mofname" name="mofname" class="form-control mofname" required>
                                                 </div>
 
@@ -379,26 +379,26 @@
                                                 </div>
 
                                                 <div class="col-lg-4 col-md-12 mt-2">
-                                                    <label for="molname">Last Name:</label>
+                                                    <label for="molname" class="required">Last Name:</label>
                                                     <input type="text" id="molname" name="molname" class="form-control molname" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-4 mt-2">
-                                                    <label for="mobirthdate">Birth Date:</label>
+                                                    <label for="mobirthdate" class="required">Birth Date:</label>
                                                     <input type="text" id="mobirthdate" name="mobirthdate" class="datepicker-custom form-control mobirthdate" required>
                                                 </div>
 
                                                 <div class="col-lg-6 col-md-12 mt-2">
-                                                    <label for="mobirthplace">Birth Place:</label>
+                                                    <label for="mobirthplace" class="required">Birth Place:</label>
                                                     <input type="text" id="mobirthplace" name="mobirthplace" class="form-control mobirthplace" required>
                                                 </div>
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-12 mt-2">
-                                                    <label for="moaddress">Address:</label>
+                                                    <label for="moaddress" class="required">Address:</label>
                                                     <input type="text" id="moaddress" name="moaddress" class="form-control moaddress" required>
                                                 </div>
                                             </div>
@@ -417,13 +417,13 @@
 
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="confDate">Confirmation Date:</label>
+                                            <label for="confDate" class="required">Confirmation Date:</label>
                                             <input type="text" id="confDatePicker" name="confDate" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="priest">Priest:</label>
+                                                <label for="priest" class="required">Priest:</label>
                                                 <select id="priest" name="priest" class="form-control" required>
                                                     <option value="" selected disabled>Select Priest</option>
                                                 </select>
@@ -433,7 +433,7 @@
 
                                     <div class="row">
                                         <div class="col-12 mt-2">
-                                            <label for="church_baptized">Church Baptized:</label>
+                                            <label for="church_baptized" class="required">Church Baptized:</label>
                                             <input type="text" id="church_baptized" name="church_baptized" class="form-control">
                                         </div>
                                     </div>
@@ -444,12 +444,12 @@
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="sponsorA">Sponsor 1:</label>
+                                            <label for="sponsorA" class="required">Sponsor 1:</label>
                                             <input type="text" id="sponsorA" name="sponsorA" class="form-control">
                                         </div>
                                         
                                         <div class="col-lg-6 col-md-12 mt-2">    
-                                            <label for="sponsorB">Sponsor 2:</label>
+                                            <label for="sponsorB" class="required">Sponsor 2:</label>
                                             <input type="text" id="sponsorB" name="sponsorB" class="form-control">
                                        </div>
                                     </div>
@@ -467,22 +467,22 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confIndex">Index:</label>
+                                            <label for="confIndex" class="required">Index:</label>
                                             <input type="text" id="confIndex" name="rec_index" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confBook">Book:</label>
+                                            <label for="confBook" class="required">Book:</label>
                                             <input type="text" id="confBook" name="rec_book" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confPage">Page:</label>
+                                            <label for="confPage" class="required">Page:</label>
                                             <input type="text" id="confPage" name="rec_page" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confLine">Line:</label>
+                                            <label for="confLine" class="required">Line:</label>
                                             <input type="text" id="confLine" name="rec_line" class="form-control" required>
                                         </div>
                                     </div>
@@ -533,13 +533,13 @@
 
                                     <div class="row">
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="confDate">Confirmation Date:</label>
+                                            <label for="confDate" class="required">Confirmation Date:</label>
                                             <input type="text" id="DatePickerEdit" name="confDate" class="form-control datepicker" required>
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">    
                                             <div class="subform">
-                                                <label for="priestEdit">Priest:</label>
+                                                <label for="priestEdit" class="required">Priest:</label>
                                                 <select id="priestEdit" name="priestEdit" class="form-control" required>
                                                     <option value="" selected disabled>Select Priest</option>
                                                 </select>
@@ -549,7 +549,7 @@
 
                                     <div class="row">
                                         <div class="col-12 mt-2">
-                                            <label for="church_baptized">Church Baptized:</label>
+                                            <label for="church_baptized" class="required">Church Baptized:</label>
                                             <input type="text" id="church_baptized" name="church_baptized" class="form-control">
                                         </div>
                                     </div>
@@ -560,12 +560,12 @@
                                         </div>
 
                                         <div class="col-lg-6 col-md-12 mt-2">
-                                            <label for="sponsorA">Sponsor 1:</label>
+                                            <label for="sponsorA" class="required">Sponsor 1:</label>
                                             <input type="text" id="sponsorA" name="sponsorA" class="form-control">
                                         </div>
                                         
                                         <div class="col-lg-6 col-md-12 mt-2">    
-                                            <label for="sponsorB">Sponsor 2:</label>
+                                            <label for="sponsorB" class="required">Sponsor 2:</label>
                                             <input type="text" id="sponsorB" name="sponsorB" class="form-control">
                                        </div>
                                     </div>
@@ -582,22 +582,22 @@
                                     
                                     <div class="row">
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confIndex">Index:</label>
+                                            <label for="confIndex" class="required">Index:</label>
                                             <input type="text" id="confIndex" name="rec_index" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confBook">Book:</label>
+                                            <label for="confBook" class="required">Book:</label>
                                             <input type="text" id="confBook" name="rec_book" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confPage">Page:</label>
+                                            <label for="confPage" class="required">Page:</label>
                                             <input type="text" id="confPage" name="rec_page" class="form-control" required>
                                         </div>
 
                                         <div class="col-lg-3 col-md-12 mt-2">
-                                            <label for="confLine">Line:</label>
+                                            <label for="confLine" class="required">Line:</label>
                                             <input type="text" id="confLine" name="rec_line" class="form-control" required>
                                         </div>
                                     </div>
