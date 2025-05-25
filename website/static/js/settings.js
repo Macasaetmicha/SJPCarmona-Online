@@ -79,114 +79,141 @@ document.addEventListener("DOMContentLoaded", () => {
     const step2 = document.getElementById('step2');
     const step3 = document.getElementById('step3');
 
-    const existingPhoneInput = document.getElementById('existingPhoneInput');
-    const sendOtpBtn = document.getElementById('sendOtpBtn');
+    const maskedCurrentPhoneEl = document.getElementById('maskedCurrentPhone');
+    const maskedCurrentEmailEl = document.getElementById('maskedCurrentEmail');
 
-    const otpInput = document.getElementById('otpInput');
-    const verifyOtpBtn = document.getElementById('verifyOtpBtn');
-    const otpTimerEl = document.getElementById('otpTimer');
-    const resendOtpBtn = document.getElementById('resendOtpBtn');
-    const changePhoneBtn = document.getElementById('changePhoneBtn');
-    const closeModal = document.getElementById('close-modal');
+    const sendOtpPhoneBtn = document.getElementById('sendOtpPhoneBtn');
+    const sendOtpEmailBtn = document.getElementById('sendOtpEmailBtn');
 
-    const newPhoneInput = document.getElementById('newPhoneInput');
-    const updatePhoneBtn = document.getElementById('updatePhoneBtn');
+    const loadingPhone = document.getElementById('loadingPhone');
+    const loadingEmail = document.getElementById('loadingEmail');
 
-    let otpCountdown;
-    let otpTimeLeft = 60; 
-    let currentPhone = ''; 
+    let userId = null;
+    let currentPhone = '';
+    let currentEmail = '';
 
     let otpAttempts = 0;
     const maxOtpAttempts = 5;
-    let otpResetTimeout;
 
+    // On modal open or changePhoneBtn click: fetch user info, mask and display
     changePhoneBtn.addEventListener('click', () => {
-        document.getElementById('modalHeader').textContent = 'Verify Current Phone Number';
+        document.getElementById('modalHeader').textContent = 'Verify Current Contact';
         step1.classList.remove('d-none');
         step2.classList.add('d-none');
         step3.classList.add('d-none');
 
-        // Clear input fields
-        existingPhoneInput.value = '';
-        otpInput.value = '';
-        newPhoneInput.value = '';
+        // Clear OTP inputs & reset states as needed
+        otpInputs.forEach(input => input.value = '');
 
-        // Reset OTP timer if running
-        clearInterval(otpCountdown);
-        otpTimerEl.textContent = '';
-        resendOtpBtn.disabled = true;
-    })
 
-    let userId = null; 
-    sendOtpBtn.addEventListener('click', () => {
-        const enteredPhone = existingPhoneInput.value.trim();
-        const now = Date.now();
-        const lockoutExpiry = localStorage.getItem('otpLockoutExpiry'); 
-        console.log("LockoutExpiry", lockoutExpiry)
+        // Fetch user info
+        fetch('/api_db/get-current-user')
+            .then(res => res.json())
+            .then(user => {
+                userId = user.id;
+                currentPhone = user.contact_number || '';
+                currentEmail = user.email || '';
 
-        if (!isValidPhone(enteredPhone)) {
-            toastr.error('Invalid phone number format. Use 09xxxxxxxxx.');
+                console.log("Phone: ", currentPhone)
+                console.log("Email: ", currentEmail)
+
+                // Mask phone e.g. 09*******1234
+                if (currentPhone.length === 11) {
+                    maskedCurrentPhoneEl.textContent = currentPhone.slice(0, 2) + '*******' + currentPhone.slice(-2);
+                } else {
+                    maskedCurrentPhoneEl.textContent = 'Not available';
+                }
+
+                // Mask email: show first letter and domain e.g. j****@domain.com
+                if (currentEmail) {
+                    const [name, domain] = currentEmail.split('@');
+                    if (name.length > 1) {
+                        maskedCurrentEmailEl.textContent = name[0] + '****@' + domain;
+                    } else {
+                        maskedCurrentEmailEl.textContent = currentEmail;
+                    }
+                } else {
+                    maskedCurrentEmailEl.textContent = 'Not available';
+                }
+            })
+            .catch(() => {
+                toastr.error('Failed to fetch user information.');
+                maskedCurrentPhoneEl.textContent = 'Unavailable';
+                maskedCurrentEmailEl.textContent = 'Unavailable';
+            });
+    });
+
+    // Helper: disable buttons and show spinner
+    function setLoading(button, spinner, isLoading) {
+        button.disabled = isLoading;
+        if (isLoading) {
+            spinner.classList.remove('d-none');
+        } else {
+            spinner.classList.add('d-none');
+        }
+    }
+
+    // Send OTP to phone
+    sendOtpPhoneBtn.addEventListener('click', () => {
+        if (!currentPhone) {
+            toastr.error('No registered phone number found.');
             return;
         }
+        setLoading(sendOtpPhoneBtn, loadingPhone, true);
 
-        if (lockoutExpiry && now < parseInt(lockoutExpiry, 10)) {
-            console.log("Still not allowed")
-            const waitSeconds = Math.ceil((parseInt(lockoutExpiry, 10) - now) / 1000);
-            toastr.error(`Maximum OTP attempts reached. Please try again after ${waitSeconds} seconds.`);
-            return; // Prevent going to Step 2
-        }
-
-        $.ajax({
-            url: '/api_db/get-current-user',
-            method: 'GET',
-            success: function(user) {
-                console.log(user)
-                userId = user.id;
-                currentPhone = user.contact_number;
-                fetch('/send-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: userId, phone: enteredPhone }),
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.message) {
-                        // Show OTP step and start timer
-                        step1.classList.add('d-none');
-                        document.getElementById('modalHeader').textContent = 'Enter OTP';
-                        step2.classList.remove('d-none');
-                        
-                        toastr.success('OTP sent to your current phone number.');
-                        
-                    } else {
-                        toastr.error('Error: ' + (data.error || 'Unknown error'));
-                    }
-                })
-                .catch(() =>toastr.error('Network error. Please try again.'));
-
-                // console.log("Fetched Current Phone:", currentPhone);
-                // console.log("Entered Number:", enteredPhone);
-
-                // if (enteredPhone !== currentPhone) {
-                //     toastr.error('Entered number does not match your current phone number.');
-                //     return;
-                // }
-
-                
-            },
-            error: function(err) {
-                console.error("Failed to fetch user info:", err);
-                toastr.error('Error fetching user phone number.');
+        fetch('/send-otp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ user_id: userId, phone: currentPhone }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            setLoading(sendOtpPhoneBtn, loadingPhone, false);
+            if (data.message) {
+                toastr.success('OTP sent to your current phone number.');
+                step1.classList.add('d-none');
+                document.getElementById('modalHeader').textContent = 'Enter OTP';
+                step2.classList.remove('d-none');
+            } else {
+                toastr.error('Error: ' + (data.error || 'Unknown error'));
             }
+        })
+        .catch(() => {
+            setLoading(sendOtpPhoneBtn, loadingPhone, false);
+            toastr.error('Network error. Please try again.');
         });
     });
 
-    // resendOtpBtn.addEventListener('click', () => {
-    //     otpInput.value = '';
-    //     startOtpTimer();
-    //     toastr.success('OTP resent.');
-    //     resendOtpBtn.disabled = true;
-    // });
+    // Send OTP to email
+    sendOtpEmailBtn.addEventListener('click', () => {
+        if (!currentEmail) {
+            toastr.error('No registered email found.');
+            return;
+        }
+        setLoading(sendOtpEmailBtn, loadingEmail, true);
+
+        fetch('/send-otp-email', {  // your email OTP endpoint
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ user_id: userId, email: currentEmail }),
+        })
+        .then(res => res.json())
+        .then(data => {
+            setLoading(sendOtpEmailBtn, loadingEmail, false);
+            if (data.message) {
+                toastr.success('OTP sent to your registered email.');
+                step1.classList.add('d-none');
+                document.getElementById('modalHeader').textContent = 'Enter OTP';
+                step2.classList.remove('d-none');
+            } else {
+                toastr.error('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(() => {
+            setLoading(sendOtpEmailBtn, loadingEmail, false);
+            toastr.error('Network error. Please try again.');
+        });
+    });
 
     const otpInputs = document.querySelectorAll('#otpBoxContainer .otp-box');
 
@@ -207,65 +234,56 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('verifyOtpBtn').addEventListener('click', () => {
         const enteredOtp = Array.from(otpInputs).map(input => input.value).join('');
 
-        if (enteredOtp !== '123456') {
-            otpAttempts++;
-
-
-            if (otpAttempts >= maxOtpAttempts) {
-                const lockoutDurationMs = 5 * 60 * 1000; // 5 minutes
-                const expiry = Date.now() + lockoutDurationMs;
-                localStorage.setItem('otpLockoutExpiry', expiry.toString());
-
-                toastr.error('Maximum OTP attempts reached. Please try again after 5 minutes.');
-
-                // // Calculate unlock timestamp
-                // const unlockTime = Date.now() + lockoutDurationMs;
-                // localStorage.setItem('otpUnlockTime', unlockTime);
-
-                otpInputs.forEach(input => {
-                    input.value = '';
-                    input.disabled = true;
-                });
-                document.getElementById('verifyOtpBtn').disabled = true;
-
-                // startLockoutTimer(unlockTime);
-                return;
-            }
-
-
-            const remaining = maxOtpAttempts - otpAttempts;
-            toastr.error(`Incorrect OTP. You have ${remaining} attempt${remaining === 1 ? '' : 's'} left.`);
-            return;
-        }
-
-        if (enteredOtp.length !== 6) {
+        if (enteredOtp.length !== 6 || !/^\d{6}$/.test(enteredOtp)) {
             toastr.error('Please enter a valid 6-digit OTP.');
             return;
         }
 
-        // Send OTP to backend (endpoint: /verify-otp) — implement separately
+        // Check for lockout before making request
+        const lockoutExpiry = localStorage.getItem('otpLockoutExpiry');
+        if (lockoutExpiry && Date.now() < parseInt(lockoutExpiry)) {
+            toastr.error('You are temporarily locked out. Please try again later.');
+            return;
+        }
+
+        // Send OTP to backend
         fetch('/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ otp: enteredOtp , user_id:userId})  // optionally add user_id
+            body: JSON.stringify({ otp: enteredOtp, user_id: userId })
         })
         .then(res => res.json())
         .then(data => {
-            if (data.message) {
+            if (data.success) {
                 // OTP is correct
                 step2.classList.add('d-none');
+                document.getElementById('modalHeader').textContent = 'Enter New Number';
                 step3.classList.remove('d-none');
-                // clearInterval(otpCountdown);
             } else {
-                toastr.error('Error: ' + (data.error || 'Unknown error'));
+                otpAttempts++;
+                if (otpAttempts >= maxOtpAttempts) {
+                    const lockoutDurationMs = 5 * 60 * 1000; // 5 minutes
+                    localStorage.setItem('otpLockoutExpiry', (Date.now() + lockoutDurationMs).toString());
+
+                    toastr.error('Maximum OTP attempts reached. Please try again after 5 minutes.');
+
+                    otpInputs.forEach(input => {
+                        input.value = '';
+                        input.disabled = true;
+                    });
+                    document.getElementById('verifyOtpBtn').disabled = true;
+                    return;
+                }
+
+                const remaining = maxOtpAttempts - otpAttempts;
+                toastr.error(`Incorrect OTP. You have ${remaining} attempt${remaining === 1 ? '' : 's'} left.`);
             }
         })
         .catch(() => {
             toastr.error('Network error. Please try again.');
         });
-
-        
     });
+
 
     updatePhoneBtn.addEventListener('click', async () => {
         const newPhone = newPhoneInput.value.trim();
@@ -321,21 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const unlockTime = localStorage.getItem('otpUnlockTime');
-
-    if (unlockTime && Date.now() < unlockTime) {
-        // still locked out, disable inputs and start countdown
-        otpInputs.forEach(input => input.disabled = true);
-        document.getElementById('verifyOtpBtn').disabled = true;
-        startLockoutTimer(Number(unlockTime));
-    } else {
-        // not locked or time passed, clear lockout
-        localStorage.removeItem('otpUnlockTime');
-        otpInputs.forEach(input => input.disabled = false);
-        document.getElementById('verifyOtpBtn').disabled = false;
-        otpAttempts = 0; // reset attempts here if needed
-    }
-
 });
 
 async function onAuthenticateButtonClicked() {
@@ -386,59 +389,4 @@ async function onAuthenticateButtonClicked() {
 
 function isValidPhone(phone) {
     return /^09\d{9}$/.test(phone);
-}
-
-function formatTime(seconds) {
-    const m = String(Math.floor(seconds / 60)).padStart(2, '0');
-    const s = String(seconds % 60).padStart(2, '0');
-    return `${m}:${s}`;
-}
-
-function startOtpTimer() {
-    otpTimeLeft = 60; 
-    resendOtpBtn.disabled = true;
-    otpTimerEl.textContent = formatTime(otpTimeLeft);
-
-    clearInterval(otpCountdown);
-    clearTimeout(otpResetTimeout);
-
-    otpCountdown = setInterval(() => {
-        otpTimeLeft--;
-        otpTimerEl.textContent = formatTime(otpTimeLeft);
-
-        if (otpTimeLeft <= 0) {
-        clearInterval(otpCountdown);
-        resendOtpBtn.disabled = false;
-        }
-    }, 1000);
-
-    otpResetTimeout = setTimeout(() => {
-        otpAttempts = 0;
-        verifyOtpBtn.disabled = false;
-        otpInputs.forEach(input => input.disabled = false);
-        toastr.info('You can try verifying the OTP again.');
-    }, 300000);
-}
-
-function startLockoutTimer(unlockTime) {
-    const otpTimerEl = document.getElementById('otpTimer');
-    
-    function updateTimer() {
-        const timeLeft = Math.floor((unlockTime - Date.now()) / 1000);
-        if (timeLeft <= 0) {
-        otpTimerEl.textContent = '';
-        otpInputs.forEach(input => input.disabled = false);
-        document.getElementById('verifyOtpBtn').disabled = false;
-        otpAttempts = 0; // reset attempts here too
-        localStorage.removeItem('otpUnlockTime');
-        clearInterval(timerInterval);
-        } else {
-        const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-        const seconds = String(timeLeft % 60).padStart(2, '0');
-        otpTimerEl.textContent = `Try again in ${minutes}:${seconds}`;
-        }
-    }
-
-    updateTimer();
-    const timerInterval = setInterval(updateTimer, 1000);
 }
