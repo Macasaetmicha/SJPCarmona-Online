@@ -480,36 +480,39 @@ def send_otp_email():
 
 @auth.route('/verify-otp', methods=['POST'])
 def verify_otp():
-    print("START VERIFICATION")
-    data = request.get_json()
-    user_id = data.get('user_id')
-    submitted_otp = data.get('otp')
-
-    user = User.query.filter_by(id=user_id).first()
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-
-    print(f"USER OTP: '{submitted_otp}' (len={len(submitted_otp)})")
-    print(f"DB OTP:   '{user.otp_code}' (len={len(user.otp_code)})")
-
-    if user.otp_code != submitted_otp:
-        print("OTP ARE NOT THE SAME")
-        return jsonify({'error': 'Incorrect OTP'}), 400
+    try:
+        print("START VERIFICATION")
+        data = request.get_json()
+        user_id = data.get('user_id')
+        submitted_otp = data.get('otp')
     
-    otp_exp = user.otp_expiration
-    if otp_exp.tzinfo is None:
-        otp_exp = otp_exp.replace(tzinfo=timezone.utc)
-
-    if datetime.now(timezone.utc) > otp_exp:
-        return jsonify({'error': 'OTP expired'}), 400
-
-    # Invalidate OTP
-    user.otp_code = None
-    user.otp_expiration = None
-    db.session.commit()
-    print("REACHED THE END")
-
-    return jsonify({'message': 'OTP verified successfully'}), 200
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+    
+        print(f"USER OTP: '{submitted_otp}' (len={len(submitted_otp)})")
+        print(f"DB OTP:   '{user.otp_code}' (len={len(user.otp_code)})")
+    
+        if user.otp_code != submitted_otp:
+            print("OTP ARE NOT THE SAME")
+            return jsonify({'error': 'Incorrect OTP'}), 400
+        
+        otp_exp = user.otp_expiration
+        if otp_exp.tzinfo is None:
+            otp_exp = otp_exp.replace(tzinfo=timezone.utc)
+    
+        if datetime.now(timezone.utc) > otp_exp:
+            return jsonify({'error': 'OTP expired'}), 400
+    
+        # Invalidate OTP
+        user.otp_code = None
+        user.otp_expiration = None
+        db.session.commit()
+        print("REACHED THE END")
+    
+        return jsonify({'success': True, 'message': 'OTP verified successfully'}), 200
+    except Exception as e:
+        return jsonify({'success': False, 'error': 'Invalid or expired OTP'}), 400
 
 @auth.route('/recover_fido')
 def recover_fido():
