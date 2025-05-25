@@ -123,11 +123,24 @@
                     <h5 class="modal-title"><span id="modalHeader"></span></h5>
                     <button type="button" id="close-modal" class="btn-close close-modal" data-bs-dismiss="modal"></button>
                 </div>
+               
                 <!-- Step 1: Enter Existing Number -->
                 <div class="modal-body p-3" id="step1">
-                    <label for="existingPhoneInput" class="form-label">Enter your current phone number</label>
-                    <input type="tel" id="existingPhoneInput" class="form-control" placeholder="09xxxxxxxxx" maxlength="11">
-                    <button id="sendOtpBtn" class="btn btn-primary mt-3">Send OTP</button>
+                    <p>We will send a One-Time Password (OTP) to your registered contact.</p>
+                    <p>Current Phone: <strong id="maskedCurrentPhone"></strong></p>
+                    <p>Email: <strong id="maskedCurrentEmail"></strong></p>
+
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <button id="sendOtpPhoneBtn" class="btn btn-primary">
+                            Send OTP to Phone
+                            <span id="loadingPhone" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                        </button>
+
+                        <button id="sendOtpEmailBtn" class="btn btn-secondary">
+                            Send OTP to Email
+                            <span id="loadingEmail" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Step 2: Enter OTP -->
