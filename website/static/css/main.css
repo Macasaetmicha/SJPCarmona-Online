@@ -315,6 +315,43 @@ footer {
     font-size: 0.6rem !important;
 }
 
+.btn-view {
+  background-color: #0d6efd;
+  color: white;
+}
+.btn-view:hover,
+.btn-view:focus {
+  background-color: #0b5ed7;
+}
+.btn-view:active {
+  background-color: #0a58ca;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: black;
+}
+.btn-edit:hover,
+.btn-edit:focus {
+  background-color: #ffcd39;
+}
+.btn-edit:active {
+  background-color: #ffca2c;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+.btn-delete:hover,
+.btn-delete:focus {
+  background-color: #bb2d3b;
+}
+.btn-delete:active {
+  background-color: #b02a37;
+}
+
+
 /* HYPERLINKS */
 a {
     color: var(--text-color)!important;
