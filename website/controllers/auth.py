@@ -13,6 +13,8 @@ from .sms_service import send_verification_sms
 import random
 from datetime import datetime, timedelta, timezone
 import pytz
+from flask_mail import Message
+from website import mail
 
 auth = Blueprint('auth', __name__)
 
@@ -431,6 +433,50 @@ def send_otp():
     except Exception as e:
         print("Error in send_otp:", e)
         return jsonify({'error': 'Server error backend'}), 500
+
+@auth.route('/send-otp-email', methods=['POST'])
+def send_otp_email():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+
+        if not user_id:
+            return jsonify({'error': 'User ID is required'}), 400
+
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+
+        if not user.email:
+            return jsonify({'error': 'User has no email address on record'}), 400
+
+        otp = f"{random.randint(100000, 999999)}"
+        # Generate or reuse OTP logic
+        # otp = 123456  # For testing; use: f"{random.randint(100000, 999999)}" in production
+
+        manila = pytz.timezone("Asia/Manila")
+        now_local = datetime.now(manila)
+        expiration = now_local + timedelta(minutes=5)
+
+        # Store OTP in DB
+        user.otp_code = otp
+        user.otp_expiration = expiration
+        db.session.commit()
+
+        # Send OTP via Email
+        msg = Message(
+            subject='Your OTP Code for Account Recovery',
+            recipients=[user.email],
+            body=f'Your OTP is: {otp}. It will expire in 5 minutes.\n\nIf you did not request this, please ignore this email.'
+        )
+        mail.send(msg)
+
+        return jsonify({'message': 'OTP sent successfully to email'}), 200
+
+    except Exception as e:
+        print("Error in send_otp_email:", e)
+        return jsonify({'error': 'Server error while sending email OTP'}), 500
+
 
 @auth.route('/verify-otp', methods=['POST'])
 def verify_otp():
