@@ -11,7 +11,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const resendOtpBtn = document.getElementById('resendOtpBtn');
     const otpTimer = document.getElementById('otpTimer');
 
+    const sendSMSLoading = document.getElementById('sendSMSLoading');
+    const recovemailBtn = document.getElementById('recovemailBtn');
+    const emailLoading = document.getElementById('emailLoading');
+
     let countdownInterval;
+    let usingEmail = false;
 
     function showStep(stepElement) {
         [step1, step2].forEach(s => s.classList.add('d-none'));
@@ -44,6 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // STEP 1 — Send SMS
     document.getElementById('sendSMSBtn').addEventListener('click', () => {
+        sendSMSBtn.disabled = true;
+        sendSMSLoading.classList.remove('d-none');
+
         console.log("Button Pressed")
         const userId = document.getElementById('sendSMSBtn').dataset.userId;
         const phone = document.getElementById('fullPhoneInput').value.trim();
@@ -67,8 +75,42 @@ document.addEventListener('DOMContentLoaded', function () {
                 toastr.error('Error: ' + (data.error || 'Unknown error'));
             }
         })
-        .catch(() =>toastr.error('Network error. Please try again.'));
+        .catch(() =>toastr.error('Network error. Please try again.'))
+        .finally(() => {
+            sendSMSBtn.disabled = false;
+            sendSMSLoading.classList.add('d-none');
+        });
+        
     });
+
+    document.getElementById('recovemailBtn').addEventListener('click', () => {
+        recovemailBtn.style.pointerEvents = 'none'; // disable clicking
+        emailLoading.classList.remove('d-none');
+        const userId = document.getElementById('sendSMSBtn').dataset.userId;
+
+        fetch('/send-otp-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: userId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.message) {
+                toastr.success('OTP sent to your email.');
+                showStep(step2);
+                const instruction = document.getElementById('verifyInstruction');
+                if (instruction) instruction.textContent = 'We sent an OTP to your email. Please enter it below.';
+            } else {
+                toastr.error('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(() => toastr.error('Network error. Please try again.'))
+        .finally(() => {
+            recovemailBtn.style.pointerEvents = 'auto';
+            emailLoading.classList.add('d-none');
+        });
+    });
+
     
 
     // STEP 2 — Verify OTP
@@ -115,6 +157,3 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize with step 1 shown
     showStep(step1);
 });
-
-
-
