@@ -315,39 +315,39 @@ footer {
     font-size: 0.6rem !important;
 }
 
-.btn-view {
+.view-btn {
   background-color: #0d6efd;
   color: white;
 }
-.btn-view:hover,
-.btn-view:focus {
+.view-btn:hover,
+.view-btn:focus {
   background-color: #0b5ed7;
 }
-.btn-view:active {
+.view-btn:active {
   background-color: #0a58ca;
 }
 
-.btn-edit {
+.edit-btn {
   background-color: #ffc107;
   color: black;
 }
-.btn-edit:hover,
-.btn-edit:focus {
+.edit-btn:hover,
+.edit-btn:focus {
   background-color: #ffcd39;
 }
-.btn-edit:active {
+.edit-btn:active {
   background-color: #ffca2c;
 }
 
-.btn-delete {
+.delete-btn {
   background-color: #dc3545;
   color: white;
 }
-.btn-delete:hover,
-.btn-delete:focus {
+.delete-btn:hover,
+.delete-btn:focus {
   background-color: #bb2d3b;
 }
-.btn-delete:active {
+.delete-btn:active {
   background-color: #b02a37;
 }
 
