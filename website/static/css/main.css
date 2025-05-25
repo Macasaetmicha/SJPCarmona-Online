@@ -316,39 +316,39 @@ footer {
 }
 
 .view-btn {
-  background-color: #0d6efd;
-  color: white;
+  background-color: #0d6efd !important;
+  color: white !important;
 }
 .view-btn:hover,
 .view-btn:focus {
-  background-color: #0b5ed7;
+  background-color: #0b5ed7 !important;
 }
 .view-btn:active {
-  background-color: #0a58ca;
+  background-color: #0a58ca !important;
 }
 
 .edit-btn {
-  background-color: #ffc107;
-  color: black;
+  background-color: #ffc107 !important;
+  color: white !important;
 }
 .edit-btn:hover,
 .edit-btn:focus {
-  background-color: #ffcd39;
+  background-color: #ffcd39 !important;
 }
 .edit-btn:active {
-  background-color: #ffca2c;
+  background-color: #ffca2c !important;
 }
 
 .delete-btn {
-  background-color: #dc3545;
+  background-color: #dc3545 !important;
   color: white;
 }
 .delete-btn:hover,
 .delete-btn:focus {
-  background-color: #bb2d3b;
+  background-color: #bb2d3b !important;
 }
 .delete-btn:active {
-  background-color: #b02a37;
+  background-color: #b02a37 !important;
 }
 
 
