@@ -17,7 +17,7 @@ const recordsColumns = [
         data: null,
         render: function (data, type, row) {
             return `
-                <button class="btn btn-primary find-btn-rec" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#recordsModal">
+                <button class="btn btn-primary find-btn-rec view-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#recordsModal">
                     <i class="fa-solid fa-info fa-fw"></i>
                 </button>
                 <button class="mt-1 btn btn-primary edit-btn-record edit-btn" id="editRecordBtn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#editRecordModal">
@@ -56,7 +56,7 @@ const baptismColumns = [
         data: null,
         render: function (data, type, row) {
             return `
-                <button class="btn btn-primary find-btn-bapt" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showBaptModal">
+                <button class="btn btn-primary find-btn-bapt view-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showBaptModal">
                     <i class="fa-solid fa-info fa-fw"></i>
                 </button>
                 <button class="mt-1 btn btn-primary edit-btn-baptism edit-btn" id="editBaptismBtn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#editBaptismModal">
@@ -111,7 +111,7 @@ const confirmationColumns = [
         data: null,
         render: function (data, type, row) {
             return `
-                <button class="btn btn-primary find-btn-conf" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showConfModal">
+                <button class="btn btn-primary find-btn-conf view-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showConfModal">
                     <i class="fa-solid fa-info fa-fw"></i>
                 </button>
                 <button class="mt-1 btn btn-primary edit-btn-confirmation edit-btn" id="editConfirmationBtn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#editConfirmationModal">
@@ -166,7 +166,7 @@ const weddingColumns = [
         data: null,
         render: function (data, type, row) {
             return `
-                <button class="btn btn-primary find-btn-wedd" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showWeddModal">
+                <button class="btn btn-primary find-btn-wedd view-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showWeddModal">
                     <i class="fa-solid fa-info fa-fw"></i>
                 </button>
                 <button class="mt-1 btn btn-primary edit-btn-wedding edit-btn" id="editWeddingBtn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#editWeddingModal">
@@ -225,7 +225,7 @@ const deathColumns = [
         data: null,
         render: function (data, type, row) {
             return `
-                <button class="btn btn-primary find-btn-death" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showDeathModal">
+                <button class="btn btn-primary find-btn-death view-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showDeathModal">
                     <i class="fa-solid fa-info fa-fw"></i>
                 </button>
                 <button class="mt-1 btn btn-primary edit-btn-death edit-btn" id="editDeathBtn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#editDeathModal">
@@ -280,7 +280,7 @@ const priestColumns = [
         data: null,
         render: function (data, type, row) {
             return `
-                <button class="btn btn-primary find-btn-priest" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showPriestModal">
+                <button class="btn btn-primary find-btn-priest view-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showPriestModal">
                     <i class="fa-solid fa-info fa-fw"></i>
                 </button>
                 <button class="btn btn-primary edit-btn-priest edit-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#editPriestModal">
@@ -305,10 +305,10 @@ const requestColumns = [
         data: null,
         render: function (data, type, row) {
             return `
-                <button class="btn btn-primary find-btn-request me-1" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showRequestModal">
+                <button class="btn btn-primary find-btn-request me-1 view-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#showRequestModal">
                     <i class="fa-solid fa-info fa-fw"></i>
                 </button>
-                <button class="btn btn-secondary search-record-btn" 
+                <button class="btn btn-secondary search-record-btn edit-btn" 
                         data-ceremony="${row.ceremony}" 
                         data-rec-name="${row.rec_name}" 
                         data-cer-year="${row.cer_year}"
