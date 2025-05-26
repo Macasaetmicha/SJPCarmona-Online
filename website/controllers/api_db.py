@@ -555,46 +555,58 @@ def get_wedding():
         .all()
     )
 
+    # Collect all location codes for batch querying
+    province_codes = set()
+    citymun_codes = set()
+    brgy_codes = set()
+
+    for w in weddings:
+        if w.groom_record:
+            province_codes.add(w.groom_record.province)
+            citymun_codes.add(w.groom_record.citymun)
+            brgy_codes.add(w.groom_record.brgy)
+        if w.bride_record:
+            province_codes.add(w.bride_record.province)
+            citymun_codes.add(w.bride_record.citymun)
+            brgy_codes.add(w.bride_record.brgy)
+
+    # Batch load location data into dicts
+    provinces = {p.provCode: p.provDesc for p in Province.query.filter(Province.provCode.in_(province_codes)).all()}
+    citymuns = {c.citymunCode: c.citymunDesc for c in CityMun.query.filter(CityMun.citymunCode.in_(citymun_codes)).all()}
+    brgys = {b.brgyCode: b.brgyDesc for b in Barangay.query.filter(Barangay.brgyCode.in_(brgy_codes)).all()}
+
     data = []
     for wedding in weddings:
-        groom_record = wedding.groom_record
-        bride_record = wedding.bride_record
+        groom = wedding.groom_record
+        bride = wedding.bride_record
         priest = wedding.priest
-
-        # Address lookups (not eager-loadable unless you model them)
-        groom_province = Province.query.filter_by(provCode=groom_record.province).first() if groom_record else None
-        groom_citymun = CityMun.query.filter_by(citymunCode=groom_record.citymun).first() if groom_record else None
-        groom_brgy = Barangay.query.filter_by(brgyCode=groom_record.brgy).first() if groom_record else None
-
-        bride_province = Province.query.filter_by(provCode=bride_record.province).first() if bride_record else None
-        bride_citymun = CityMun.query.filter_by(citymunCode=bride_record.citymun).first() if bride_record else None
-        bride_brgy = Barangay.query.filter_by(brgyCode=bride_record.brgy).first() if bride_record else None
 
         wedding_data = {
             "id": wedding.id,
-            "wedding_date": wedding.wedding_date.strftime('%Y-%m-%d'),
+            "wedding_date": wedding.wedding_date.strftime('%Y-%m-%d') if wedding.wedding_date else None,
 
             "groom": {
-                "groom_id": groom_record.id if groom_record else None,
-                "first_name": groom_record.first_name if groom_record else None,
-                "middle_name": groom_record.middle_name if groom_record else None,
-                "last_name": groom_record.last_name if groom_record else None,
-                "birthday": groom_record.birthday.strftime('%Y-%m-%d') if groom_record and groom_record.birthday else None,
-                "address": groom_record.address if groom_record else None,
-                "province": groom_province.provDesc if groom_province else None,
-                "citymun": groom_citymun.citymunDesc if groom_citymun else None,
-                "brgy": groom_brgy.brgyDesc if groom_brgy else None
+                "groom_id": groom.id if groom else None,
+                "first_name": groom.first_name if groom else None,
+                "middle_name": groom.middle_name if groom else None,
+                "last_name": groom.last_name if groom else None,
+                "birthday": groom.birthday.strftime('%Y-%m-%d') if groom and groom.birthday else None,
+                "address": groom.address if groom else None,
+                "province": provinces.get(groom.province) if groom else None,
+                "citymun": citymuns.get(groom.citymun) if groom else None,
+                "brgy": brgys.get(groom.brgy) if groom else None
             },
+
             "bride": {
-                "bride_id": bride_record.id if bride_record else None,
-                "first_name": bride_record.first_name if bride_record else None,
-                "middle_name": bride_record.middle_name if bride_record else None,
-                "last_name": bride_record.last_name if bride_record else None,
-                "birthday": bride_record.birthday.strftime('%Y-%m-%d') if bride_record and bride_record.birthday else None,
-                "address": bride_record.address if bride_record else None,
-                "province": bride_province.provDesc if bride_province else None,
-                "citymun": bride_citymun.citymunDesc if bride_citymun else None,
-                "brgy": bride_brgy.brgyDesc if bride_brgy else None
+                "bride_id": bride.id if bride else None,
+                "first_name": bride.first_name if bride else None,
+                "middle_name": bride.middle_name if bride else None,
+                "last_name": bride.last_name if bride else None,
+                "birthday": bride.birthday.strftime('%Y-%m-%d') if bride and bride.birthday else None,
+                "address": bride.address if bride else None,
+                "province": provinces.get(bride.province) if bride else None,
+                "citymun": citymuns.get(bride.citymun) if bride else None,
+                "brgy": brgys.get(bride.brgy) if bride else None
             },
 
             "priest": {
@@ -723,6 +735,23 @@ def get_death():
         .all()
     )
 
+    # Collect all location codes from all death records
+    province_codes = set()
+    citymun_codes = set()
+    brgy_codes = set()
+
+    for death in deaths:
+        record = death.record
+        if record:
+            province_codes.add(record.province)
+            citymun_codes.add(record.citymun)
+            brgy_codes.add(record.brgy)
+
+    # Batch load location lookups
+    provinces = {p.provCode: p.provDesc for p in Province.query.filter(Province.provCode.in_(province_codes)).all()}
+    citymuns = {c.citymunCode: c.citymunDesc for c in CityMun.query.filter(CityMun.citymunCode.in_(citymun_codes)).all()}
+    brgys = {b.brgyCode: b.brgyDesc for b in Barangay.query.filter(Barangay.brgyCode.in_(brgy_codes)).all()}
+
     data = []
     for death in deaths:
         record = death.record
@@ -730,13 +759,9 @@ def get_death():
         mother = record.mother if record else None
         father = record.father if record else None
 
-        province = Province.query.filter_by(provCode=record.province).first() if record else None
-        citymun = CityMun.query.filter_by(citymunCode=record.citymun).first() if record else None
-        brgy = Barangay.query.filter_by(brgyCode=record.brgy).first() if record else None
-
         death_data = {
             "id": death.id,
-            "death_date": death.death_date.strftime('%Y-%m-%d'),
+            "death_date": death.death_date.strftime('%Y-%m-%d') if death.death_date else None,
 
             "record": {
                 "id": record.id if record else None,
@@ -745,9 +770,9 @@ def get_death():
                 "last_name": record.last_name if record else None,
                 "birthday": record.birthday.strftime('%Y-%m-%d') if record and record.birthday else None,
                 "address": record.address if record else None,
-                "province": province.provDesc if province else None,
-                "citymun": citymun.citymunDesc if citymun else None,
-                "brgy": brgy.brgyDesc if brgy else None
+                "province": provinces.get(record.province) if record else None,
+                "citymun": citymuns.get(record.citymun) if record else None,
+                "brgy": brgys.get(record.brgy) if record else None
             },
 
             "priest": {
@@ -761,6 +786,7 @@ def get_death():
                 "middle_name": mother.middle_name if mother else None,
                 "last_name": mother.last_name if mother else None
             },
+
             "father": {
                 "id": father.id if father else None,
                 "first_name": father.first_name if father else None,
@@ -772,6 +798,7 @@ def get_death():
         data.append(death_data)
 
     return jsonify({"data": data})
+
 
 @api_db.route('/death/view/<int:death_id>', methods=['GET'])
 def get_deaths_view(death_id):
