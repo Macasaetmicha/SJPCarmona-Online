@@ -38,11 +38,4 @@ class Record(db.Model):
 
     barangay = db.relationship('Barangay', backref=db.backref('requests', lazy=True))
 
-    region_rel = db.relationship('Region', foreign_keys=[region])
-    province_rel = db.relationship('Province', foreign_keys=[province])
-    citymun_rel = db.relationship('CityMun', foreign_keys=[citymun])
-    # brgy_rel = db.relationship('Barangay', foreign_keys=[brgy])
-
-    mother = db.relationship('Parent', foreign_keys=[mother_id])
-    father = db.relationship('Parent', foreign_keys=[father_id])
     
