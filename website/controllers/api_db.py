@@ -68,10 +68,25 @@ def get_all_priest():
 
 @api_db.route('/records', methods=['GET'])
 def get_records():
-    records = Record.query.all()
+    records = (
+        Record.query
+        .options(
+            joinedload(Record.baptism),
+            joinedload(Record.confirmation),
+            joinedload(Record.wedding_groom),
+            joinedload(Record.death),
+            joinedload(Record.region_rel),
+            joinedload(Record.province_rel),
+            joinedload(Record.citymun_rel),
+            joinedload(Record.brgy_rel),
+            joinedload(Record.mother),
+            joinedload(Record.father)
+        )
+        .all()
+    )
+
     data = []
     for record in records:
-
         record_data = {
             "id": record.id,
             "first_name": record.first_name,
@@ -82,32 +97,30 @@ def get_records():
             "birthplace": record.birthplace,
             "status": record.status.name,
             "address": record.address,
-            "region": Region.query.get(record.region).regDesc if record.region else None,
-            "province": Province.query.filter_by(provCode=record.province).first().provDesc if record.province else None,
-            "citymun": CityMun.query.filter_by(citymunCode=record.citymun).first().citymunDesc if record.citymun else None,
-            "brgy": Barangay.query.filter_by(brgyCode=record.brgy).first().brgyDesc if record.brgy else None,
-            
-            # Fetch Parents Information
+            "region": record.region_rel.regDesc if record.region_rel else None,
+            "province": record.province_rel.provDesc if record.province_rel else None,
+            "citymun": record.citymun_rel.citymunDesc if record.citymun_rel else None,
+            "brgy": record.brgy_rel.brgyDesc if record.brgy_rel else None,
+
             "mother": {
-                "id": record.mother_id,
-                "first_name": Parent.query.get(record.mother_id).first_name if record.mother_id else None,
-                "middle_name": Parent.query.get(record.mother_id).middle_name if record.mother_id else None,
-                "last_name": Parent.query.get(record.mother_id).last_name if record.mother_id else None,
-                "birthday": Parent.query.get(record.mother_id).birthday.strftime('%Y-%m-%d') if record.mother_id else None,
-                "birthplace": Parent.query.get(record.mother_id).birthplace if record.mother_id else None,
-                "address": Parent.query.get(record.mother_id).address if record.mother_id else None
+                "id": record.mother.id if record.mother else None,
+                "first_name": record.mother.first_name if record.mother else None,
+                "middle_name": record.mother.middle_name if record.mother else None,
+                "last_name": record.mother.last_name if record.mother else None,
+                "birthday": record.mother.birthday.strftime('%Y-%m-%d') if record.mother and record.mother.birthday else None,
+                "birthplace": record.mother.birthplace if record.mother else None,
+                "address": record.mother.address if record.mother else None,
             },
             "father": {
-                "id": record.father_id,
-                "first_name": Parent.query.get(record.father_id).first_name if record.father_id else None,
-                "middle_name": Parent.query.get(record.father_id).middle_name if record.father_id else None,
-                "last_name": Parent.query.get(record.father_id).last_name if record.father_id else None,
-                "birthday": Parent.query.get(record.father_id).birthday.strftime('%Y-%m-%d') if record.father_id else None,
-                "birthplace": Parent.query.get(record.father_id).birthplace if record.father_id else None,
-                "address": Parent.query.get(record.father_id).address if record.father_id else None
+                "id": record.father.id if record.father else None,
+                "first_name": record.father.first_name if record.father else None,
+                "middle_name": record.father.middle_name if record.father else None,
+                "last_name": record.father.last_name if record.father else None,
+                "birthday": record.father.birthday.strftime('%Y-%m-%d') if record.father and record.father.birthday else None,
+                "birthplace": record.father.birthplace if record.father else None,
+                "address": record.father.address if record.father else None,
             },
 
-            # Fetch Ceremonies with Index, Book, Page, Line
             "ceremonies": {
                 "baptism": {
                     "index": record.baptism.rec_index if record.baptism else None,
@@ -121,7 +134,7 @@ def get_records():
                     "page": record.confirmation.rec_page if record.confirmation else None,
                     "line": record.confirmation.rec_line if record.confirmation else None
                 },
-                 "wedding": {
+                "wedding": {
                     "index": record.wedding_groom.rec_index if record.wedding_groom else None,
                     "book": record.wedding_groom.rec_book if record.wedding_groom else None,
                     "page": record.wedding_groom.rec_page if record.wedding_groom else None,
