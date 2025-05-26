@@ -37,5 +37,4 @@ class Record(db.Model):
     user = db.relationship('User', back_populates='record', lazy=True)
 
     barangay = db.relationship('Barangay', backref=db.backref('requests', lazy=True))
-
     
