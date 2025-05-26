@@ -17,17 +17,20 @@
         <div class="col-lg-5 col-md-12">
             <div class="card mb-4">
                 <div class="card-body">
-                    <h4>Steps in Requesting Certificates</h4>
-                    <p>To submit a request, please have the following information ready:</p>
-                    <ul>
-                        <li>Full name of the document holder</li>
-                        <li>The type of ceremony certificate to request (e.g., Baptism, Marriage)</li>
-                        <li>The date of the ceremony (at least the year)</li>
-                    </ul>
-
-                    <p>Processing usually takes <strong>3-5 business days</strong>.</p>
-                    <p><strong>Note:</strong> Requests can only be canceled within <strong>24 hours</strong> from when request was made.</p>
-                    <a href="{{ url_for('views.request_form') }}" class="btn btn-primary w-100">Request Certificate</a>
+                    <div class="table-responsive"> 
+                        <h4>Steps in Requesting Certificates</h4>
+                        <p>To submit a request, please have the following information ready:</p>
+                        <ul>
+                            <li>Full name of the document holder</li>
+                            <li>The type of ceremony certificate to request (e.g., Baptism, Marriage)</li>
+                            <li>The date of the ceremony (at least the year)</li>
+                        </ul>
+    
+                        <p>Processing usually takes <strong>3-5 business days</strong>.</p>
+                        <p><strong>Note:</strong> Requests can only be canceled within <strong>24 hours</strong> from when request was made.</p>
+                        <a href="{{ url_for('views.request_form') }}" class="btn btn-primary w-100">Request Certificate</a>
+                
+                    </div>
                 </div>
             </div>
         </div>
