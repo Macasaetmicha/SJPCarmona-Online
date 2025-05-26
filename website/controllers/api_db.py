@@ -142,11 +142,9 @@ def get_records():
 @api_db.route('/record/view/<int:record_id>', methods=['GET'])
 def get_records_view(record_id):
     record = Record.query.filter_by(id=record_id).first()
-    print(f"Record ID: {record_id}")
-    print(f"Record Data: {record}")
+
     data = []
     
-   
     record_data = {
         "id": record.id,
         "first_name": record.first_name,
@@ -233,14 +231,13 @@ def get_records_view(record_id):
     }
     data.append(record_data)
 
-    print(f"Data: {data}")
    
     return jsonify({"data": data})
 
 @api_db.route('/baptism', methods=['GET'])
 def get_baptisms():
     baptisms = Baptism.query.all()
-    print(f"Baptism Data: {baptisms}")
+  
     data = []
     for baptism in baptisms:
         record = Record.query.get(baptism.record_id)  # Get associated record
@@ -296,8 +293,7 @@ def get_baptisms():
 @api_db.route('/baptism/view/<int:bapt_id>', methods=['GET'])
 def get_baptisms_view(bapt_id):
     baptism = Baptism.query.filter_by(id=bapt_id).first()
-    print(f"Baptism ID: {bapt_id}")
-    print(f"Baptism Data: {baptism}")
+  
     data = []
     
     record = Record.query.get(baptism.record_id)  # Get associated record
@@ -360,8 +356,7 @@ def get_baptisms_view(bapt_id):
     }
     
     data.append(baptism_data)
-    print(f"Data: {data}")
-   
+  
     return jsonify({"data": data})
 
 @api_db.route('/confirmation', methods=['GET'])
@@ -417,8 +412,6 @@ def get_confirmation():
             }
         }
         data.append(confirmation_data)
-
-    print(f"Confirmation Data: {data}")
 
     return jsonify({"data": data})
 
@@ -485,8 +478,6 @@ def get_confirmations_view(conf_id):
         }
     }
     data.append(confirmation_data)
-
-    print(f"Confirmation Data: {data}")
 
     return jsonify({"data": data})
 
@@ -572,7 +563,6 @@ def get_wedding():
         }
         data.append(wedding_data)
 
-    print(f"Wedding Data: {data}")
 
     return jsonify({"data": data})
 
@@ -677,7 +667,6 @@ def get_weddings_view(wedd_id):
     }
     data.append(wedding_data)
 
-    print(f"Wedding Data: {data}")
 
     return jsonify({"data": data})
 
@@ -734,8 +723,7 @@ def get_death():
         }
         data.append(death_data)
 
-    print(f"Death Data: {data}")
-
+  
     return jsonify({"data": data})
 
 @api_db.route('/death/view/<int:death_id>', methods=['GET'])
@@ -803,8 +791,7 @@ def get_deaths_view(death_id):
     }
     data.append(death_data)
 
-    print(f"Death Data: {data}")
-
+ 
     return jsonify({"data": data})
 
 @api_db.route('/priest', methods=['GET'])
@@ -823,7 +810,7 @@ def get_priests():
         }
         data.append(priest_data)
     
-    print(f"Data: {data}")
+
 
     return jsonify({"data": data})
 
@@ -852,7 +839,6 @@ def get_priests_view(priest_id):
     }
     data.append(priest_data)
 
-    print(f"Data: {data}")
 
     return jsonify({"data": data})
 
@@ -915,8 +901,6 @@ def get_report_data():
     else:
         filters = {}
 
-    print("Filters received:", filters)
-    print("Report Type:", report_type)
 
     data = []
 
@@ -1151,7 +1135,6 @@ def get_report_data():
 
         processed_data.append(processed_item)
 
-    print("Data from DB:", processed_data)
     return jsonify(processed_data)
 
 @api_db.route('/get-schedule')
@@ -1162,12 +1145,10 @@ def get_schedule():
 
     event_data = []
     for event in events:
-        print(f"Event: {event.title}, Status: {event.status}, Category: {event.category}")
 
         status_value = event.status.value
         category_value = event.category.value
 
-        print(f"Formatted Event: {event.title}, Status: {status_value}, Category: {category_value}")
         # Determine the status class based on the event status
         status_class = ''
         if status_value == 'active':
@@ -1202,14 +1183,13 @@ def get_schedule():
             'className': [status_class, category_class]  # Add the classes here
         })
 
-    print(event_data)  # Optionally log the event data
-
+ 
     return jsonify(event_data)
 
 @api_db.route('/get-request')
 def get_requests():
     requests = Request.query.all()
-    print("Total requests found:", len(requests))
+   
 
 
     request_data = []
@@ -1258,7 +1238,7 @@ def get_requests():
             'className': [status_class, category_class]  # Add the classes here
         })
 
-    print("\nREQUEST DATA:", request_data)  
+
 
     return jsonify({"data": request_data})
 
@@ -1266,10 +1246,7 @@ def get_requests():
 def get_ClientRequests():
 
     requests = Request.query.filter_by(user_id=current_user.id)
-    print(str(Request.query.filter_by(user_id=current_user.id)))
 
-    print("Total requests found for current user:", requests)
-    print("USER ID: ", current_user.id)
 
     request_data = []
     for request in requests:
@@ -1321,7 +1298,7 @@ def get_request_count():
         .all()
     )
 
-    print({status.value: count for status, count in status_counts})
+  
     return jsonify({status.value: count for status, count in status_counts})
 
 @api_db.route('/request/view/<int:req_id>', methods=['GET'])
@@ -1329,8 +1306,7 @@ def get_requests_view(req_id):
     request = Request.query.filter_by(id=req_id).first()
    
     data = []
-    user = User.query.get(request.user_id)  # Get associated record   
-    print(f"Record: {user}") 
+    user = User.query.get(request.user_id)  # Get associated record    
     request_data = {
         "id": request.id,
         "ceremony": request.ceremony.name,
@@ -1356,7 +1332,7 @@ def get_requests_view(req_id):
     }
     data.append(request_data)
 
-    print(f"Data: {data}")
+  
 
     return jsonify({"data": data})
 
@@ -1368,8 +1344,6 @@ def search_record():
     cer_year = data.get('cer_year', '')
     cer_month = data.get('cer_month', '')
     cer_day = data.get('cer_day', '')
-
-    print("\n\nFINDING RECORD with Data:", data)
 
     model_map = {
         'baptism': Baptism,
@@ -1494,7 +1468,7 @@ def get_accounts():
         }
         data.append(user_data)
     
-    print(f"Data: {data}")
+   
 
     return jsonify({"data": data})
 
@@ -1516,7 +1490,6 @@ def get_audits():
         }
         data.append(log_data)
     
-    print(f"Data: {data}")
 
     return jsonify({"data": data})
 
@@ -1528,7 +1501,7 @@ def get_serializer():
 def reset_pass_req():
     try:
         data = request.get_json()
-        print("Received data:", data)
+     
         email = data.get('email')
 
         if not email:
@@ -1553,7 +1526,7 @@ def reset_pass_req():
         return jsonify({"message": "Reset email sent."}), 200
 
     except Exception as e:
-        print("Error:", e)
+     
         return jsonify({"message": "Error sending email"}), 500
     
 @api_db.route('/reset-password', methods=['GET', 'POST'])
@@ -1587,7 +1560,7 @@ def reset_password():
             return redirect('/login')  # adjust path to your login route
         except Exception as e:
             db.session.rollback()
-            print("ERROR OCCURRED:", str(e))  
+          
             traceback.print_exc()
             return jsonify({"error": str(e)}), 500 
 
