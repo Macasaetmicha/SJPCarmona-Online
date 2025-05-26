@@ -68,9 +68,30 @@ def get_all_priest():
 
 @api_db.route('/records', methods=['GET'])
 def get_records():
-    records = Record.query.all()
+    records = Record.query.options(
+        joinedload(Record.baptism),
+        joinedload(Record.confirmation),
+        joinedload(Record.death),
+        joinedload(Record.wedding_groom),
+        joinedload(Record.mother),
+        joinedload(Record.father)
+    ).all()
+
+    # Cache regions/provinces/cities/barangays
+    region_codes = list({r.region for r in records})
+    province_codes = list({r.province for r in records})
+    citymun_codes = list({r.citymun for r in records})
+    brgy_codes = list({r.brgy for r in records})
+
+    regions = {r.regCode: r.regDesc for r in Region.query.filter(Region.regCode.in_(region_codes)).all()}
+    provinces = {p.provCode: p.provDesc for p in Province.query.filter(Province.provCode.in_(province_codes)).all()}
+    citymuns = {c.citymunCode: c.citymunDesc for c in CityMun.query.filter(CityMun.citymunCode.in_(citymun_codes)).all()}
+    brgys = {b.brgyCode: b.brgyDesc for b in Barangay.query.filter(Barangay.brgyCode.in_(brgy_codes)).all()}
+
     data = []
     for record in records:
+        mother = record.mother
+        father = record.father
 
         record_data = {
             "id": record.id,
@@ -82,32 +103,29 @@ def get_records():
             "birthplace": record.birthplace,
             "status": record.status.name,
             "address": record.address,
-            "region": Region.query.get(record.region).regDesc if record.region else None,
-            "province": Province.query.filter_by(provCode=record.province).first().provDesc if record.province else None,
-            "citymun": CityMun.query.filter_by(citymunCode=record.citymun).first().citymunDesc if record.citymun else None,
-            "brgy": Barangay.query.filter_by(brgyCode=record.brgy).first().brgyDesc if record.brgy else None,
-            
-            # Fetch Parents Information
+            "region": regions.get(record.region),
+            "province": provinces.get(record.province),
+            "citymun": citymuns.get(record.citymun),
+            "brgy": brgys.get(record.brgy),
+
             "mother": {
-                "id": record.mother_id,
-                "first_name": Parent.query.get(record.mother_id).first_name if record.mother_id else None,
-                "middle_name": Parent.query.get(record.mother_id).middle_name if record.mother_id else None,
-                "last_name": Parent.query.get(record.mother_id).last_name if record.mother_id else None,
-                "birthday": Parent.query.get(record.mother_id).birthday.strftime('%Y-%m-%d') if record.mother_id else None,
-                "birthplace": Parent.query.get(record.mother_id).birthplace if record.mother_id else None,
-                "address": Parent.query.get(record.mother_id).address if record.mother_id else None
+                "id": mother.id if mother else None,
+                "first_name": mother.first_name if mother else None,
+                "middle_name": mother.middle_name if mother else None,
+                "last_name": mother.last_name if mother else None,
+                "birthday": mother.birthday.strftime('%Y-%m-%d') if mother and mother.birthday else None,
+                "birthplace": mother.birthplace if mother else None,
+                "address": mother.address if mother else None
             },
             "father": {
-                "id": record.father_id,
-                "first_name": Parent.query.get(record.father_id).first_name if record.father_id else None,
-                "middle_name": Parent.query.get(record.father_id).middle_name if record.father_id else None,
-                "last_name": Parent.query.get(record.father_id).last_name if record.father_id else None,
-                "birthday": Parent.query.get(record.father_id).birthday.strftime('%Y-%m-%d') if record.father_id else None,
-                "birthplace": Parent.query.get(record.father_id).birthplace if record.father_id else None,
-                "address": Parent.query.get(record.father_id).address if record.father_id else None
+                "id": father.id if father else None,
+                "first_name": father.first_name if father else None,
+                "middle_name": father.middle_name if father else None,
+                "last_name": father.last_name if father else None,
+                "birthday": father.birthday.strftime('%Y-%m-%d') if father and father.birthday else None,
+                "birthplace": father.birthplace if father else None,
+                "address": father.address if father else None
             },
-
-            # Fetch Ceremonies with Index, Book, Page, Line
             "ceremonies": {
                 "baptism": {
                     "index": record.baptism.rec_index if record.baptism else None,
@@ -121,7 +139,7 @@ def get_records():
                     "page": record.confirmation.rec_page if record.confirmation else None,
                     "line": record.confirmation.rec_line if record.confirmation else None
                 },
-                 "wedding": {
+                "wedding": {
                     "index": record.wedding_groom.rec_index if record.wedding_groom else None,
                     "book": record.wedding_groom.rec_book if record.wedding_groom else None,
                     "page": record.wedding_groom.rec_page if record.wedding_groom else None,
@@ -135,10 +153,8 @@ def get_records():
                 }
             }
         }
+
         data.append(record_data)
-
-    return jsonify({"data": data})
-
 
     return jsonify({"data": data})
 
