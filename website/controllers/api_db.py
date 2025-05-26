@@ -69,7 +69,6 @@ def get_all_priest():
 @api_db.route('/records', methods=['GET'])
 def get_records():
     records = Record.query.all()
-
     data = []
     for record in records:
 
@@ -137,6 +136,8 @@ def get_records():
             }
         }
         data.append(record_data)
+
+    return jsonify({"data": data})
 
 
     return jsonify({"data": data})
