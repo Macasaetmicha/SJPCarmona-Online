@@ -407,12 +407,30 @@ def get_baptisms_view(bapt_id):
 @api_db.route('/confirmation', methods=['GET'])
 def get_confirmation():
     confirmations = Confirmation.query.options(
-        joinedload(Confirmation.record)
-            .joinedload(Record.mother),
-        joinedload(Confirmation.record)
-            .joinedload(Record.father),
+        joinedload(Confirmation.record).joinedload(Record.mother),
+        joinedload(Confirmation.record).joinedload(Record.father),
         joinedload(Confirmation.priest)
     ).all()
+
+    # Collect all location codes first for batch querying
+    region_codes = set()
+    province_codes = set()
+    citymun_codes = set()
+    brgy_codes = set()
+
+    for c in confirmations:
+        record = c.record
+        if record:
+            region_codes.add(record.region)
+            province_codes.add(record.province)
+            citymun_codes.add(record.citymun)
+            brgy_codes.add(record.brgy)
+
+    # Batch load location data into dictionaries
+    regions = {r.regCode: r.regDesc for r in Region.query.filter(Region.regCode.in_(region_codes)).all()}
+    provinces = {p.provCode: p.provDesc for p in Province.query.filter(Province.provCode.in_(province_codes)).all()}
+    citymuns = {c.citymunCode: c.citymunDesc for c in CityMun.query.filter(CityMun.citymunCode.in_(citymun_codes)).all()}
+    brgys = {b.brgyCode: b.brgyDesc for b in Barangay.query.filter(Barangay.brgyCode.in_(brgy_codes)).all()}
 
     data = []
     for confirmation in confirmations:
@@ -420,12 +438,6 @@ def get_confirmation():
         priest = confirmation.priest
         mother = record.mother if record else None
         father = record.father if record else None
-
-        # Optional: Load address references if needed
-        region = Region.query.filter_by(regCode=record.region).first() if record else None
-        province = Province.query.filter_by(provCode=record.province).first() if record else None
-        citymun = CityMun.query.filter_by(citymunCode=record.citymun).first() if record else None
-        brgy = Barangay.query.filter_by(brgyCode=record.brgy).first() if record else None
 
         confirmation_data = {
             "id": confirmation.id,
@@ -438,9 +450,9 @@ def get_confirmation():
                 "last_name": record.last_name if record else None,
                 "birthday": record.birthday.strftime('%Y-%m-%d') if record and record.birthday else None,
                 "address": record.address if record else None,
-                "province": province.provDesc if province else None,
-                "citymun": citymun.citymunDesc if citymun else None,
-                "brgy": brgy.brgyDesc if brgy else None
+                "province": provinces.get(record.province) if record else None,
+                "citymun": citymuns.get(record.citymun) if record else None,
+                "brgy": brgys.get(record.brgy) if record else None
             },
 
             "priest": {
