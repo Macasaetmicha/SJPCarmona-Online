@@ -255,43 +255,68 @@ def get_records_view(record_id):
 
 @api_db.route('/baptism', methods=['GET'])
 def get_baptisms():
-    baptisms = Baptism.query.all()
-  
+    # Eager load relationships: record → mother, father; and priest
+    baptisms = Baptism.query.options(
+        joinedload(Baptism.record).joinedload(Record.mother),
+        joinedload(Baptism.record).joinedload(Record.father),
+        joinedload(Baptism.priest)
+    ).all()
+
+    # Collect all needed location codes for batch querying
+    region_codes = set()
+    province_codes = set()
+    citymun_codes = set()
+    brgy_codes = set()
+
+    for b in baptisms:
+        if b.record:
+            region_codes.add(b.record.region)
+            province_codes.add(b.record.province)
+            citymun_codes.add(b.record.citymun)
+            brgy_codes.add(b.record.brgy)
+
+    # Batch load location data into dictionaries
+    regions = {r.regCode: r.regDesc for r in Region.query.filter(Region.regCode.in_(region_codes)).all()}
+    provinces = {p.provCode: p.provDesc for p in Province.query.filter(Province.provCode.in_(province_codes)).all()}
+    citymuns = {c.citymunCode: c.citymunDesc for c in CityMun.query.filter(CityMun.citymunCode.in_(citymun_codes)).all()}
+    brgys = {b.brgyCode: b.brgyDesc for b in Barangay.query.filter(Barangay.brgyCode.in_(brgy_codes)).all()}
+
     data = []
     for baptism in baptisms:
-        record = Record.query.get(baptism.record_id)  # Get associated record
-        priest = Priest.query.get(baptism.priest_id)  # Get associated priest
-        region = Region.query.filter_by(regCode=record.region).first()
-        province = Province.query.filter_by(provCode=record.province).first()
-        citymun = CityMun.query.filter_by(citymunCode=record.citymun).first()
-        brgy = Barangay.query.filter_by(brgyCode=record.brgy).first()
+        record = baptism.record
+        if not record:
+            continue  # Skip if no linked record
 
-        mother = Parent.query.get(record.mother_id) if record and record.mother_id else None  # Get mother info
-        father = Parent.query.get(record.father_id) if record and record.father_id else None  # Get father info
-        
+        mother = record.mother
+        father = record.father
+        priest = baptism.priest
+
         baptism_data = {
             "id": baptism.id,
-            "baptism_date": baptism.baptism_date.strftime('%Y-%m-%d'),
-            # Fetch Related Record Data
+            "baptism_date": baptism.baptism_date.strftime('%Y-%m-%d') if baptism.baptism_date else None,
+            "sponsorA": baptism.sponsorA,
+            "residenceA": baptism.residenceA,
+            "sponsorB": baptism.sponsorB,
+            "residenceB": baptism.residenceB,
+            "rec_index": baptism.rec_index,
+            "rec_book": baptism.rec_book,
+            "rec_page": baptism.rec_page,
+            "rec_line": baptism.rec_line,
             "record": {
-                "id": record.id if record else None,
-                "first_name": record.first_name if record else None,
-                "middle_name": record.middle_name if record else None,
-                "last_name": record.last_name if record else None,
-                "birthday": record.birthday.strftime('%Y-%m-%d') if record else None,
-                "address": record.address if record else None,
-                "province": province.provDesc if province else None,
-                "citymun": citymun.citymunDesc if citymun else None,
-                "brgy": brgy.brgyDesc if brgy else None
+                "id": record.id,
+                "first_name": record.first_name,
+                "middle_name": record.middle_name,
+                "last_name": record.last_name,
+                "birthday": record.birthday.strftime('%Y-%m-%d') if record.birthday else None,
+                "address": record.address,
+                "province": provinces.get(record.province),
+                "citymun": citymuns.get(record.citymun),
+                "brgy": brgys.get(record.brgy)
             },
-
-            # Fetch Related Priest Data
             "priest": {
                 "id": priest.id if priest else None,
                 "name": priest.name if priest else None
             },
-
-            #Fetch Related Parents Data
             "mother": {
                 "id": mother.id if mother else None,
                 "first_name": mother.first_name if mother else None,
@@ -305,6 +330,7 @@ def get_baptisms():
                 "last_name": father.last_name if father else None
             }
         }
+
         data.append(baptism_data)
 
     return jsonify({"data": data})
@@ -380,43 +406,48 @@ def get_baptisms_view(bapt_id):
 
 @api_db.route('/confirmation', methods=['GET'])
 def get_confirmation():
-    confirmation = Confirmation.query.all()
-    
+    confirmations = Confirmation.query.options(
+        joinedload(Confirmation.record)
+            .joinedload(Record.mother),
+        joinedload(Confirmation.record)
+            .joinedload(Record.father),
+        joinedload(Confirmation.priest)
+    ).all()
+
     data = []
-    for confirmation in confirmation:
-        record = Record.query.get(confirmation.record_id)  # Get associated record
-        priest = Priest.query.get(confirmation.priest_id)  # Get associated priest
-        region = Region.query.filter_by(regCode=record.region).first()
-        province = Province.query.filter_by(provCode=record.province).first()
-        citymun = CityMun.query.filter_by(citymunCode=record.citymun).first()
-        brgy = Barangay.query.filter_by(brgyCode=record.brgy).first()
-        mother = Parent.query.get(record.mother_id) if record and record.mother_id else None  # Get mother info
-        father = Parent.query.get(record.father_id) if record and record.father_id else None  # Get father info
+    for confirmation in confirmations:
+        record = confirmation.record
+        priest = confirmation.priest
+        mother = record.mother if record else None
+        father = record.father if record else None
+
+        # Optional: Load address references if needed
+        region = Region.query.filter_by(regCode=record.region).first() if record else None
+        province = Province.query.filter_by(provCode=record.province).first() if record else None
+        citymun = CityMun.query.filter_by(citymunCode=record.citymun).first() if record else None
+        brgy = Barangay.query.filter_by(brgyCode=record.brgy).first() if record else None
 
         confirmation_data = {
             "id": confirmation.id,
-            "confirmation_date": confirmation.confirmation_date.strftime('%Y-%m-%d'),
+            "confirmation_date": confirmation.confirmation_date.strftime('%Y-%m-%d') if confirmation.confirmation_date else None,
 
-            # Fetch Related Record Data
             "record": {
                 "id": record.id if record else None,
                 "first_name": record.first_name if record else None,
                 "middle_name": record.middle_name if record else None,
                 "last_name": record.last_name if record else None,
-                "birthday": record.birthday.strftime('%Y-%m-%d') if record else None,
+                "birthday": record.birthday.strftime('%Y-%m-%d') if record and record.birthday else None,
                 "address": record.address if record else None,
                 "province": province.provDesc if province else None,
                 "citymun": citymun.citymunDesc if citymun else None,
                 "brgy": brgy.brgyDesc if brgy else None
             },
 
-            # Fetch Related Priest Data
             "priest": {
                 "id": priest.id if priest else None,
                 "name": priest.name if priest else None
             },
 
-            #Fetch Related Parents Data
             "mother": {
                 "id": mother.id if mother else None,
                 "first_name": mother.first_name if mother else None,
@@ -502,86 +533,65 @@ def get_confirmations_view(conf_id):
 
 @api_db.route('/wedding', methods=['GET'])
 def get_wedding():
-    wedding = Wedding.query.all()
-    
+    weddings = (
+        Wedding.query
+        .options(
+            joinedload(Wedding.groom_record),
+            joinedload(Wedding.bride_record),
+            joinedload(Wedding.priest)
+        )
+        .all()
+    )
+
     data = []
-    for wedding in wedding:
-        groom_record = Record.query.get(wedding.groom_record_id)  # Get associated record
-        bride_record = Record.query.get(wedding.bride_record_id)  # Get associated record
-        priest = Priest.query.get(wedding.priest_id)  # Get associated priest
-        groom_province = Province.query.filter_by(provCode=groom_record.province).first()
-        groom_citymun = CityMun.query.filter_by(citymunCode=groom_record.citymun).first()
-        groom_brgy = Barangay.query.filter_by(brgyCode=groom_record.brgy).first()
-        bride_province = Province.query.filter_by(provCode=bride_record.province).first()
-        bride_citymun = CityMun.query.filter_by(citymunCode=bride_record.citymun).first()
-        bride_brgy = Barangay.query.filter_by(brgyCode=bride_record.brgy).first()
-        # groom_mother = Parent.query.get(groom_record.mother_id) if groom_record and groom_record.mother_id else None  # Get mother info
-        # groom_father = Parent.query.get(groom_record.father_id) if groom_record and groom_record.father_id else None  # Get father info
-        # bride_mother = Parent.query.get(bride_record.mother_id) if bride_record and bride_record.mother_id else None  # Get mother info
-        # bride_father = Parent.query.get(bride_record.father_id) if bride_record and bride_record.father_id else None  # Get father info
+    for wedding in weddings:
+        groom_record = wedding.groom_record
+        bride_record = wedding.bride_record
+        priest = wedding.priest
+
+        # Address lookups (not eager-loadable unless you model them)
+        groom_province = Province.query.filter_by(provCode=groom_record.province).first() if groom_record else None
+        groom_citymun = CityMun.query.filter_by(citymunCode=groom_record.citymun).first() if groom_record else None
+        groom_brgy = Barangay.query.filter_by(brgyCode=groom_record.brgy).first() if groom_record else None
+
+        bride_province = Province.query.filter_by(provCode=bride_record.province).first() if bride_record else None
+        bride_citymun = CityMun.query.filter_by(citymunCode=bride_record.citymun).first() if bride_record else None
+        bride_brgy = Barangay.query.filter_by(brgyCode=bride_record.brgy).first() if bride_record else None
 
         wedding_data = {
             "id": wedding.id,
             "wedding_date": wedding.wedding_date.strftime('%Y-%m-%d'),
 
-            # Fetch Related Record Data
             "groom": {
-                "groom_id": groom_record.id,
+                "groom_id": groom_record.id if groom_record else None,
                 "first_name": groom_record.first_name if groom_record else None,
                 "middle_name": groom_record.middle_name if groom_record else None,
                 "last_name": groom_record.last_name if groom_record else None,
-                "birthday": groom_record.birthday.strftime('%Y-%m-%d') if groom_record else None,
+                "birthday": groom_record.birthday.strftime('%Y-%m-%d') if groom_record and groom_record.birthday else None,
                 "address": groom_record.address if groom_record else None,
                 "province": groom_province.provDesc if groom_province else None,
                 "citymun": groom_citymun.citymunDesc if groom_citymun else None,
                 "brgy": groom_brgy.brgyDesc if groom_brgy else None
             },
             "bride": {
-                "bride_id": bride_record.id,
+                "bride_id": bride_record.id if bride_record else None,
                 "first_name": bride_record.first_name if bride_record else None,
                 "middle_name": bride_record.middle_name if bride_record else None,
                 "last_name": bride_record.last_name if bride_record else None,
-                "birthday": bride_record.birthday.strftime('%Y-%m-%d') if bride_record else None,
+                "birthday": bride_record.birthday.strftime('%Y-%m-%d') if bride_record and bride_record.birthday else None,
                 "address": bride_record.address if bride_record else None,
                 "province": bride_province.provDesc if bride_province else None,
                 "citymun": bride_citymun.citymunDesc if bride_citymun else None,
                 "brgy": bride_brgy.brgyDesc if bride_brgy else None
             },
 
-            # Fetch Related Priest Data
             "priest": {
                 "id": priest.id if priest else None,
                 "name": priest.name if priest else None
-            },
-
-            #Fetch Related Parents Data
-            # "groom_mother": {
-            #     "id": groom_mother.id if groom_mother else None,
-            #     "first_name": groom_mother.first_name if groom_mother else None,
-            #     "middle_name": groom_mother.middle_name if groom_mother else None,
-            #     "last_name": groom_mother.last_name if groom_mother else None
-            # },
-            # "groom_father": {
-            #     "id": groom_father.id if groom_father else None,
-            #     "first_name": groom_father.first_name if groom_father else None,
-            #     "middle_name": groom_father.middle_name if groom_father else None,
-            #     "last_name": groom_father.last_name if groom_father else None
-            # },
-            # "bride_mother": {
-            #     "id": bride_mother.id if bride_mother else None,
-            #     "first_name": bride_mother.first_name if bride_mother else None,
-            #     "middle_name": bride_mother.middle_name if bride_mother else None,
-            #     "last_name": bride_mother.last_name if bride_mother else None
-            # },
-            # "bride_father": {
-            #     "id": bride_father.id if bride_father else None,
-            #     "first_name": bride_father.first_name if bride_father else None,
-            #     "middle_name": bride_father.middle_name if bride_father else None,
-            #     "last_name": bride_father.last_name if bride_father else None
-            # }
+            }
         }
-        data.append(wedding_data)
 
+        data.append(wedding_data)
 
     return jsonify({"data": data})
 
@@ -691,42 +701,48 @@ def get_weddings_view(wedd_id):
 
 @api_db.route('/death', methods=['GET'])
 def get_death():
-    deaths = Death.query.all()
-    
+    deaths = (
+        Death.query
+        .options(
+            joinedload(Death.record).joinedload(Record.mother),
+            joinedload(Death.record).joinedload(Record.father),
+            joinedload(Death.priest)
+        )
+        .all()
+    )
+
     data = []
     for death in deaths:
-        record = Record.query.get(death.record_id)  # Get associated record
-        priest = Priest.query.get(death.priest_id)  # Get associated priest
-        province = Province.query.filter_by(provCode=record.province).first()
-        citymun = CityMun.query.filter_by(citymunCode=record.citymun).first()
-        brgy = Barangay.query.filter_by(brgyCode=record.brgy).first()
-        mother = Parent.query.get(record.mother_id) if record and record.mother_id else None  # Get mother info
-        father = Parent.query.get(record.father_id) if record and record.father_id else None  # Get father info
+        record = death.record
+        priest = death.priest
+        mother = record.mother if record else None
+        father = record.father if record else None
+
+        province = Province.query.filter_by(provCode=record.province).first() if record else None
+        citymun = CityMun.query.filter_by(citymunCode=record.citymun).first() if record else None
+        brgy = Barangay.query.filter_by(brgyCode=record.brgy).first() if record else None
 
         death_data = {
             "id": death.id,
             "death_date": death.death_date.strftime('%Y-%m-%d'),
 
-            # Fetch Related Record Data
             "record": {
                 "id": record.id if record else None,
                 "first_name": record.first_name if record else None,
                 "middle_name": record.middle_name if record else None,
                 "last_name": record.last_name if record else None,
-                "birthday": record.birthday.strftime('%Y-%m-%d') if record else None,
+                "birthday": record.birthday.strftime('%Y-%m-%d') if record and record.birthday else None,
                 "address": record.address if record else None,
                 "province": province.provDesc if province else None,
                 "citymun": citymun.citymunDesc if citymun else None,
                 "brgy": brgy.brgyDesc if brgy else None
             },
 
-            # Fetch Related Priest Data
             "priest": {
                 "id": priest.id if priest else None,
                 "name": priest.name if priest else None
             },
 
-            #Fetch Related Parents Data
             "mother": {
                 "id": mother.id if mother else None,
                 "first_name": mother.first_name if mother else None,
@@ -740,9 +756,9 @@ def get_death():
                 "last_name": father.last_name if father else None
             }
         }
+
         data.append(death_data)
 
-  
     return jsonify({"data": data})
 
 @api_db.route('/death/view/<int:death_id>', methods=['GET'])
@@ -816,20 +832,17 @@ def get_deaths_view(death_id):
 @api_db.route('/priest', methods=['GET'])
 def get_priests():
     priests = Priest.query.all()
-    
+
     data = []
     for priest in priests:
         priest_data = {
             "id": priest.id,
             "name": priest.name,
-            "position": priest.position.label,
+            "position": priest.position.label if priest.position else None,
             "church": priest.church,
-            "status": priest.status.name
-
+            "status": priest.status.name if priest.status else None
         }
         data.append(priest_data)
-    
-
 
     return jsonify({"data": data})
 
