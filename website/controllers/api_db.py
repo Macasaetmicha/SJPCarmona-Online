@@ -68,16 +68,7 @@ def get_all_priest():
 
 @api_db.route('/records', methods=['GET'])
 def get_records():
-    records = (
-        db.session.query(Record)
-        .options(
-            joinedload(Record.baptism),
-            joinedload(Record.confirmation),
-            joinedload(Record.wedding_groom),
-            joinedload(Record.death),
-        )
-        .all()
-    )
+    records = Record.query.all()
     data = []
     for record in records:
 
