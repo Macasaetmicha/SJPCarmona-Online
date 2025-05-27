@@ -1559,7 +1559,7 @@ def delete_request(reqId):
         print("Error deleting schedule:", str(e))
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route('/edit-clientReq', methods=['POST'])
+@api_route.route('/edit-clientReq', methods=['POST'])
 def update_request_status():
     data = request.json
     record_id = data.get('id')
