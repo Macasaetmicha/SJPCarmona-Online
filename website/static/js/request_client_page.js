@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
         if (confirm('Are you sure you want to change the status?')) {
             $.ajax({
-                url: `/edit-clientReq/${page}`, 
+                url: `/edit-clientReq`, 
                 type: 'POST',
                 data: { id, status },
                 success: function (response) {
