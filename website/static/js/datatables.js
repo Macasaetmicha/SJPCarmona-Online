@@ -408,7 +408,7 @@ const reqClientColumns = [
             const disabledAttr = hoursSinceCreated > 24 ? 'disabled' : '';
 
             return `
-                <button class="mt-1 delete-btn-request btn btn-primary delete-btn" data-id="${row.id}" data-page="deleteRequest" ${disabledAttr}>
+                <button class="mt-1 btn btn-primary update-status-btn" data-id="${row.id}" data-status="cancelled" data-page="updateRequestStatus"${disabledAttr}>
                     <i class="fa-solid fa-trash fa-fw"></i>
                 </button>
             `;
