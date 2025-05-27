@@ -128,7 +128,7 @@ const confirmationColumns = [
     {
         data: 'confirmation_date',
         render: function (data, type, row) {
-            return formatDateToLong(data);
+            return data ? formatDateToLong(data) : 'N/A'; 
         }
     },
     { data: 'record.first_name' },
