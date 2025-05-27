@@ -1558,3 +1558,16 @@ def delete_request(reqId):
         db.session.rollback()
         print("Error deleting schedule:", str(e))
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/edit-clientReq', methods=['POST'])
+def update_request_status():
+    data = request.json
+    record_id = data.get('id')
+    new_status = data.get('status')
+
+    request_obj = Request.query.get(record_id)
+    if request_obj:
+        request_obj.status = new_status
+        db.session.commit()
+        return jsonify({'success': True})
+    return jsonify({'error': 'Not found'}), 404
