@@ -368,6 +368,10 @@ a.btn {
   color: white !important;
 }
 
+.dropdown-item:active {
+    background-color: transparent !important;
+}
+
 /* CARD */
 .card {
     display: flex;
