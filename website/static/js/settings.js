@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 console.log("Phone: ", currentPhone)
                 console.log("Email: ", currentEmail)
+                console.log("ID: ", userId)
 
                 // Mask phone e.g. 09*******1234
                 if (currentPhone.length === 11) {
@@ -160,7 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         setLoading(sendOtpPhoneBtn, loadingPhone, true);
-
+        
+        console.log("Phone: ", currentPhone)
+        console.log("ID: ", userId)
+        
         fetch('/send-otp', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -191,6 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         setLoading(sendOtpEmailBtn, loadingEmail, true);
+
+        console.log("Email: ", currentEmail)
+        console.log("ID: ", userId)
 
         fetch('/send-otp-email', {  // your email OTP endpoint
             method: 'POST',
