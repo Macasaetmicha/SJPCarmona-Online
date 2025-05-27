@@ -406,13 +406,24 @@ const reqClientColumns = [
             const createdAt = new Date(row.requested_at); 
             const now = new Date();
             const hoursSinceCreated = (now - createdAt) / (1000 * 60 * 60);
-
-            const disabledAttr = hoursSinceCreated > 24 ? 'disabled' : '';
-
+    
+            const timeDisabled = hoursSinceCreated > 24;
+            const statusDisabled = row.status === 'cancelled';
+            const fullyDisabled = timeDisabled || statusDisabled;
+    
+            const disabledAttr = fullyDisabled ? 'disabled' : '';
+            const style = statusDisabled ? 'style="opacity: 0.5;"' : '';
+    
             return `
-                <button class="mt-1 btn btn-primary update-status-btn" data-id="${row.id}" data-status="cancelled" data-page="updateRequestStatus"${disabledAttr}>
-                    <i class="fa-solid fa-trash fa-fw"></i>
-                </button>
+                <div ${style}>
+                    <button class="mt-1 btn btn-primary update-status-btn" 
+                            data-id="${row.id}" 
+                            data-status="cancelled" 
+                            data-page="updateRequestStatus"
+                            ${disabledAttr}>
+                        <i class="fa-solid fa-trash fa-fw"></i>
+                    </button>
+                </div>
             `;
         },
         orderable: false,
