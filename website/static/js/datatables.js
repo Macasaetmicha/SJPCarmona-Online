@@ -180,7 +180,12 @@ const weddingColumns = [
         orderable: false,
         searchable: false
     },
-    { data: 'wedding_date' },
+    {
+        data: 'wedding_date',
+        render: function (data, type, row) {
+            return data ? formatDateToLong(data) : 'N/A'; 
+        }
+    },
     { 
         data: null, 
         render: function(data, type, row) {
