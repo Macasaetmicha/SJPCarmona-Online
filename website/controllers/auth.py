@@ -391,7 +391,7 @@ def send_otp():
         user_id = data.get('user_id')
         phone = data.get('phone')
 
-        if not user_id or not phone:
+        if user_id is None or not phone:
             return jsonify({'error': 'User ID and phone number are required'}), 400
 
         user = User.query.get(user_id)
@@ -440,7 +440,7 @@ def send_otp_email():
         data = request.get_json()
         user_id = data.get('user_id')
 
-        if not user_id:
+        if user_id is None:
             return jsonify({'error': 'User ID is required'}), 400
 
         user = User.query.get(user_id)
