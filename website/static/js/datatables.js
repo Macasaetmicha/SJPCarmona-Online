@@ -345,10 +345,11 @@ const requestColumns = [
         }
     },
     {
-    data: 'status',
+        data: 'status',
         render: function (data, type, row) {
+            const isDisabled = data === 'cancelled' ? 'disabled' : '';
             return `
-                <select class="form-select form-select-sm status-dropdown" data-id="${row.id}">
+                <select class="form-select form-select-sm status-dropdown" data-id="${row.id}" ${isDisabled}>
                     <option value="pending" ${data === 'pending' ? 'selected' : ''}>Pending</option>
                     <option value="processing" ${data === 'processing' ? 'selected' : ''}>Processing</option>
                     <option value="ready" ${data === 'ready' ? 'selected' : ''}>Ready</option>
@@ -359,6 +360,7 @@ const requestColumns = [
             `;
         }
     }
+
 
 ];
 
