@@ -1561,6 +1561,7 @@ def delete_request(reqId):
 
 @api_route.route('/edit-clientReq', methods=['POST'])
 def update_request_status():
+    print("EDITING CLIENT STATUS AS CANCELED")
     data = request.json
     record_id = data.get('id')
     new_status = data.get('status')
