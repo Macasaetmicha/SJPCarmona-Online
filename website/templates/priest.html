@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% block title %}Priest{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">Priest</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" data-table="priestTable" data-table-name="Priest" class="btn btn-danger btn-pdf">
+                Export to PDF
+            </button>
+            <button type="button" id="addPriestBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPriestModal">
+                + Add Priest
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<div class="card">
+    <!-- <div class="card-header">
+        <h3>Church Records</h3>
+    </div> -->
+    <div class="card-body">
+        
+        <div class="table-responsive">
+            <table id="priestTable" class="display table zero-configuration dataTable table-striped table-bordered rounded mt-2 w-100">
+                <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Church</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-container">
+    <div class="modal fade" id="showPriestModal" tabindex="-1" role="dialog" aria-labelledby="PriestModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="priestModalTitle">Priest Information
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="priestAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion1" aria-expanded="true" aria-controls="accordion1">
+                                    Priest Information
+                                </button>
+                            </h2>
+                            <div id="accordion1" class="accordion-collapse collapse" data-bs-parent="#priestAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Name:</strong> <span id="priestName"></span></p>
+                                    <p><strong>Position:</strong> <span id="priestPosition"></span></p>
+                                    <p><strong>Church:</strong> <span id="priestChurch"></span></p>
+                                    <p><strong>Status:</strong> <span id="priestStatus"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion2" aria-expanded="false" aria-controls="accordion2">
+                                    Ceremony Information
+                                </button>
+                            </h2>
+                            <div id="accordion2" class="accordion-collapse collapse" data-bs-parent="#priestAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <p><strong>Baptism:</strong> <span id="priestBapt"></span></p>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <p><strong>Confirmation:</strong> <span id="priestConf"></span></p>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <p><strong>Wedding:</strong> <span id="priestWedd"></span></p>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <p><strong>Death:</strong> <span id="priestDeath"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addPriestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addPriestModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Priest Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <form id="priestAddForm">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="name">Name:</label>
+                                    <input type="text" id="name" name="name" class="form-control" required>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="status">Status:</label>
+                                    <select id="status" name="status" class="form-control" required>
+                                        <option value="" disabled selected>Select an option</option>
+                                        <option value="ACTIVE">Active</option>
+                                        <option value="INACTIVE">Inactive</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="position">Position:</label>
+                                    <select id="position" name="position" class="form-control" required>
+                                        <option value="" disabled selected>Select an option</option>
+                                        <option value="parish_priest">Parish Priest</option>
+                                        <option value="guest_priest">Guest Priest</option>
+                                        <option value="bishop">Bishop</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="church">Church:</label>
+                                    <input type="text" id="church" name="church" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12 mt-2">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light mt-3">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <div class="modal fade" id="editPriestModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editPriestModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Priest Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <form id="priestEditForm">
+                            <div class="row">
+                                <input type="hidden" name="id" id="id">
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="name">Name:</label>
+                                    <input type="text" id="name" name="name" class="form-control" required>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="status">Status:</label>
+                                    <select id="status" name="status" class="form-control" required>
+                                        <option value="" disabled selected>Select an option</option>
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="position">Position:</label>
+                                    <select id="position" name="position" class="form-control" required>
+                                        <option value="" disabled selected>Select an option</option>
+                                        <option value="parish_priest">Parish Priest</option>
+                                        <option value="guest_priest">Guest Priest</option>
+                                        <option value="bishop">Bishop</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="church">Church:</label>
+                                    <input type="text" id="church" name="church" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12 mt-2">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light mt-3">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

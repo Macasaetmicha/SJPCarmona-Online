@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Login | Recover{% endblock %}
+
+{% block content %}
+    <div class="card card-auth mt-lg-5 mt-3 mb-lg-5 mb-3">
+        <img src="{{ url_for('static', filename='images/stjoseph.png') }}" class="card-img" alt="St. Joseph">
+        <div class="card-body">
+            <h5 class="card-title">Recover | Authentication</h5>
+            <p class="card-text">Please get your device ready and open a QR Code scanner to authenticate. Take note that the device you will use now will be the device used everytime you log into your account. <br><br>Press the button below if you are ready for authentication.</p>
+            
+            <div id="fido-layout-inprogress-div" class="d-none">
+                <div class="d-flex justify-content-center mb-1 text-secondary">
+                    <div class="spinner-border" role="status"></div>
+                </div>
+                <div class="text-center text-secondary">Waiting for approval...</div>
+            </div>
+        
+            <div id="fido-layout-failed-alert" class="alert alert-danger text-center d-none" role="alert">
+                <img src="{{url_for('static', filename='images/danger.svg')}}" class="w-25">
+                <div id="fido-layout-failed-alert-message"></div>
+            </div>
+
+            <div class="button-container">
+                <div id="button-div">
+
+                    <button id="authenticate-button-recover" data-user-id="{{ user.id }}" type="button" class="btn btn-primary">Use Security Key</button>
+                </div>
+                
+            </div>
+        
+        </div>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/recover_fido.js') }}"></script>
+
+{% endblock %}

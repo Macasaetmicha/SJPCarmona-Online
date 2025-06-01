@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex">
+        <h2 class="m-0">Welcome {{ current_user.first_name }}!</h2>
+    </div>
+</header>
+
+<div class="row">
+    <div class="col-lg-8 col-md-12" id="calendarContainer">
+        <div class="card mb-3">
+            <!-- Calendar -->
+            <div class="card-body">
+                <div class="calendar-header custom-calendar-header">
+                    <!-- Row 1: Title on the left, Navigation on the right -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <!-- Left: Month title + Kebab menu -->
+                        <div class="d-flex align-items-center">
+                            <h4 id="current-date" class="mb-0 me-2"></h4> 
+                            <button id="prevBtn" class="btn btn-light me-2 custom-nav-btn">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button id="nextBtn" class="btn btn-light custom-nav-btn">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Right: Navigation buttons -->
+                        <div class="d-flex align-items-center">
+                            <button type="button" class="p-0 ms-2 help-icon-btn">
+                                <i class="fa fa-question-circle help-icon ms-2" id="calendarHelpIcon"></i>
+                            </button>
+
+                            <button id="currentMonthBtn" class="btn btn-light today-btn ms-2">
+                                Today
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            
+
+                <!-- FullCalendar -->
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-12">
+        
+            <div class="mb-3 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h4>Pending</h4>
+                        <h4 id="reviewCount"><span class="reviewCount"></span></h4>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="mb-3 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h4>Processing</h4>
+                        <h4 id="inprogCount"><span class="inprogCount"></span></h4>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="mb-3 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h4>Ready for Pick-Up</h4>
+                        <h4 id="pickupCount"><span class="pickupCount"></span></h4>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="mb-3 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h4>Completed</h4>
+                        <h4 id="completeCount"><span class="completeCount"></span></h4>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="mb-3 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h4>Rejected</h4>
+                        <h4 id="rejectCount"><span class="rejectCount"></span></h4>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="mb-3 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h4>Canceled</h4>
+                        <h4 id="cancelCount"><span class="cancelCount"></span></h4>
+                    </div> 
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+<div class="modal-container">
+    <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-labelledby="eventDetailLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventDetailLabel">Event Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="eventDetailBody">
+              
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+{% endblock %}

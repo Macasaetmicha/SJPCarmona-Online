@@ -1,0 +1,554 @@
+{% extends "base.html" %}
+{% block title %}Requests{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center mb-2 gap-2">
+            <h2 class="mb-0">Requests</h2>
+            <button id="toggleCalendarBtn" class="toggleCalendarBtn">
+                <i class="fa fa-calendar"></i>
+            </button>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" data-table="requestTableStaff" data-table-name="Request" class="btn btn-danger btn-pdf">
+                Export to PDF
+            </button>  
+        </div>
+    </div>
+</header>
+
+
+<div class="row">
+    <!-- LEFT SIDE: Calendar + Lists (col-4 or col-lg-4) -->
+    <div class="col-lg-5 col-md-12" id="calendarContainer">
+        <div class="card mb-3">
+            <!-- Calendar -->
+            <div class="card-body">
+                <div class="calendar-header custom-calendar-header">
+                    <!-- Row 1: Title on the left, Navigation on the right -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <!-- Left: Month title + Kebab menu -->
+                        <div class="d-flex align-items-center">
+                            <h4 id="current-date" class="mb-0 me-2"></h4> 
+                            <button id="prevBtn" class="btn btn-light me-2 custom-nav-btn">
+                                <i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button id="nextBtn" class="btn btn-light custom-nav-btn">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Right: Navigation buttons -->
+                        <div class="d-flex align-items-center">
+                            <button type="button" class="p-0 ms-2 help-icon-btn">
+                                <i class="fa fa-question-circle help-icon ms-2" id="calendarHelpIcon"></i>
+                            </button>
+
+                            <button id="currentMonthBtn" class="btn btn-light today-btn ms-2">
+                                Today
+                            </button>
+                            <div class="dropdown">
+                                <button class="btn p-0 ms-2 border-0 kebabMenuButton" id="kebabMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-plus kebab-icon"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="kebabMenuButton">
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addEventModal" id="addScheduleBtn">Add Schedule</a></li>
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#addReqModal" id="addScheduleBtn">Add Request</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            
+
+                <!-- FullCalendar -->
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE: Quick Status + Request Table (col-8 or col-lg-8) -->
+    <div class="col-lg-7 col-md-12" id="requestContainer">
+        <!-- <div class="row">
+            <div class="summaryHeader col-12">
+                <h4>Requests</h4>
+            
+                <button type="button" class="btn btn-primary" id="requestPopover" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="manual">
+                    <i class="fa fa-filter"></i>
+                </button>
+            
+                <div id="requestContent" class="d-none">
+                    <div id="requestrange">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-caret-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="row mt-3">
+            <!-- Quick Status Cards -->
+            <div class="col-6 col-sm-6 col-md-4 mb-1 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h6>Pending</h6>
+                        <h6 id="reviewCount"><span class="reviewCount"></span></h6>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 col- mb-1 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h6>Processing</h6>
+                        <h6 id="inprogCount"><span class="inprogCount"></span></h6>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 mb-1 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h6>Ready for Pick-Up</h6>
+                        <h6 id="pickupCount"><span class="pickupCount"></span></h6>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 mb-1 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h6>Completed</h6>
+                        <h6 id="completeCount"><span class="completeCount"></span></h6>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 mb-1 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h6>Rejected</h6>
+                        <h6 id="rejectCount"><span class="rejectCount"></span></h6>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-md-4 mb-1 countCard">
+                <div class="card text-center">
+                    <div class="card-req-count d-flex justify-content-between align-items-center">
+                        <h6>Canceled</h6>
+                        <h6 id="cancelCount"><span class="cancelCount"></span></h6>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Table Section -->
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <table id="requestTableStaff" class="display table zero-configuration dataTable table-striped table-bordered rounded mt-2 w-100">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Pick-up Date</th>
+                                <th>Requestor</th>
+                                <th>Ceremony</th>
+                                <th>Document Holder</th>
+                                <th>Ceremony Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            
+                        </tbody>
+                        </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-container">
+    <div class="modal fade" id="showRequestModal" tabindex="-1" role="dialog" aria-labelledby="RequestModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalTitle">Request Information              
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Requested by:</strong> <span id="requestor"></span></p>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Email:</strong> <span id="email"></span></p>
+                        </div>
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Requested on:</strong> <span id="requestDate"></span></p>
+                        </div>
+                       
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Contact number:</strong> <span id="cont_no"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Document Holder:</strong> <span id="rec_name"></span></p>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Relationship:</strong> <span id="relationship"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Ceremony:</strong> <span id="ceremony"></span></p>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Ceremony Date:</strong> <span id="cer_date"></span></p>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Status:</strong> <span id="status"></span></p>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Pick-up Date:</strong> <span id="pickup_date"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Remarks:</strong> <span id="remarks"></span></p>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <p><strong>Processed On:</strong> <span id="process_date"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding or editing events -->
+    <div class="modal fade" id="addEventModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addEventModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <form id="eventAddForm">
+                            <div class="row">
+                                <div class="col-12 mt-2">
+                                    <label class="required" for="eventTitle">Event Title:</label>
+                                    <input type="text" id="eventTitle" name="eventTitle" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventStart">Start:</label>
+                                    <input type="datetime-local" class="form-control" id="eventStart" name="eventStart" required>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventEnd">End:</label>
+                                    <input type="datetime-local" class="form-control" id="eventEnd" name="eventEnd" required>
+                                </div>
+                            </div>
+
+                            <div class="form-check form-switch mt-1">
+                                <input class="form-check-input" type="checkbox" id="allDayCheckbox">
+                                <label class="form-check-label" for="allDayCheckbox">All Day Event</label>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventCategory">Category:</label>
+                                    <select id="eventCategory" name="eventCategory" class="form-control" required>
+                                        <option value="" disabled selected>Select category</option>
+                                        <option value="parish">Parish</option>
+                                        <option value="holiday">Holiday</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventStatus">Status:</label>
+                                    <select id="eventStatus" name="eventStatus" class="form-control" required>
+                                        <option value="" disabled selected>Select status</option>
+                                        <option value="active">Active</option>
+                                        <option value="canceled">Canceled</option>
+                                        <option value="postponed">Postponed</option>
+                                        <option value="holiday">Holiday</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 mt-2">
+                                    <label for="eventDescription">Description</label>
+                                    <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3" placeholder="Enter event description..."></textarea>
+                                </div>
+                            </div>
+                                
+                            <div class="row">
+                                <div class="col-12 mt-2">
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light mt-3">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editEventModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editEventModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <form id="eventEditForm">
+                            <div class="row">
+                                <input type="hidden" name="schedId" id="schedId">
+                                <div class="col-12 mt-2">
+                                    <label class="required" for="eventTitleEdit">Event Title:</label>
+                                    <input type="text" id="eventTitleEdit" name="eventTitleEdit" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventStartEdit">Start:</label>
+                                    <input type="datetime-local" class="form-control" id="eventStartEdit" name="eventStartEdit" required>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventEndEdit">End:</label>
+                                    <input type="datetime-local" class="form-control" id="eventEndEdit" name="eventEndEdit" required>
+                                </div>
+                            </div>
+
+                            <div class="form-check form-switch mt-1">
+                                <input class="form-check-input" type="checkbox" id="allDayCheckboxEdit">
+                                <label class="form-check-label" for="allDayCheckboxEdit">All Day Event</label>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventCategoryEdit">Category:</label>
+                                    <select id="eventCategoryEdit" name="eventCategoryEdit" class="form-control" required>
+                                        <option value="" disabled selected>Select category</option>
+                                        <option value="parish">Parish</option>
+                                        <option value="request">Request</option>
+                                        <option value="holiday">Holiday</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 mt-2">
+                                    <label class="required" for="eventStatusEdit">Status:</label>
+                                    <select id="eventStatusEdit" name="eventStatusEdit" class="form-control" required>
+                                        <option value="" disabled selected>Select status</option>
+                                        <option value="active">Active</option>
+                                        <option value="canceled">Canceled</option>
+                                        <option value="postponed">Postponed</option>
+                                        <option value="holiday">Holiday</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 mt-2">
+                                    <label for="eventDescriptionEdit">Description</label>
+                                    <textarea class="form-control" id="eventDescriptionEdit" name="eventDescriptionEdit" rows="3" placeholder="Enter event description..."></textarea>
+                                </div>
+                            </div>
+                                
+                            <div class="row">
+                                <div class="col-12 mt-2 text-end">
+                                    <button class="btn btn-danger" id="deleteEventBtn">Delete</button>
+                                    <button type="submit" class="btn btn-primary waves-effect waves-light">Submit</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addReqModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addReqModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Request</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="requestAddFormStaff">
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>Name on Document</strong>
+                            </div>
+                            <div class="col-lg-4 col-md-12 mt-2">
+                                <label class="required" for="recFirstName">First Name:</label>
+                                <input type="text" id="recFirstName" name="recFirstName" class="form-control" required>
+                            </div>
+                            <div class="col-lg-4 col-md-12 mt-2">
+                                <label for="recMiddleName">Middle Name:</label>
+                                <input type="text" id="recMiddleName" name="recMiddleName" class="form-control">
+                            </div>
+                            <div class="col-lg-4 col-md-12 mt-2">
+                                <label class="required" for="recLastName">Last Name:</label>
+                                <input type="text" id="recLastName" name="recLastName" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 mt-2">
+                                <label class="required" for="relationship">Relationship to Document Holder:</label>
+                                <input type="text" id="relationship" name="relationship" class="form-control" required>
+                            </div>
+
+                            <div class="col-lg-6 col-md-12 mt-2">
+                                <label class="required" for="ceremony">Ceremony:</label>
+                                <select id="ceremony" name="ceremony" class="form-control" required>
+                                    <option value="" disabled selected>Select ceremony</option>
+                                    <option value="baptism">Baptism</option>
+                                    <option value="confirmation">Confirmation</option>
+                                    <option value="wedding">Wedding</option>
+                                    <option value="death">Death</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <label>Ceremony Date (any known part):</label>
+
+                            <div class="col-lg-4 col-md-6 mt-1">
+                                <select class="form-control" id="cer_year" name="cer_year">
+                                    <option value="">Year</option>
+                                    <!-- Years dynamically populated by JS -->
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mt-1">
+                                <select class="form-control" id="cer_month" name="cer_month">
+                                    <option value="">Month</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-6 mt-1">
+                                <select class="form-control" id="cer_day" name="cer_day">
+                                    <option value="">Day</option>
+                                    <!-- Days dynamically populated by JS -->
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <label for="note">Note:</label>
+                                <textarea id="note" name="note" rows="3" class="form-control" placeholder="Enter additional notes..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <label class="required" for="pickupDate">Pickup Date:</label>
+                                <input type="date" id="pickupDate" name="pickup_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mt-3">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="searchResultsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog"  aria-labelledby="searchResultsModalLabel" aria-hidden="true" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchResultsModalLabel">Matching Records</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="accordionExample" class="accordion"></div>
+                    <div id="searchResultsModalBody"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-labelledby="eventDetailLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventDetailLabel">Event Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="eventDetailBody">
+              
+            </div>
+            </div>
+        </div>
+    </div>
+
+                            
+                            
+</div>
+
+
+
+</div>
+{% endblock %}

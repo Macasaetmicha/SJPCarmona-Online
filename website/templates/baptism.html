@@ -1,0 +1,618 @@
+{% extends "base.html" %}
+{% block title %}Baptism{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">Baptism</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" data-table="baptismTable" data-table-name="Baptism" class="btn btn-danger btn-pdf">
+                Export to PDF
+            </button>
+            <button type="button" id="addBaptismBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBaptismModal">
+                + Add Baptism Record
+            </button>
+        </div>
+    </div>
+</header>
+
+
+<div class="card">
+    <!-- <div class="card-header">
+        <h3>Church Records</h3>
+    </div> -->
+    <div class="card-body">
+        <div class="table-responsive">
+
+            <table id="baptismTable" class="display table zero-configuration dataTable table-striped table-bordered rounded mt-2 w-100">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Action</th>
+                        <th rowspan="2">Baptism Date</th>
+                        <th colspan="3">Name</th>
+                        <th rowspan="2">Birthdate</th>
+                        <th rowspan="2">Address</th>
+                        <th colspan="2">Parents</th>
+                        <th rowspan="2">Priest</th>
+                    </tr>
+                    <tr>
+                        <th>First</th>
+                        <th>Middle</th>
+                        <th>Last</th>
+                        <th>Father</th>
+                        <th>Mother</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal-container">
+    <div class="modal fade" id="showBaptModal" tabindex="-1" role="dialog" aria-labelledby="BaptismModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="baptismModalTitle">Baptism Information               
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="baptismAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion1" aria-expanded="true" aria-controls="accordion1">
+                                    Client Information
+                                </button>
+                            </h2>
+                            <div id="accordion1" class="accordion-collapse collapse" data-bs-parent="#baptismAccordion">
+                                <div class="accordion-body">
+                                    <p><strong>Client Name:</strong> <span id="baptClientName"></span></p>
+                                    <p><strong>Birthday:</strong> <span id="baptClientBday"></span></p>
+                                    <p><strong>Birthplace:</strong> <span id="baptClientBplace"></span></p>
+                                    <p><strong>Legitimcay:</strong> <span id="baptClientLigitivity"></span></p>
+                                    <p><strong>Address:</strong> 
+                                        <span id="baptClientAddress"></span>, 
+                                        <span id="baptClientBrgy"></span>,
+                                        <span id="baptClientCityMun"></span>,
+                                        <span id="baptClientProv"></span>,
+                                        <span id="baptClientReg"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion2" aria-expanded="false" aria-controls="accordion2">
+                                    Baptism Information
+                                </button>
+                            </h2>
+                            <div id="accordion2" class="accordion-collapse collapse" data-bs-parent="#baptismAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Baptism Date:</strong> <span id="baptDate"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Priest:</strong> <span id="baptPriest"></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Sponsor:</strong> <span id="baptSponsA"></span></p>
+                                            <p><strong>Residence:</strong> <span id="baptSponsResA"></span></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Sponsor:</strong> <span id="baptSponsB"></span></p>
+                                            <p><strong>Residence:</strong> <span id="baptSponsResB"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordion3" aria-expanded="false" aria-controls="accordion3">
+                                    Client Records
+                                </button>
+                            </h2>
+                            <div id="accordion3" class="accordion-collapse collapse" data-bs-parent="#baptismAccordion">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <p><strong>Index:</strong> <span id="baptIndex"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Book:</strong> <span id="baptBook"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Page:</strong> <span id="baptPage"></span></p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <p><strong>Line:</strong> <span id="baptLine"></span></p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multi-step Modal -->
+    <div class="modal fade" id="addBaptismModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addBaptismModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Baptism Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <!-- Progress Tracker -->
+                        <div class="progress-tracker">
+                            <div class="step active">
+                                <i class="fa-solid fa-user"></i>
+                                <span>Client</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-person-breastfeeding"></i>
+                                <span>Parent</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-church"></i>
+                                <span>Baptism</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Step Form -->
+                        <div class="stepper-form">
+                            <form id="baptismAddForm">
+                                <!-- Step 1 -->
+                                <div class="step-content active">
+                                    <h3>Step 1: Personal Information</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="name" class="required">First Name:</label>
+                                            <input type="text" id="fname" name="fname" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="name">Middle Name:</label>
+                                            <input type="text" id="mname" name="mname" class="form-control">
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="name" class="required">Last Name:</label>
+                                            <input type="text" id="lname" name="lname" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-4 col-md-4 mt-2">
+                                            <label for="birthdate" class="required">Birth Date:</label>
+                                            <input type="text" id="birthdate" name="birthdate" class="datepicker-custom form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2 check-records">
+                                            <button type="button" id="checkRecBtn" class="btn btn-primary mt-3">Check if record exists</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <input type="hidden" name="rec_id" id="rec_id">
+                                        <input type="hidden" name="rec_moID" id="rec_moID">
+                                        <input type="hidden" name="rec_faID" id="rec_faID">
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="birthplace" class="required">Birth Place:</label>
+                                            <input type="text" id="birthplace" name="birthplace" class="form-control birthplace" required>
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="ligitivity" class="required">Legitimacy:</label><br>
+                                            <div class="radio-group mt-2">
+                                                <input type="radio" value="civil" id="civilLigitivity" name="ligitivity"  required>
+                                                <label for="civilLigitivity">Civil</label>
+                                        
+                                                <input type="radio" value="catholic" id="catholicLigitivity" name="ligitivity" required>
+                                                <label for="catholicLigitivity">Catholic</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-4 col-md-12 mt-2">
+                                            <label for="civilStatus" class="required">Civil Status:</label>
+                                            <select id="civilStatus" name="civilStatus" class="form-control" required>
+                                                <option value="" disabled selected>Select an option</option>
+                                                <option value="single">Single</option>
+                                                <option value="married">Married</option>
+                                                <option value="widowed">Widowed</option>
+                                                <option value="separated">Separated</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Address</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="region" class="required">Region:</label>
+                                                <select id="region" name="region" class="form-control" required>
+                                                    <option region_id="" value="" selected disabled>Select Region</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">  
+                                            <div class="subform">
+                                                <label for="province" class="required">Province:</label>
+                                                <select id="province" name="province" class="form-control" required>
+                                                    <option value="" selected disabled>Select Province</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="city" class="required">City/Municipality:</label>
+                                                <select id="city" name="cityMun" class="form-control" required>
+                                                    <option value="" selected disabled>Select City/Municipality</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="barangay" class="required">Barangay:</label>
+                                                <select id="barangay" name="barangay" class="form-control" required>
+                                                    <option value="" selected disabled>Select Barangay</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">    
+                                            <label for="addressLine" class="required">Address Line:</label>
+                                            <input type="text" id="addressLine" name="addressLine" class="form-control addressLine" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+
+                                    
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div class="step-content active">
+                                    <h3>Step 2: Parents Information</h3>
+
+                                    <div class="row gx-5">
+                                        <!-- Father -->
+                                        <div class="col-lg-6 col-md-12 mt-2 parent-container middle-divider">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h5>Father</h5></p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="fafname" class="required">First Name:</label>
+                                                    <input type="text" id="fafname" name="fafname" class="form-control fafname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="famname">Middle Name:</label>
+                                                    <input type="text" id="famname" name="famname" class="form-control famname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="falname" class="required">Last Name:</label>
+                                                    <input type="text" id="falname" name="falname" class="form-control falname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="fabirthdate" class="required">Birth Date:</label>
+                                                    <input type="text" id="fabirthdate" name="fabirthdate" class="datepicker-custom form-control fabirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="fabirthplace" class="required">Birth Place:</label>
+                                                    <input type="text" id="fabirthplace" name="fabirthplace" class="form-control fabirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="faaddress" class="required">Address:</label>
+                                                    <input type="text" id="faaddress" name="faaddress" class="form-control faaddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Mother -->
+                                        <div class="col-lg-6 col-md-12 parent-container">
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <p class="mb-0"><h5>Mother</h5>
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="mofname" class="required">First Name:</label>
+                                                    <input type="text" id="mofname" name="mofname" class="form-control mofname" required>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="momname">Middle Name:</label>
+                                                    <input type="text" id="momname" name="momname" class="form-control momname">
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-12 mt-2">
+                                                    <label for="molname" class="required">Last Name:</label>
+                                                    <input type="text" id="molname" name="molname" class="form-control molname" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-4 mt-2">
+                                                    <label for="mobirthdate" class="required">Birth Date:</label>
+                                                    <input type="text" id="mobirthdate" name="mobirthdate" class="datepicker-custom form-control mobirthdate" required>
+                                                </div>
+
+                                                <div class="col-lg-6 col-md-12 mt-2">
+                                                    <label for="mobirthplace" class="required">Birth Place:</label>
+                                                    <input type="text" id="mobirthplace" name="mobirthplace" class="form-control mobirthplace" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12 mt-2">
+                                                    <label for="moaddress" class="required">Address:</label>
+                                                    <input type="text" id="moaddress" name="moaddress" class="form-control moaddress" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                </div>
+    
+                                <!-- Step 3 -->
+                                <div class="step-content">
+                                    <h3>Step 3: Baptism Information</h3>
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="baptDate" class="required">Baptism Date:</label>
+                                            <input type="text" id="baptDatePicker" name="baptDate" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="priest" class="required">Priest:</label>
+                                                <select id="priest" name="priest" class="form-control" required>
+                                                    <option value="" selected disabled>Select Priest</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Sponsors</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorA" class="required">Sponsor 1:</label>
+                                            <input type="text" id="sponsorA" name="sponsorA" class="form-control">
+
+                                            <label for="residenceA" class="required">Address of Sponsor 1:</label>
+                                            <input type="text" id="residenceA" name="residenceA" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorB" class="required">Sponsor 2:</label>
+                                            <input type="text" id="sponsorB" name="sponsorB" class="form-control">
+
+                                            <label for="residenceB" class="required">Address of Sponsor 2:</label>
+                                            <input type="text" id="residenceB" name="residenceB" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                    
+                                </div>
+    
+                                <!-- Step 4 -->
+                                <div class="step-content">
+                                    <h3>Step 4: Records</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptIndex" class="required">Index:</label>
+                                            <input type="text" id="baptIndex" name="rec_index" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptBook" class="required">Book:</label>
+                                            <input type="text" id="baptBook" name="rec_book" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptPage" class="required">Page:</label>
+                                            <input type="text" id="baptPage" name="rec_page" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptLine" class="required">Line:</label>
+                                            <input type="text" id="baptLine" name="rec_line" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="submit" class="btn btn-primary next-btn mt-3">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editBaptismModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="editBaptismModal" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Baptism Record</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-case">
+                        <!-- Progress Tracker -->
+                        <div class="progress-tracker">
+                            <div class="step active">
+                                <i class="fa-solid fa-church"></i>
+                                <span>Baptism</span>
+                            </div>
+                            <div class="progress-line"></div>
+                            <div class="step">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Records</span>
+                            </div>
+                        </div>
+
+                        <!-- Multi-Step Form -->
+                        <div class="stepper-form">
+                            <form id="baptismEditForm">
+                                <!-- Step 3 -->
+                                <div class="step-content">
+                                    <h3>Baptism Information</h3>
+
+                                    <input type="hidden" name="id" id="id">
+
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="baptDate" class="required">Baptism Date:</label>
+                                            <input type="text" id="DatePickerEdit" name="baptDate" class="form-control datepicker" required>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">    
+                                            <div class="subform">
+                                                <label for="priestEdit" class="required">Priest:</label>
+                                                <select id="priestEdit" name="priestEdit" class="form-control" required>
+                                                    <option value="" selected disabled>Select Priest</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-2">
+                                            <p class="mb-0"><strong>Sponsors</strong></p>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorA" class="required">Sponsor 1:</label>
+                                            <input type="text" id="sponsorA" name="sponsorA" class="form-control">
+
+                                            <label for="residenceA" class="required">Address of Sponsor 1:</label>
+                                            <input type="text" id="residenceA" name="residenceA" class="form-control">
+                                        </div>
+                                        
+                                        <div class="col-lg-6 col-md-12 mt-2">
+                                            <label for="sponsorB" class="required">Sponsor 2:</label>
+                                            <input type="text" id="sponsorB" name="sponsorB" class="form-control">
+
+                                            <label for="residenceB" class="required">Address of Sponsor 2:</label>
+                                            <input type="text" id="residenceB" name="residenceB" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary next-btn mt-3">Next</button>
+                                    </div>
+                                    
+                                </div>
+    
+                                <!-- Step 4 -->
+                                <div class="step-content">
+                                    <h3>Records</h3>
+                                    
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptIndex" class="required">Index:</label>
+                                            <input type="text" id="baptIndex" name="rec_index" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptBook" class="required">Book:</label>
+                                            <input type="text" id="baptBook" name="rec_book" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptPage" class="required">Page:</label>
+                                            <input type="text" id="baptPage" name="rec_page" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-lg-3 col-md-12 mt-2">
+                                            <label for="baptLine" class="required">Line:</label>
+                                            <input type="text" id="baptLine" name="rec_line" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-1 text-end">
+                                        <button type="button" class="btn btn-primary prev-btn mt-3">Back</button>
+                                        <button type="submit" class="btn btn-primary next-btn mt-3">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+</div>
+
+
+{% endblock %}

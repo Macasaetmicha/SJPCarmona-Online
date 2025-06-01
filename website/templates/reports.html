@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block title %}Report{% endblock %}
+
+{% block content %}
+
+<div class="container-xxl pt-3">
+    <div class="summaryHeader col-12">
+        <h4>Record Summary</h4>
+    
+        <button type="button" class="btn btn-primary" id="filterPopover" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="manual">
+            <i class="fa fa-filter"></i>
+        </button>
+    
+        <div id="filterContent" class="d-none">
+            <div id="reportrange">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-3">
+        <div class="col-lg-6 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Records</h5>
+                    <h3 id="recordCount"><span class="recordCount"></span></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Requests</h5>
+                    <h3 id="requestCount"><span class="requestCount"></span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-3 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Baptism</h5>
+                    <h3 id="baptismCount"><span class="baptismCount"></span></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Confirmation</h5>
+                    <h3 id="confirmationCount"><span class="confirmationCount"></span></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Wedding</h5>
+                    <h3 id="weddingCount"><span class="weddingCount"></span></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Death</h5>
+                    <h3 id="deathCount"><span class="deathCount"></span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div class="container-xxl pt-3">
+    <div class="col-12">
+        <h4>Generate Report</h4>
+    </div>
+
+    <div class="container-fluid mt-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+            <div class="d-flex gap-2">
+                <div class="d-flex align-items-center mb-2 mb-md-0">
+                    <label for="dataFilterDropdown" class="me-2 mb-0 text-nowrap">Select Data</label>
+                    <select class="form-select dataFilterDropdown" id="dataFilterDropdown">
+                        <option value="record">Record</option>
+                        <option value="baptism">Baptism</option>
+                        <option value="confirmation">Confirmation</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="death">Death</option>
+                        <option value="priest">Priest</option>
+                        <option value="request">Request</option>
+                    </select>
+                </div>
+                <!-- <button type="button" class="btn btn-primary" id="" data-bs-toggle="popover" data-bs-placement="right" data-bs-trigger="manual">
+                    <i class="fa fa-filter"></i>
+                </button> -->
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" id="exportPDF">Export as PDF</button>
+                <button class="btn btn-primary" id="exportExcel">Export as Excel</button>
+            </div>
+        </div>
+    
+        <div id="ceremonyFilters" class="row g-3 align-items-center d-none">
+            <div class="col-md-3">
+                <label for="ceremonyDateRange" class="custom-form-label">Ceremony Date:</label>
+                <input type="text" class="form-control" id="ceremonyDateRange" placeholder="Select date range">
+            </div>
+            <div class="col-md-3">
+                <label for="priestDropdown" class="custom-form-label">Priest:</label>
+                <select class="form-select" id="priestDropdown">
+                    <option value="">Select a priest</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="custom-form-label">Record Location:</label>
+                <div class="d-flex gap-2">
+                    <input type="text" class="form-control" id="recordIndex" placeholder="Index">
+                    <input type="text" class="form-control" id="recordBook" placeholder="Book">
+                    <input type="text" class="form-control" id="recordPage" placeholder="Page">
+                    <input type="text" class="form-control" id="recordLine" placeholder="Line">
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-12 d-flex justify-content-end align-items-end">
+                <button type="button" id="confclearFilters" class="btn btn-secondary clearFilters">Clear Filters</button>
+            </div>
+        </div>
+
+        <div id="recordFilter" class="row g-3 align-items-center">
+            <div class="col-lg-3 col-md-12">
+                <label for="civilStatusFilter">Civil Status:</label>
+                <select id="civilStatusFilter" name="civilStatusFilter" class="form-control" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="widowed">Widowed</option>
+                    <option value="separated">Separated</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-12">
+                <label for="ligitivityFilter">Ligitivity:</label>
+                <select id="ligitivityFilter" name="ligitivityFilter" class="form-control" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="CATHOLIC">Catholic</option>
+                    <option value="CIVIL">Civil</option>
+                </select>
+            </div>
+            <div class="col-lg-6 col-md-12 d-flex justify-content-end align-items-end">
+                <button type="button" id="cerclearFilters" class="btn btn-secondary clearFilters">Clear Filters</button>
+            </div>
+            
+        </div>
+
+        <div id="priestFilter" class="row g-3 align-items-center d-none">
+            <div class="col-lg-3 col-md-12">
+                <label for="positionFilter">Position:</label>
+                <select id="positionFilter" name="positionFilter" class="form-control" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="parish_priest">Parish Priest</option>
+                    <option value="guest_priest">Guest Priest</option>
+                    <option value="bishop">Bishop</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-12">
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter" name="statusFilter" class="form-control" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="col-lg-6 col-md-12 d-flex justify-content-end align-items-end">
+                <button type="button" id="priestclearFilters" class="btn btn-secondary clearFilters">Clear Filters</button>
+            </div>
+            
+        </div>
+
+        <div id="requestFilter" class="row g-3 align-items-center d-none">
+            <div class="col-lg-3 col-md-12">
+                <label for="requestDateRange" class="custom-form-label">Date Range:</label>
+                <input type="text" class="form-control" id="requestDateRange" placeholder="Select date range">
+            </div>
+            <div class="col-lg-3 col-md-12">
+                <label for="ceremony">Ceremony:</label>
+                <select id="ceremony" name="ceremony" class="form-control" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="baptism">Baptism</option>
+                    <option value="confirmation">Confirmation</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="death">Death</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-12">
+                <label for="reqStatus">Status:</label>
+                <select id="reqStatus" name="reqStatus" class="form-control" required>
+                    <option value="" disabled selected>Select an option</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="processing">Processing</option>
+                    <option value="ready">Ready</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-12 d-flex justify-content-end align-items-end">
+                <button type="button" id="reqclearFilters" class="btn btn-secondary clearFilters">Clear Filters</button>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div id="tableContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

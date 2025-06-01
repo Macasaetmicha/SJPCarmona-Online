@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+
+{% block content %}
+<header class="p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="m-0">History</h2>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" data-table="auditLogTable" data-table-name="Audit" class="btn btn-danger btn-pdf">
+                Export to PDF
+            </button>
+
+            <div>
+                <input type="text" id="dateRange" class="form-control" style="max-width: 250px;" placeholder="Filter by Date Range" readonly />
+            </div>     
+        </div>
+    </div>
+</header>
+
+
+<div class="card">
+    <div class="card-body">  
+        <div class="table-responsive">
+        
+            <table id="auditLogTable" class="display table zero-configuration dataTable table-striped table-bordered rounded mt-2 w-100">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Action</th>
+                        <th>Table</th>
+                        <th>Record ID</th>
+                        <th>Changed By</th>
+                        <th>Old Data</th>
+                        <th>New Data</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                </tbody>
+                </table>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/audit.js') }}"></script>
+
+{% endblock %}
