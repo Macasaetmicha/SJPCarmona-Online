@@ -17,7 +17,7 @@ from ..fidosession import start_fido_session, close_fido_session, get_user_id
 
 from website.models.enums import UserRole
 
-rp = PublicKeyCredentialRpEntity(name="Demo server", id="localhost")
+rp = PublicKeyCredentialRpEntity(name="St. Joseph Carmona", id="sjpcarmona-online-production.up.railway.app")
 fido_server = Fido2Server(rp)
 
 active_challenges = TTLCache(1000, 60)
