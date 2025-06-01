@@ -49,7 +49,6 @@
         
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js"></script>
 
-        <!-- Buttons extension -->
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
         <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
@@ -132,7 +131,7 @@
                     {% if current_user.role == UserRole.ADMIN %}
                     <!-- Only visible to Admin -->
                     <li class="nav-item">
-                        <a class="nav-link {% if active_page == 'audit' %}active{% endif %}" href="/admin/audit-log">History</a>
+                        <a class="nav-link {% if active_page == 'audit' %}active{% endif %}" href="/admin/audit-log">Audit Log</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if active_page == 'accounts' %}active{% endif %}" href="/admin/accounts">Accounts</a>
