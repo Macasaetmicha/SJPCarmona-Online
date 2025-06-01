@@ -39,6 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
         $('#editAccountModal input[name="username"]').val(data.username);
         $('#editAccountModal input[name="contact_number"]').val(data.contact_number);
         $('#editAccountModal input[name="email"]').val(data.email);
+        $('#editAccountModal select[name="role"]').val(data.role);
+        console.log("This is the role ", data.role)
 
         $('#editAccountModal').data('user-id', data.id);
         console.log("THIS IS THE USER-ID", data.id)
