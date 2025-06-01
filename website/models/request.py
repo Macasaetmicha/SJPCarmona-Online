@@ -10,7 +10,7 @@ class Request(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     ceremony = db.Column(Enum(Ceremonies), nullable=False)
     rec_name = db.Column(db.String(255), nullable=False)
-    cer_year = db.Column(db.Integer, nullable=False)
+    cer_year = db.Column(db.Integer, nullable=True)
     cer_month = db.Column(db.SmallInteger, nullable=True)  
     cer_day = db.Column(db.SmallInteger, nullable=True)
     relationship = db.Column(db.String(255), nullable=False)
