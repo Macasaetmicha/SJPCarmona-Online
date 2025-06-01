@@ -85,7 +85,9 @@
                 
                                 <div class="col-lg-6 col-12 mb-3">
                                     <label for="contact_number" class="form-label required">Contact Number</label>
-                                    <input type="text" class="form-control" id="contact_number" name="contact_number" maxlength="13" placeholder="09xxxxxxxxx" required>
+                                   <input type="tel" class="form-control" id="contact_number" name="contact_number"
+                                    maxlength="11" pattern="^09\d{9}$" placeholder="09xxxxxxxxx" required
+                                    inputmode="numeric">
                                 </div>
                             </div>
 
@@ -94,7 +96,7 @@
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="password" class="form-label required">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
                             </div>
@@ -102,7 +104,7 @@
                             <div class="mb-3">
                                 <label for="confirm_password" class="form-label required">Confirm Password</label>
                                 <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
-                            </div>
+                            </div> -->
 
                             <br>
 

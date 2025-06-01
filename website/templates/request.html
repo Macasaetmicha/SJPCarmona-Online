@@ -21,15 +21,12 @@
 
 
 <div class="row">
-    <!-- LEFT SIDE: Calendar + Lists (col-4 or col-lg-4) -->
     <div class="col-lg-5 col-md-12" id="calendarContainer">
         <div class="card mb-3">
             <!-- Calendar -->
             <div class="card-body">
                 <div class="calendar-header custom-calendar-header">
-                    <!-- Row 1: Title on the left, Navigation on the right -->
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <!-- Left: Month title + Kebab menu -->
                         <div class="d-flex align-items-center">
                             <h4 id="current-date" class="mb-0 me-2"></h4> 
                             <button id="prevBtn" class="btn btn-light me-2 custom-nav-btn">
@@ -40,7 +37,6 @@
                             </button>
                         </div>
 
-                        <!-- Right: Navigation buttons -->
                         <div class="d-flex align-items-center">
                             <button type="button" class="p-0 ms-2 help-icon-btn">
                                 <i class="fa fa-question-circle help-icon ms-2" id="calendarHelpIcon"></i>
@@ -65,13 +61,11 @@
                 </div>
             
 
-                <!-- FullCalendar -->
                 <div id="calendar"></div>
             </div>
         </div>
     </div>
 
-    <!-- RIGHT SIDE: Quick Status + Request Table (col-8 or col-lg-8) -->
     <div class="col-lg-7 col-md-12" id="requestContainer">
         <!-- <div class="row">
             <div class="summaryHeader col-12">
@@ -90,7 +84,6 @@
             </div>
         </div> -->
         <div class="row mt-3">
-            <!-- Quick Status Cards -->
             <div class="col-6 col-sm-6 col-md-4 mb-1 countCard">
                 <div class="card text-center">
                     <div class="card-req-count d-flex justify-content-between align-items-center">
@@ -139,14 +132,13 @@
             <div class="col-6 col-sm-6 col-md-4 mb-1 countCard">
                 <div class="card text-center">
                     <div class="card-req-count d-flex justify-content-between align-items-center">
-                        <h6>Canceled</h6>
+                        <h6>cancelled</h6>
                         <h6 id="cancelCount"><span class="cancelCount"></span></h6>
                     </div> 
                 </div>
             </div>
         </div>
 
-        <!-- Request Table Section -->
         <div class="card mt-3">
             <div class="card-body">
                 <div class="table-responsive">
@@ -252,7 +244,6 @@
         </div>
     </div>
 
-    <!-- Modal for adding or editing events -->
     <div class="modal fade" id="addEventModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="addEventModal" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
@@ -266,19 +257,36 @@
                             <div class="row">
                                 <div class="col-12 mt-2">
                                     <label class="required" for="eventTitle">Event Title:</label>
-                                    <input type="text" id="eventTitle" name="eventTitle" class="form-control" required>
+                                    <select id="eventTitle" name="eventTitle" class="form-control" required>
+                                        <option value="" disabled selected>Select ceremony</option>
+                                        <option value="baptism">Baptism</option>
+                                        <option value="confirmation">Confirmation</option>
+                                        <option value="wedding">Wedding</option>
+                                        <option value="death">Death</option>
+                                    </select>
                                 </div>
                             </div>
                             
                             <div class="row">
-                                <div class="col-lg-6 col-md-12 mt-2">
+                                <div class="col-lg-4 col-md-12 mt-2">
                                     <label class="required" for="eventStart">Start:</label>
                                     <input type="datetime-local" class="form-control" id="eventStart" name="eventStart" required>
                                 </div>
 
-                                <div class="col-lg-6 col-md-12 mt-2">
+                                <div class="col-lg-4 col-md-12 mt-2">
                                     <label class="required" for="eventEnd">End:</label>
                                     <input type="datetime-local" class="form-control" id="eventEnd" name="eventEnd" required>
+                                </div>
+
+                                <div class="col-lg-4 col-md-12 mt-2">
+                                    <label class="required" for="eventStatus">Status:</label>
+                                    <select id="eventStatus" name="eventStatus" class="form-control" required>
+                                        <option value="" disabled selected>Select status</option>
+                                        <option value="active">Active</option>
+                                        <option value="cancelled">cancelled</option>
+                                        <option value="postponed">Postponed</option>
+                                        <!-- <option value="holiday">Holiday</option> -->
+                                    </select>
                                 </div>
                             </div>
 
@@ -288,25 +296,14 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-6 col-md-12 mt-2">
+                                <!-- <div class="col-lg-6 col-md-12 mt-2">
                                     <label class="required" for="eventCategory">Category:</label>
                                     <select id="eventCategory" name="eventCategory" class="form-control" required>
                                         <option value="" disabled selected>Select category</option>
                                         <option value="parish">Parish</option>
                                         <option value="holiday">Holiday</option>
                                     </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-12 mt-2">
-                                    <label class="required" for="eventStatus">Status:</label>
-                                    <select id="eventStatus" name="eventStatus" class="form-control" required>
-                                        <option value="" disabled selected>Select status</option>
-                                        <option value="active">Active</option>
-                                        <option value="canceled">Canceled</option>
-                                        <option value="postponed">Postponed</option>
-                                        <option value="holiday">Holiday</option>
-                                    </select>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="row">
@@ -342,19 +339,36 @@
                                 <input type="hidden" name="schedId" id="schedId">
                                 <div class="col-12 mt-2">
                                     <label class="required" for="eventTitleEdit">Event Title:</label>
-                                    <input type="text" id="eventTitleEdit" name="eventTitleEdit" class="form-control" required>
+                                    <select id="eventTitleEdit" name="eventTitleEdit" class="form-control" required>
+                                        <option value="" disabled selected>Select ceremony</option>
+                                        <option value="baptism">Baptism</option>
+                                        <option value="confirmation">Confirmation</option>
+                                        <option value="wedding">Wedding</option>
+                                        <option value="death">Death</option>
+                                    </select>
                                 </div>
                             </div>
                             
                             <div class="row">
-                                <div class="col-lg-6 col-md-12 mt-2">
+                                <div class="col-lg-4 col-md-12 mt-2">
                                     <label class="required" for="eventStartEdit">Start:</label>
                                     <input type="datetime-local" class="form-control" id="eventStartEdit" name="eventStartEdit" required>
                                 </div>
 
-                                <div class="col-lg-6 col-md-12 mt-2">
+                                <div class="col-lg-4 col-md-12 mt-2">
                                     <label class="required" for="eventEndEdit">End:</label>
                                     <input type="datetime-local" class="form-control" id="eventEndEdit" name="eventEndEdit" required>
+                                </div>
+
+                                <div class="col-lg-4 col-md-12 mt-2">
+                                    <label class="required" for="eventStatusEdit">Status:</label>
+                                    <select id="eventStatusEdit" name="eventStatusEdit" class="form-control" required>
+                                        <option value="" disabled selected>Select status</option>
+                                        <option value="active">Active</option>
+                                        <option value="cancelled">cancelled</option>
+                                        <option value="postponed">Postponed</option>
+                                        <!-- <option value="holiday">Holiday</option> -->
+                                    </select>
                                 </div>
                             </div>
 
@@ -364,7 +378,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-6 col-md-12 mt-2">
+                                <!-- <div class="col-lg-6 col-md-12 mt-2">
                                     <label class="required" for="eventCategoryEdit">Category:</label>
                                     <select id="eventCategoryEdit" name="eventCategoryEdit" class="form-control" required>
                                         <option value="" disabled selected>Select category</option>
@@ -372,18 +386,7 @@
                                         <option value="request">Request</option>
                                         <option value="holiday">Holiday</option>
                                     </select>
-                                </div>
-
-                                <div class="col-lg-6 col-md-12 mt-2">
-                                    <label class="required" for="eventStatusEdit">Status:</label>
-                                    <select id="eventStatusEdit" name="eventStatusEdit" class="form-control" required>
-                                        <option value="" disabled selected>Select status</option>
-                                        <option value="active">Active</option>
-                                        <option value="canceled">Canceled</option>
-                                        <option value="postponed">Postponed</option>
-                                        <option value="holiday">Holiday</option>
-                                    </select>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="row">
@@ -458,7 +461,7 @@
                             <div class="col-lg-4 col-md-6 mt-1">
                                 <select class="form-control" id="cer_year" name="cer_year">
                                     <option value="">Year</option>
-                                    <!-- Years dynamically populated by JS -->
+
                                 </select>
                             </div>
                             <div class="col-lg-4 col-md-6 mt-1">
@@ -481,7 +484,6 @@
                             <div class="col-lg-4 col-md-6 mt-1">
                                 <select class="form-control" id="cer_day" name="cer_day">
                                     <option value="">Day</option>
-                                    <!-- Days dynamically populated by JS -->
                                 </select>
                             </div>
                         </div>

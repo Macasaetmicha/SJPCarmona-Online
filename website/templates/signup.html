@@ -37,8 +37,9 @@
     
                     <div class="col-lg-6 col-12 mb-3">
                         <label for="contact_number" class="form-label required">Contact Number</label>
-                        <input type="text" class="form-control" id="contact_number" name="contact_number" maxlength="13" placeholder="09xxxxxxxxx" required>
-                    </div>
+                        <input type="tel" class="form-control" id="contact_number" name="contact_number"
+                                maxlength="11" pattern="^09\d{9}$" placeholder="09xxxxxxxxx" required
+                                inputmode="numeric">                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -46,7 +47,7 @@
                     <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
                 </div>
 
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="password" class="form-label required">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
                 </div>
@@ -54,6 +55,13 @@
                 <div class="mb-3">
                     <label for="confirm_password" class="form-label required">Confirm Password</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm password" required>
+                </div> -->
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="termsCheckbox" required>
+                    <label class="form-check-label" for="termsCheckbox">
+                        I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a>.
+                    </label>
                 </div>
 
                 <br>
@@ -101,6 +109,83 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. Purpose</h6>
+                    <p>
+                    This system allows parishioners to request official church documents — <strong>Baptismal, Confirmation, Wedding, and Death Certificates</strong> — and helps parish staff manage and process these requests efficiently.
+                    </p>
+
+                    <h6>2. Account and Authentication</h6>
+                    <ul>
+                    <li>You must register an account and verify your identity using your preferred authentication method (e.g., fingerprint, PIN, or USB key).</li>
+                    <li>You are responsible for keeping your account and authentication device secure.</li>
+                    </ul>
+
+                    <h6>3. Data Privacy</h6>
+                    <ul>
+                    <li>Only necessary personal information is collected to fulfill requests.</li>
+                    <li>Data access is restricted to authorized users only.</li>
+                    <li>You may request access, correction, or deletion of your personal information through the Parish Office.</li>
+                    </ul>
+
+                    <h6>4. Using the System</h6>
+                    <ul>
+                    <li>Submit document requests through the online form.</li>
+                    <li>Choose a preferred <strong>pickup date during document release days: Wednesday to Friday, 8:00 AM to 5:00 PM</strong> (with a <strong>lunch break from 12:00 PM to 2:00 PM</strong>).</li>
+                    <li><strong>Check the website</strong> to confirm when your document is ready before going to the Parish Office.</li>
+                    <li>All documents must be picked up <strong>in person</strong>. Documents can not be sent through digital methods.</li>
+                    </ul>
+
+                    <h6>5. Acceptable Use</h6>
+                    <ul>
+                    <li>Provide accurate and truthful information.</li>
+                    <li>Keep login credentials and devices secure.</li>
+                    <li>Use the system only for its intended purpose.</li>
+                    <li>Report any issues or suspicious activity immediately.</li>
+                    </ul>
+
+                    <h6>6. Limitations</h6>
+                    <ul>
+                    <li>Only Baptismal, Confirmation, Wedding, and Death certificates are supported.</li>
+                    <li>Older physical records must be manually added to the system.</li>
+                    <li>Pickup is only available on the official release days and times.</li>
+                    </ul>
+
+                    <h6>7. Suspension and Termination</h6>
+                    <p>
+                    The Parish Office may suspend or terminate your access for violations such as system misuse, unauthorized access attempts, or data tampering.
+                    </p>
+
+                    <h6>8. Updates and Contact</h6>
+                    <p>Terms may change over time. Continued use indicates your agreement to the latest version.</p>
+
+                    <p>
+                    <strong>Contact Information:</strong><br>
+                    St. Joseph Parish Office<br>
+                    Barangay 2, Poblacion, Carmona, Cavite<br>
+                    430-1015 • sjp.carmonacavite@gmail.com<br>
+                    Office Hours: Monday–Saturday, 8 AM–5 PM (Closed on holidays; lunch break: 12 PM–2 PM)
+                    </p>
+
+                    <hr>
+                    <p class="fw-bold">By clicking “I Agree”, you confirm that you have read and accept these Terms and Conditions.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="declineTermsBtn"  data-bs-dismiss="modal">Decline</button>
+                    <button type="button" class="btn btn-primary" id="agreeTermsBtn" data-bs-dismiss="modal">I Agree</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script type="module" src="{{ url_for('static', filename='js/register.js') }}"></script>

@@ -21,17 +21,21 @@
                     <div class="col-12">
                         <strong>Name on Document<em> / Pangalan sa Dokumento</em></strong>
                     </div>
-                    <div class="col-lg-4 col-md-12 mt-2">
+                    <div class="col-lg-3 col-md-12 mt-2">
                         <label class="required" for="recFirstName">First Name<em> / Pangalan</em>:</label>
                         <input type="text" id="recFirstName" name="recFirstName" class="form-control" required>
                     </div>
-                    <div class="col-lg-4 col-md-12 mt-2">
+                    <div class="col-lg-3 col-md-12 mt-2">
                         <label for="recMiddleName">Middle Name<em> / Gitnang Pangalan</em>:</label>
                         <input type="text" id="recMiddleName" name="recMiddleName" class="form-control">
                     </div>
-                    <div class="col-lg-4 col-md-12 mt-2">
+                    <div class="col-lg-3 col-md-12 mt-2">
                         <label class="required" for="recLastName">Last Name<em> / Apelyido</em>:</label>
                         <input type="text" id="recLastName" name="recLastName" class="form-control" required>
+                    </div>
+                    <div class="col-lg-3 col-md-12 mt-2">
+                        <label for="birthdate" class="required">Birthday<em> / Araw ng Kapanakan</em>:</label>
+                        <input type="text" id="birthdate" name="birthdate" class="datepicker-custom form-control" required>
                     </div>
                 </div>
 
@@ -70,7 +74,6 @@
                     <div class="col-lg-4 col-md-6 mt-1">
                         <select class="form-control" id="cer_year" name="cer_year" required>
                             <option value="">Year (Taon)</option>
-                            <!-- Years dynamically populated by JS -->
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-6 mt-1">
@@ -93,7 +96,6 @@
                     <div class="col-lg-4 col-md-6 mt-1">
                         <select class="form-control" id="cer_day" name="cer_day">
                             <option value="">Day (Araw)</option>
-                            <!-- Days dynamically populated by JS -->
                         </select>
                     </div>
                 </div>
@@ -112,7 +114,6 @@
                         <label class="required" for="pickupDate">Pickup Date<em> / Petsa ng Pagkuha</em>:</label>
                         <input type="text" id="pickupDateClient" name="pickup_date" class="form-control" required readonly>
 
-                        <!-- <input type="date" id="pickupDate" name="pickup_date" class="form-control" required> -->
                     </div>
                 </div>
 
