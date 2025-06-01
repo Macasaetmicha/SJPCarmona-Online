@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             'Request deleted successfully.',
                             'success'
                         );
+                        $('#requestTable').DataTable().ajax.reload(null, false);
                     },
                     error: function (xhr, status, error) {
                         console.error('Error:', error);

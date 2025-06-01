@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'GET',
             failure: () => toastr.error("Failed to load request events"),
             success: function(data) {
-                return data.data; // Access the 'data' property and return the events
+                return data.data.map(ev => ({
+                    ...ev,
+                    title: `REQUEST`.toUpperCase()
+                }));
             }
         }
         ],
@@ -53,12 +56,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const start = new Date(event.start);
                 let end = new Date(event.end || event.start);
 
-                // If all-day event and end has time 00:00, subtract 1 day for accurate range
                 if (event.allDay && end.getHours() === 0 && end.getMinutes() === 0) {
                     end.setDate(end.getDate() - 1);
                 }
 
-                // Normalize times for comparison
                 start.setHours(0, 0, 0, 0);
                 end.setHours(0, 0, 0, 0);
 
@@ -72,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
             detailCell.colSpan = 7;
 
             if (eventsForDate.length > 0) {
-                // Group events
                 const parishEvents = eventsForDate.filter(ev => {
                     return !ev.classNames.includes("event-request") && !ev.classNames.includes("event-holiday");
                 });
@@ -85,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const formatDateTime = (date) => `${formatDate(date)} (${formatTime(date)})`;
 
-                // Format Parish Events
                 let parishItems = '';
                 if (parishEvents.length > 0) {
                     const sortedParishEvents = parishEvents.sort((a, b) => a.start - b.start);
@@ -119,15 +118,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
 
-                // Function to convert a string to title case
                 const toTitleCase = str => str.replace(/\w\S*/g, word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
 
-                // Format Document Requests
                 let requestItems = '';
                 if (requestEvents.length > 0) {
-                    // Group the request events by status
                     const groupedRequests = requestEvents.reduce((groups, ev) => {
-                        const status = ev.extendedProps.status || 'Unknown';  // Group by status
+                        const status = ev.extendedProps.status || 'Unknown'; 
                         if (!groups[status]) {
                             groups[status] = [];
                         }
@@ -135,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         return groups;
                     }, {});
 
-                    // Create HTML for each group
                     for (let status in groupedRequests) {
                         const requests = groupedRequests[status];
                         
@@ -158,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </li>`;
                         }).join('');
 
-                        // Append the status heading in title case and the request items for that status
                         requestItems += `
                             <em>${toTitleCase(status)}</em>
                             <ul>
@@ -169,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-                // Format Holidays
                 let holidayItems = '';
                 if (holidayEvents.length > 0) {
                     holidayItems = holidayEvents.map(ev => {
@@ -209,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
 
-                // Build the final display
                 detailCell.innerHTML = holidaySection + scheduleSection + requestSection;
             } else {
                 detailCell.innerHTML = `<em>No schedules for ${new Date(clickedDate).toDateString()}</em>`;
@@ -231,9 +223,9 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         dayCellDidMount: function(info) {
-            const day = info.date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            const day = info.date.getDay(); 
 
-            if (day >= 3 && day <= 5) { // Wednesday to Friday
+            if (day >= 3 && day <= 5) { 
                 info.el.classList.add('highlight-wed-fri');
             }
         },
@@ -254,9 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const relation = event.extendedProps.relationship || 'N/A';
                 const recName = event.extendedProps.rec_name || 'N/A';
                 const ceremony = event.extendedProps.ceremony || 'N/A';
-                const cerDate = event.extendedProps.cer_date
-                    ? new Date(event.extendedProps.cer_date).toLocaleDateString()
-                    : 'N/A';
+                const cerDate = event.extendedProps.cer_date || 'N/A';
                 const status = event.extendedProps.status || 'N/A';
                 const remarks = event.extendedProps.remarks || null;
 
@@ -273,7 +263,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 modalTitle = "Event Details";
 
-                const title = event.title || 'Untitled Event';
+                // const title = event.title || 'Untitled Event';
+                const title = event.title ? event.title.toUpperCase() : 'UNTITLED EVENT';
                 const start = event.start ? event.start.toLocaleString() : 'N/A';
                 const end = event.end ? event.end.toLocaleString() : 'N/A';
                 const status = event.extendedProps.status || 'Scheduled';
@@ -297,7 +288,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calendar.render();
 
-    // Previous/Next buttons event listeners
     document.getElementById('prevBtn').addEventListener('click', () => {
         calendar.prev();
         openDetailDate = null;
@@ -310,9 +300,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.fc-custom-detail-row').forEach(el => el.remove());
     });
 
-    // New "Go to Current Month" button event listener
     document.getElementById('currentMonthBtn').addEventListener('click', () => {
-        calendar.today(); // This will take the calendar to the current month
+        calendar.today();
         openDetailDate = null;
         document.querySelectorAll('.fc-custom-detail-row').forEach(el => el.remove());
     });
@@ -320,14 +309,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const helpTooltip = new bootstrap.Tooltip(document.getElementById('calendarHelpIcon'), {
         title: `
             <div>
-                <div><span class="tooltip-box active-event">Active</span></div>
-                <div><span class="tooltip-box canceled-event">Canceled</span></div>
-                <div><span class="tooltip-box postponed-event">Postponed</span></div>
-                <div><span class="tooltip-box holiday-event">Holiday</span></div>
+                <div><span class="tooltip-box fc-event sched-baptism">Baptism</span></div>
+                <div><span class="tooltip-box fc-event sched-confirmation">Confirmation</span></div>
+                <div><span class="tooltip-box fc-event sched-wedding">Wedding</span></div>
+                <div><span class="tooltip-box fc-event sched-death">Funeral</span></div>
+                <div><span class="tooltip-box event-request">Request</span></div>
 
                 <hr class="my-1">
-                <div><span class="circle-indicator bg-success me-1"></span>Parish Activity</div>
-                <div><span class="circle-indicator bg-warning me-1"></span>Request</div>
+                <div><span class="circle-indicator bg-success me-1"></span>Active</div>
+                <div><span class="circle-indicator bg-danger me-1"></span>Cancelled / Rejected</div>
             </div>
         `,
         html: true,
@@ -356,9 +346,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
-    const startDate = startOfMonth.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const startDate = startOfMonth.toISOString().split('T')[0];
     const endDate = endOfMonth.toISOString().split('T')[0];
 
     fetchRequestCount(startDate, endDate);
 
 });
+
+function formatCustomDate(date) {
+    if (!(date instanceof Date)) return 'N/A';
+    return date.toLocaleString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: undefined,
+        hour12: true,
+    }).replace(':00', '').toLowerCase(); 
+}
+

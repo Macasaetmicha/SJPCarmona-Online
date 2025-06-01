@@ -22,12 +22,10 @@ function displayInProgress() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Reset add account form when modal closes
     $('#addAccountModal').on('hidden.bs.modal', function () {
         $('#accountAddForm')[0].reset();
     });
 
-    // Edit button click inside account table
     $('#accountTable tbody').on('click', '.account-edit-btn ', function (e) {
         e.preventDefault();
 
@@ -35,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let row = table.row($(this).closest('tr'));
         let data = row.data();
 
-        // Fill the edit modal inputs with row data
         $('#editAccountModal input[name="fname"]').val(data.first_name);
         $('#editAccountModal input[name="mname"]').val(data.middle_name);
         $('#editAccountModal input[name="lname"]').val(data.last_name);
@@ -43,15 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
         $('#editAccountModal input[name="contact_number"]').val(data.contact_number);
         $('#editAccountModal input[name="email"]').val(data.email);
 
-        // Store user ID in modal data for later use
         $('#editAccountModal').data('user-id', data.id);
         console.log("THIS IS THE USER-ID", data.id)
 
-        // Show edit modal
         $('#editAccountModal').modal('show');
     });
 
-    // Delete button click inside account table
     $('#accountTable tbody').on('click', '.delete-btn-account', function (e) {
         e.preventDefault();
 
@@ -76,7 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Add Account Form submission
     $("#accountAddForm").on("submit", function (event) {
         event.preventDefault();
 
@@ -237,8 +230,8 @@ async function onAuthenticateButtonClicked() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            response,   // spread the FIDO client response fields
-            user_id: userId  // include the user ID
+            response, 
+            user_id: userId 
         }),
     });
     let data = await result.json();
@@ -256,7 +249,6 @@ async function onAuthenticateButtonClicked() {
         toastr.success("Authentication successful.");
     }
 
-    // Close modal and reload table
     $("#accountAddForm")[0].reset();
     $("#authenticateAccountModal").modal("hide");
     $('#accountTable').DataTable().ajax.reload(null, false);

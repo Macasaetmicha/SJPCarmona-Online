@@ -28,16 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     buttons.forEach(button => {
         button.addEventListener('click', () => {
-            // Remove 'active' from all buttons
             buttons.forEach(btn => btn.classList.remove('active'));
 
-            // Add 'active' to the clicked button
             button.classList.add('active');
 
-            // Hide all content sections
             sections.forEach(section => section.classList.add('d-none'));
 
-            // Show the selected section
             const targetId = button.getAttribute('data-target');
             const target = document.getElementById(targetId);
             if (target) {
@@ -95,18 +91,15 @@ document.addEventListener("DOMContentLoaded", () => {
     let otpAttempts = 0;
     const maxOtpAttempts = 5;
 
-    // On modal open or changePhoneBtn click: fetch user info, mask and display
     changePhoneBtn.addEventListener('click', () => {
         document.getElementById('modalHeader').textContent = 'Verify Current Contact';
         step1.classList.remove('d-none');
         step2.classList.add('d-none');
         step3.classList.add('d-none');
 
-        // Clear OTP inputs & reset states as needed
         otpInputs.forEach(input => input.value = '');
 
 
-        // Fetch user info
         fetch('/api_db/get-current-user')
             .then(res => res.json())
             .then(user => {
@@ -118,14 +111,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log("Email: ", currentEmail)
                 console.log("ID: ", userId)
 
-                // Mask phone e.g. 09*******1234
                 if (currentPhone.length === 11) {
                     maskedCurrentPhoneEl.textContent = currentPhone.slice(0, 2) + '*******' + currentPhone.slice(-2);
                 } else {
                     maskedCurrentPhoneEl.textContent = 'Not available';
                 }
 
-                // Mask email: show first letter and domain e.g. j****@domain.com
                 if (currentEmail) {
                     const [name, domain] = currentEmail.split('@');
                     if (name.length > 1) {
@@ -144,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     });
 
-    // Helper: disable buttons and show spinner
     function setLoading(button, spinner, isLoading) {
         button.disabled = isLoading;
         if (isLoading) {
@@ -154,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Send OTP to phone
     sendOtpPhoneBtn.addEventListener('click', () => {
         if (!currentPhone) {
             toastr.error('No registered phone number found.');
@@ -188,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Send OTP to email
     sendOtpEmailBtn.addEventListener('click', () => {
         if (!currentEmail) {
             toastr.error('No registered email found.');
@@ -199,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Email: ", currentEmail)
         console.log("ID: ", userId)
 
-        fetch('/send-otp-email', {  // your email OTP endpoint
+        fetch('/send-otp-email', {  
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ user_id: userId, email: currentEmail }),
@@ -246,14 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Check for lockout before making request
         const lockoutExpiry = localStorage.getItem('otpLockoutExpiry');
         if (lockoutExpiry && Date.now() < parseInt(lockoutExpiry)) {
             toastr.error('You are temporarily locked out. Please try again later.');
             return;
         }
 
-        // Send OTP to backend
         fetch('/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -262,14 +248,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                // OTP is correct
+
                 step2.classList.add('d-none');
                 document.getElementById('modalHeader').textContent = 'Enter New Number';
                 step3.classList.remove('d-none');
             } else {
                 otpAttempts++;
                 if (otpAttempts >= maxOtpAttempts) {
-                    const lockoutDurationMs = 5 * 60 * 1000; // 5 minutes
+                    const lockoutDurationMs = 5 * 60 * 1000; 
                     localStorage.setItem('otpLockoutExpiry', (Date.now() + lockoutDurationMs).toString());
 
                     toastr.error('Maximum OTP attempts reached. Please try again after 5 minutes.');

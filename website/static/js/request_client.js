@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // FORM CODE (SHARED WITH THE STAFF REQUEST POP UP)
-    // Populate year dropdown (e.g. 1900 to current year)
     const yearSelect = document.getElementById('cer_year');
     const currentYear = new Date().getFullYear();
     console.log("Current Year: ", currentYear)
@@ -11,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
         yearSelect.appendChild(option);
     }
 
-    // Populate day dropdown (1 to 31)
     const daySelect = document.getElementById('cer_day');
     for (let d = 1; d <= 31; d++) {
         const option = document.createElement('option');
