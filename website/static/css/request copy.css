@@ -78,7 +78,7 @@
     color: var(--text-color) !important;
 }
 
-.fc-event.canceled-event, .canceled-event, .rejected-req, .cancelled-req {
+.fc-event.cancelled-event, .cancelled-event, .rejected-req, .cancelled-req {
     background-color: rgba(220, 53, 69, 0.3);  /* Red with 50% transparency */
     color: var(--text-color) !important;
 }

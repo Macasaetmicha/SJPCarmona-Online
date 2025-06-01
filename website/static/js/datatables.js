@@ -11,7 +11,6 @@ const createTable = (selector, ajaxUrl, columns) => {
     });
 };
 
-// Setup data table columns
 const recordsColumns = [
     {
         data: null,
@@ -338,24 +337,23 @@ const requestColumns = [
     { data: 'requestor' },
     { data: 'ceremony' },
     { data: 'rec_name' },
-    {
-        data: 'cer_date',
-        render: function (data, type, row) {
-            return data ? formatDateToLong(data) : 'N/A'; 
-        }
-    },
+    { data: 'cer_date'},
     {
         data: 'status',
         render: function (data, type, row) {
-            const isDisabled = data === 'cancelled' ? 'disabled' : '';
+            const isCancelled = data === 'cancelled';
+
             return `
-                <select class="form-select form-select-sm status-dropdown" data-id="${row.id}" ${isDisabled}>
-                    <option value="pending" ${data === 'pending' ? 'selected' : ''}>Pending</option>
-                    <option value="processing" ${data === 'processing' ? 'selected' : ''}>Processing</option>
-                    <option value="ready" ${data === 'ready' ? 'selected' : ''}>Ready</option>
-                    <option value="completed" ${data === 'completed' ? 'selected' : ''}>Completed</option>
-                    <option value="cancelled" ${data === 'cancelled' ? 'selected' : ''}>Cancelled</option>
-                    <option value="rejected" ${data === 'rejected' ? 'selected' : ''}>Rejected</option>
+                <select class="form-select form-select-sm status-dropdown" data-id="${row.id}" ${isCancelled ? 'disabled' : ''}>
+                    ${isCancelled 
+                        ? `<option value="cancelled" selected>Cancelled</option>` 
+                        : `
+                            <option value="pending" ${data === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="processing" ${data === 'processing' ? 'selected' : ''}>Processing</option>
+                            <option value="ready" ${data === 'ready' ? 'selected' : ''}>Ready</option>
+                            <option value="completed" ${data === 'completed' ? 'selected' : ''}>Completed</option>
+                            <option value="rejected" ${data === 'rejected' ? 'selected' : ''}>Rejected</option>
+                        `}
                 </select>
             `;
         }
@@ -431,12 +429,7 @@ const reqClientColumns = [
     },
     { data: 'rec_name' },
     { data: 'ceremony' },
-    {
-        data: 'cer_date',
-        render: function (data, type, row) {
-            return data ? formatDateToLong(data) : 'N/A'; 
-        }
-    },
+    { data: 'cer_date' },
     {
         data: 'pickup_date',
         render: function (data, type, row) {
@@ -450,7 +443,7 @@ const reqClientColumns = [
 
 ];
 
-const tables = {}; // Store multiple table instances
+const tables = {}; 
 
 $(document).ready(function() {
     tables.recordTable = createTable('#recordTable', '/api_db/records', recordsColumns);
@@ -471,14 +464,14 @@ $(document).ready(function() {
                     if (type === 'display' || type === 'filter') {
                         return formatDateTimeLong(data);
                     }
-                    return data; // Use ISO string for sorting
+                    return data; 
                 }
             },
             { data: 'action' },
             { data: 'table_name' },
             { data: 'record_id' },
             {
-                data: null, // Use `null` since we're combining multiple fields
+                data: null,
                 render: function (data, type, row) {
                     let output = `Username: ${row.changed_by || 'N/A'}<br>`;
                     if (row.changed_by_info && typeof row.changed_by_info === 'object') {
@@ -513,8 +506,8 @@ $(document).ready(function() {
         autoWidth: false,
         columnDefs: [
             { width: '160px', targets: 0 },  // changed_at
-            { width: '100px', targets: 1 },  // action
-            { width: '100px', targets: 2 },  // table_name
+            { width: '50px', targets: 1 },  // action
+            { width: '80px', targets: 2 },  // table_name
             { width: '80px',  targets: 3 },  // record_id
             { width: '120px', targets: 4 },  // changed_by
             { width: '300px', targets: 5 },  // old_data
@@ -528,7 +521,6 @@ $(document).ready(function() {
 
 
     
-    // 🔗 Handle PDF Button
     document.querySelectorAll('.btn-pdf').forEach(button => {
         button.addEventListener('click', function () {
             const tableId = this.getAttribute('data-table');
@@ -551,16 +543,12 @@ function exportAllVisibleTableToPDF(tableId, dataTable, fileName, base64Image) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('landscape');
 
-    // Temporarily show all rows
     dataTable.page.len(-1).draw();
 
-    // Clone the full table with all rows visible
     const tableClone = document.getElementById(tableId).cloneNode(true);
 
-    // Restore pagination
-    dataTable.page.len(10).draw(); // Reset to default page size
+    dataTable.page.len(10).draw();
 
-    // Remove the Action column
     const headers = tableClone.querySelectorAll('thead tr');
     const bodyRows = tableClone.querySelectorAll('tbody tr');
 
@@ -581,29 +569,25 @@ function exportAllVisibleTableToPDF(tableId, dataTable, fileName, base64Image) {
         }
     });
 
-    // Add a new <th> as first column header
     headers.forEach(row => {
         const th = document.createElement('th');
         th.textContent = '#';
         row.insertBefore(th, row.firstChild);
     });
 
-    // Add <td> with row numbers
     bodyRows.forEach((row, index) => {
         const td = document.createElement('td');
         td.textContent = index + 1;
         row.insertBefore(td, row.firstChild);
     });
-    // Add left-aligned image and text
     const imageX = 10;
     const imageY = 10;
     const imageWidth = 15;
     const imageHeight = 15;
     doc.addImage(logoBase64, 'PNG', imageX, imageY, imageWidth, imageHeight);
 
-    // Add text aligned next to image
-    const textX = imageX + imageWidth +1; // small space between image and text
-    const textY = imageY + 7;              // vertically aligned with image center
+    const textX = imageX + imageWidth +1;
+    const textY = imageY + 7;            
 
     doc.setFontSize(12);
     doc.setFont(undefined, 'bold');
@@ -613,7 +597,6 @@ function exportAllVisibleTableToPDF(tableId, dataTable, fileName, base64Image) {
     doc.setFont(undefined, 'italic');
     doc.text(`${fileName} Record`, textX, textY + 5);
 
-    // Replace all dropdowns with selected option text before exporting
     tableClone.querySelectorAll('select').forEach(select => {
         const td = select.closest('td');
         if (td) {
@@ -621,13 +604,12 @@ function exportAllVisibleTableToPDF(tableId, dataTable, fileName, base64Image) {
         }
     });
 
-    // Draw table below header
     doc.autoTable({
         html: tableClone,
-        startY: imageY + imageHeight + 5, // space after header section
+        startY: imageY + imageHeight + 5,
         theme: 'grid',
         headStyles: {
-            fillColor: [169, 169, 169],
+            fillColor: [188, 213, 197],
             textColor: [0, 0, 0],
             lineWidth: 0.3,
             lineColor: [0, 0, 0],
@@ -637,13 +619,12 @@ function exportAllVisibleTableToPDF(tableId, dataTable, fileName, base64Image) {
         styles: {
             lineWidth: 0.3,
             lineColor: [0, 0, 0],
+            textColor: [0, 0, 0],
             halign: 'left',
             valign: 'middle'
         },
         showHead: 'everyPage'
     });
-
-    // Save PDF
     doc.save(`${fileName}.pdf`);
 }
 
@@ -723,7 +704,7 @@ function formatJsonCell(data) {
     function formatDateTime(value) {
         if (!value) return '';
         const date = new Date(value);
-        if (isNaN(date)) return value; // return original if not a valid date
+        if (isNaN(date)) return value;
         return date.toLocaleString('en-PH', {
             year: 'numeric',
             month: 'short',
@@ -740,7 +721,7 @@ function formatJsonCell(data) {
 
     for (const [key, value] of Object.entries(data)) {
         if (skipFields.includes(key.toLowerCase())) {
-            continue; // skip these fields
+            continue; 
         }
 
         if (key.toLowerCase().includes('date') || key.toLowerCase().includes('time')) {

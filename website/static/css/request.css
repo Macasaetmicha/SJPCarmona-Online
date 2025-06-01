@@ -29,17 +29,24 @@
   border-top: 1px solid #ddd;
 }
 
-.event-parish .fc-daygrid-event-dot {
+.cancelled-event .fc-daygrid-event-dot,
+.postponed-event .fc-daygrid-event-dot,
+.rejected-req .fc-daygrid-event-dot,
+.cancelled-req .fc-daygrid-event-dot {
+    border: calc(var(--fc-daygrid-event-dot-width, 8px) / 2) solid #dc3545 !important;
+}
+
+.active-event .fc-daygrid-event-dot,
+.ready-req .fc-daygrid-event-dot,
+.completed-req .fc-daygrid-event-dot,
+.pending-req .fc-daygrid-event-dot,
+.processing-req .fc-daygrid-event-dot {
     border: calc(var(--fc-daygrid-event-dot-width, 8px) / 2) solid var(--primary-color);
 }
 
-.event-request .fc-daygrid-event-dot {
-    border: calc(var(--fc-daygrid-event-dot-width, 8px) / 2) solid var(--secondary-color);
-}
-
-.event-holiday .fc-daygrid-event-dot {
+/* .event-holiday .fc-daygrid-event-dot {
     border: calc(var(--fc-daygrid-event-dot-width, 8px) / 2) solid #81d4fa;
-}
+} */
 
 .today-btn {
     background-color: var(--primary-color) !important;
@@ -63,9 +70,9 @@
 }
 
 .fc-day-today {
-    background-color: #bcd5c596 !important; /* Green background with 30% transparency */
-    color: white !important; /* Change the text color to white */
-    border: 2px solid #bcd5c5 !important; /* Green border with a bit more opacity */
+    background-color: #bcd5c596 !important; 
+    color: white !important;
+    border: 2px solid #bcd5c5 !important;
 }
 
 
@@ -73,28 +80,53 @@
     color: var(--text-color) !important;
 }
 
-.fc-event.active-event, .active-event, .completed-req {
-    background-color: rgba(40, 167, 69, 0.3);  /* Green with 50% transparency */
+/* .fc-event.active-event, .active-event, .completed-req {
+    background-color: rgba(40, 167, 69, 0.3); 
     color: var(--text-color) !important;
 }
 
-.fc-event.canceled-event, .canceled-event, .rejected-req, .cancelled-req {
-    background-color: rgba(220, 53, 69, 0.3);  /* Red with 50% transparency */
+.fc-event.cancelled-event, .cancelled-event, .rejected-req, .cancelled-req {
+    background-color: rgba(220, 53, 69, 0.3); 
     color: var(--text-color) !important;
 }
 
 .fc-event.postponed-event, .postponed-event, .ready-req, .processing-req {
-    background-color: rgba(253, 126, 20, 0.3);  /* Orange with 50% transparency */
+    background-color: rgba(253, 126, 20, 0.3);
     color: var(--text-color) !important;
 }
 
 .fc-event.holiday-event, .holiday-event {
-    background-color: #81d4fa83;  /* Orange with 50% transparency */
+    background-color: #81d4fa83; 
     color: var(--text-color) !important;
 }
 
 .pending-req {
-    background-color: #f7f470c5;  /* Orange with 50% transparency */
+    background-color: #f7f470c5;  
+    color: var(--text-color) !important;
+} */
+
+.fc-event.sched-baptism {
+    background-color: #81d4fa83;
+    color: var(--text-color) !important;
+}
+
+.fc-event.sched-confirmation {
+    background-color: #f7f470c5;
+    color: var(--text-color) !important;
+}
+
+.fc-event.sched-wedding {
+    background-color: rgba(98, 20, 253, 0.3);
+    color: var(--text-color) !important;
+}
+
+.fc-event.sched-death {
+    background-color: rgba(253, 20, 20, 0.3);
+    color: var(--text-color) !important;
+}
+
+.event-request {
+    background-color:rgba(40, 167, 69, 0.3) !important;
     color: var(--text-color) !important;
 }
 

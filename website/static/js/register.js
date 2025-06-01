@@ -25,7 +25,14 @@ document.addEventListener("DOMContentLoaded", () => {
         authenticateButton.onclick = onAuthenticateButtonClicked;
     }
 
-    // Add Account Form submission
+    $("#agreeTermsBtn").on("click", function () {
+        $("#termsCheckbox").prop("checked", true).trigger("change");
+    });
+
+    $("#declineTermsBtn").on("click", function () {
+        $("#termsCheckbox").prop("checked", false).trigger("change");
+    });
+
     $("#signupForm").on("submit", function (event) {
         event.preventDefault();
 
@@ -42,6 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 $(this).removeClass("error-highlight");
             }
         });
+
+        if (!$("#termsCheckbox").is(":checked")) {
+            isValid = false;
+            toastr.warning("You must agree to the Terms and Conditions before signing up.");
+        }
 
         if (!isValid) {
             toastr.warning("Please fill in the required fields: " + missingFields.join(", "));
@@ -134,8 +146,8 @@ async function onAuthenticateButtonClicked() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            response,   // spread the FIDO client response fields
-            user_id: userId  // include the user ID
+            response, 
+            user_id: userId 
         }),
     });
     let data = await result.json();

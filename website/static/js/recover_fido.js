@@ -25,7 +25,7 @@ async function onAuthenticateButtonClicked() {
     displayInProgress();
     const userId = document.getElementById('authenticate-button-recover').dataset.userId;
 
-    let request;  // declare here for catch scope
+    let request; 
 
     try {
         request = await fetch('/api/recover/begin', {
@@ -50,8 +50,8 @@ async function onAuthenticateButtonClicked() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                response,   // spread the FIDO client response fields
-                user_id: userId  // include the user ID
+                response,
+                user_id: userId 
             }),
         });
 
@@ -79,7 +79,5 @@ async function onAuthenticateButtonClicked() {
         }
         console.error(errorMessage, err);
 
-        // optionally throw or just log
-        // throw new Error(errorMessage);
     }
 }

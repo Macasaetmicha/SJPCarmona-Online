@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function () {
         sendSMSBtn.disabled = false;
     });
 
-    // STEP 1 — Send SMS
     document.getElementById('sendSMSBtn').addEventListener('click', () => {
         sendSMSBtn.disabled = true;
         sendSMSLoading.classList.remove('d-none');
@@ -84,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('recovemailBtn').addEventListener('click', () => {
-        recovemailBtn.style.pointerEvents = 'none'; // disable clicking
+        recovemailBtn.style.pointerEvents = 'none';
         emailLoading.classList.remove('d-none');
         const userId = document.getElementById('sendSMSBtn').dataset.userId;
 
@@ -112,8 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     
-
-    // STEP 2 — Verify OTP
     verifyOtpBtn.addEventListener('click', function () {
         const otpInputs = document.querySelectorAll('.otp-box');
         const userId = document.getElementById('sendSMSBtn').dataset.userId;
@@ -124,11 +121,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Send OTP to backend (endpoint: /verify-otp) — implement separately
         fetch('/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ otp: otp , user_id:userId})  // optionally add user_id
+            body: JSON.stringify({ otp: otp , user_id:userId}) 
         })
         .then(res => res.json())
         .then(data => {
@@ -144,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Optional: clear OTP inputs on modal show
     const otpInputs = document.querySelectorAll('.otp-box');
     otpInputs.forEach((input, index) => {
         input.addEventListener('input', () => {
@@ -154,6 +149,5 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Initialize with step 1 shown
     showStep(step1);
 });

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     forgotPassBtn.addEventListener('click', () => {
-        recoveryEmailInput.value = ''; // Clear email input when modal opens
+        recoveryEmailInput.value = ''; 
     });
 
     sendEmailBtn.addEventListener('click', async () => {
@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        sendEmailBtn.disabled = true; // Disable button
-        sendEmailBtn.textContent = 'Sending...'; // Optional: show loading
+        sendEmailBtn.disabled = true;
+        sendEmailBtn.textContent = 'Sending...'; 
 
         try {
             const res = await fetch('/api_db/request-password-reset', {
@@ -39,8 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error(err);
             toastr.error('Unexpected error. Please try again later.');
         } finally {
-            sendEmailBtn.disabled = false; // Re-enable button
-            sendEmailBtn.textContent = 'Send Email'; // Restore button text
+            sendEmailBtn.disabled = false;
+            sendEmailBtn.textContent = 'Send Email';
         }
     });
 });

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    // Check if Client Record exists
     $("#checkRecBtn").on("click", function () {
         let formData = {
             fname: $("#fname").val(),
@@ -22,7 +21,6 @@ $(document).ready(function () {
                     toastr.success("Record found! Auto-filling form...");
 
                     console.log(response)
-                    // Auto-fill client details
                     $("#rec_id").val(response.client.id);
                     $("#rec_moID").val(response.parents.mother.id);
                     $("#rec_faID").val(response.parents.father.id);
@@ -36,7 +34,6 @@ $(document).ready(function () {
                     fetch(`/api_db/get-provinces/${response.client.region}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Populate dropdown
                             data.forEach(province => {
                                 const option = document.createElement("option");
                                 option.value = province.id;
@@ -44,7 +41,6 @@ $(document).ready(function () {
                                 $("#province").append(option);
                             });
 
-                            // Autofill province after data is loaded
                             $("#province").val(response.client.province).trigger("change").prop("disabled", true);
                         });
 
@@ -76,7 +72,6 @@ $(document).ready(function () {
                     $("#addressLine").val(response.client.address).prop("disabled", true);
                     $(".addressLine").addClass("readOnly");
 
-                    // Auto-fill mother details if available
                     if (response.parents.mother) {
                         $("#mofname").val(response.parents.mother.first_name).prop("disabled", true);                        ;
                         $(".mofname").addClass("readOnly");
@@ -92,7 +87,6 @@ $(document).ready(function () {
                         $(".moaddress").addClass("readOnly");
                     }
 
-                    // Auto-fill father details if available
                     if (response.parents.father) {
                         $("#fafname").val(response.parents.father.first_name).prop("disabled", true);
                         $(".fafname").addClass("readOnly");
@@ -153,7 +147,6 @@ $(document).ready(function () {
                     toastr.success("Record found! Auto-filling form...");
 
                     console.log(response)
-                    // Auto-fill client details
                     $("#rec_GroomID").val(response.client.id);
                     $("#rec_GroomMoID").val(response.parents.mother.id);
                     $("#rec_GroomFaID").val(response.parents.father.id);
@@ -167,7 +160,6 @@ $(document).ready(function () {
                     fetch(`/api_db/get-provinces/${response.client.region}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Populate dropdown
                             data.forEach(province => {
                                 const option = document.createElement("option");
                                 option.value = province.id;
@@ -175,7 +167,6 @@ $(document).ready(function () {
                                 $("#GroomProvince").append(option);
                             });
 
-                            // Autofill province after data is loaded
                             $("#GroomProvince").val(response.client.province).trigger("change").prop("disabled", true);
                         });
 
@@ -207,7 +198,6 @@ $(document).ready(function () {
                     $("#GroomAddressLine").val(response.client.address).prop("disabled", true);
                     $(".addressLinGroomAddressLinee").addClass("readOnly");
 
-                    // Auto-fill mother details if available
                     if (response.parents.mother) {
                         $("#GroomMoFname").val(response.parents.mother.first_name).prop("disabled", true);                        ;
                         $(".GroomMoFname").addClass("readOnly");
@@ -223,7 +213,6 @@ $(document).ready(function () {
                         $(".GroomMoAddress").addClass("readOnly");
                     }
 
-                    // Auto-fill father details if available
                     if (response.parents.father) {
                         $("#GroomFaFname").val(response.parents.father.first_name).prop("disabled", true);
                         $(".GroomFaFname").addClass("readOnly");
@@ -284,7 +273,6 @@ $(document).ready(function () {
                     toastr.success("Record found! Auto-filling form...");
 
                     console.log(response)
-                    // Auto-fill client details
                     $("#rec_BrideID").val(response.client.id);
                     $("#rec_BrideMoID").val(response.parents.mother.id);
                     $("#rec_BrideFaID").val(response.parents.father.id);
@@ -298,7 +286,6 @@ $(document).ready(function () {
                     fetch(`/api_db/get-provinces/${response.client.region}`)
                         .then(response => response.json())
                         .then(data => {
-                            // Populate dropdown
                             data.forEach(province => {
                                 const option = document.createElement("option");
                                 option.value = province.id;
@@ -306,7 +293,6 @@ $(document).ready(function () {
                                 $("#BrideProvince").append(option);
                             });
 
-                            // Autofill province after data is loaded
                             $("#BrideProvince").val(response.client.province).trigger("change").prop("disabled", true);
                         });
 
@@ -338,7 +324,6 @@ $(document).ready(function () {
                     $("#BrideAddressLine").val(response.client.address).prop("disabled", true);
                     $(".addressLinBrideAddressLinee").addClass("readOnly");
 
-                    // Auto-fill mother details if available
                     if (response.parents.mother) {
                         $("#BrideMoFname").val(response.parents.mother.first_name).prop("disabled", true);                        ;
                         $(".BrideMoFname").addClass("readOnly");
@@ -354,7 +339,6 @@ $(document).ready(function () {
                         $(".BrideMoAddress").addClass("readOnly");
                     }
 
-                    // Auto-fill father details if available
                     if (response.parents.father) {
                         $("#BrideFaFname").val(response.parents.father.first_name).prop("disabled", true);
                         $(".BrideFaFname").addClass("readOnly");
