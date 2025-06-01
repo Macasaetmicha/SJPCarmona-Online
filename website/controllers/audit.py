@@ -1,5 +1,3 @@
-# yourapp/audit.py
-
 from .. import db
 from sqlalchemy import event
 from ..models import AuditLog
@@ -20,11 +18,11 @@ def get_current_user_info():
 def to_serializable(value):
     if isinstance(value, (datetime, date)):
         return value.isoformat()
-    elif hasattr(value, "__tablename__"):  # SQLAlchemy model instance
+    elif hasattr(value, "__tablename__"): 
         return str(value)
-    elif hasattr(value, "name"):  # Enum (e.g. EnumClass.VALUE)
+    elif hasattr(value, "name"):
         return value.name
-    elif hasattr(value, "value"):  # Enum (e.g. VALUE.value)
+    elif hasattr(value, "value"): 
         return value.value
     return value
 

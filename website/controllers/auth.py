@@ -28,16 +28,16 @@ def login():
     
         if request.method == 'POST':
             email = request.form.get('email')
-            password = request.form.get('password')
+            # password = request.form.get('password')
     
             user = User.query.filter_by(email=email).first()
     
             if user:
-                if check_password_hash(user.password, password):
-                    start_fido_session(user.id)
-                    return redirect('/login_fido')
-                else:
-                    flash('Incorrect password, try again.', category='error')
+                # if check_password_hash(user.password, password):
+                start_fido_session(user.id)
+                return redirect('/login_fido')
+                # else:
+                #     flash('Incorrect password, try again.', category='error')
             else:
                 flash('Email does not exist.', category='error')
     
@@ -49,14 +49,10 @@ def login():
 
 @auth.route('/login_fido')
 def login_fido():
-    """This route returns the HTML for the fido-login page. This page can only be accessed if the user has a valid
-    fido-session."""
 
-    # logged-in users don't have to log in
     if flask_login.current_user.is_authenticated:
         return redirect("/home")
 
-    # check if there is a fido-session
     user_id = get_user_id()
     print('USER ID CHECK2')
     print(user_id)
@@ -98,10 +94,10 @@ def signupUser():
         username = request.form.get('username')
         contact_number = request.form.get('contact_number')
         email = request.form.get('email')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
+        # password = request.form.get('password')
+        # confirm_password = request.form.get('confirm_password')
 
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
+        # hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
         
         existing_user = User.query.filter(
             and_(
@@ -125,7 +121,7 @@ def signupUser():
 
         if not re.match(r'^09\d{9}$', contact_number):
             return jsonify({
-                "error": "Invalid contact number format. Use 09XXXXXXXXX.",
+                "error": "Invalid contact number.",
                 "type": "warning"
             }), 400
             
@@ -141,22 +137,20 @@ def signupUser():
                 "type": "warning"
             }), 409
 
-        if len(password) < 8:
-            return jsonify({
-                "error": "Password must be at least 8 characters long.",
-                "type": "warning"
-            }), 400
+        # if len(password) < 8:
+        #     return jsonify({
+        #         "error": "Password must be at least 8 characters long.",
+        #         "type": "warning"
+        #     }), 400
             
-        if password != confirm_password:
-            return jsonify({
-                "error": "Passwords do not match.",
-                "type": "warning"
-            }), 409
+        # if password != confirm_password:
+        #     return jsonify({
+        #         "error": "Passwords do not match.",
+        #         "type": "warning"
+        #     }), 409
 
-        # Generate a temporary UUID
         temp_id = str(uuid.uuid4())
 
-        # Store the data server-side
         session[f"temp_user_{temp_id}"] = {
             "username": username,
             "first_name": first_name,
@@ -164,7 +158,7 @@ def signupUser():
             "last_name": last_name,
             "contact_number": contact_number,
             "email": email,
-            "password": hashed_password,
+            # "password": hashed_password,
             "role": UserRole.CLIENT.value
         }
 
@@ -174,7 +168,7 @@ def signupUser():
             "status": "ok",
             "type":"info",
             "message": "Account data received. Proceed with authentication.",
-            "temp_id": temp_id  # or store in server-side session
+            "temp_id": temp_id
         })
     except Exception as e:
         db.session.rollback()
@@ -211,10 +205,10 @@ def submit_account():
         username = request.form.get('username')
         contact_number = request.form.get('contact_number')
         email = request.form.get('email')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
+        # password = request.form.get('password')
+        # confirm_password = request.form.get('confirm_password')
 
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
+        # hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
 
         existing_user = User.query.filter(
             and_(
@@ -238,7 +232,7 @@ def submit_account():
 
         if not re.match(r'^09\d{9}$', contact_number):
             return jsonify({
-                "error": "Invalid contact number format. Use 09XXXXXXXXX.",
+                "error": "Invalid contact number.",
                 "type": "warning"
             }), 400
 
@@ -254,22 +248,20 @@ def submit_account():
                 "type": "warning"
             }), 409
 
-        if len(password) < 8:
-            return jsonify({
-                "error": "Password must be at least 8 characters long.",
-                "type": "warning"
-            }), 400
+        # if len(password) < 8:
+        #     return jsonify({
+        #         "error": "Password must be at least 8 characters long.",
+        #         "type": "warning"
+        #     }), 400
             
-        if password != confirm_password:
-            return jsonify({
-                "error": "Passwords do not match.",
-                "type": "warning"
-            }), 409
+        # if password != confirm_password:
+        #     return jsonify({
+        #         "error": "Passwords do not match.",
+        #         "type": "warning"
+        #     }), 409
 
-        # Generate a temporary UUID
         temp_id = str(uuid.uuid4())
 
-        # Store the data server-side
         session[f"temp_user_{temp_id}"] = {
             "username": username,
             "first_name": first_name,
@@ -277,36 +269,16 @@ def submit_account():
             "last_name": last_name,
             "contact_number": contact_number,
             "email": email,
-            "password": hashed_password,
+            # "password": hashed_password,
             "role": UserRole.STAFF.value
         }
-
-        # new_user = User(
-        #     username=username,
-        #     first_name=first_name,
-        #     middle_name=middle_name,
-        #     last_name=last_name,
-        #     contact_number=contact_number,
-        #     email=email,
-        #     password=hashed_password,
-        #     role=UserRole.STAFF
-        # )
-
-        # db.session.add(new_user)
-        # db.session.commit()
 
         return jsonify({
             "status": "ok",
             "type":"info",
             "message": "Account data received. Proceed with authentication.",
-            "temp_id": temp_id  # or store in server-side session
+            "temp_id": temp_id 
         })
-
-        # return jsonify({
-        #     "message": "Proceed to authentication",
-        #     "user_id": new_user.id,
-        #     "type": "success"
-        # }), 200
 
     except Exception as e:
         db.session.rollback()
@@ -328,14 +300,12 @@ def edit_account(user_id):
         if not user:
             return jsonify({"message": "User not found.", "type": "error"}), 404
 
-        # Prepare new values
         fname = data.get("fname", user.first_name)
         mname = data.get("mname", user.middle_name or "")
         lname = data.get("lname", user.last_name)
         username = data.get("username", user.username)
         email = data.get("email", user.email)
 
-        # Check for duplicate name
         duplicate_name = User.query.filter(
             User.first_name == fname,
             User.middle_name == mname,
@@ -348,19 +318,16 @@ def edit_account(user_id):
                 "type": "error"
             }), 400
 
-        # Check for duplicate username
         if 'username' in data:
             existing_user = User.query.filter(User.username == username, User.id != user_id).first()
             if existing_user:
                 return jsonify({"message": "Username already taken.", "type": "error"}), 400
 
-        # Check for duplicate email
         if 'email' in data:
             existing_email = User.query.filter(User.email == email, User.id != user_id).first()
             if existing_email:
                 return jsonify({"message": "Email already in use.", "type": "error"}), 400
 
-        # Update user fields
         user.first_name = fname
         user.middle_name = mname
         user.last_name = lname
@@ -398,37 +365,32 @@ def send_otp():
         if not user:
             return jsonify({'error': 'User not found'}), 404
 
-        # Normalize phone numbers if needed (e.g. remove spaces, dashes)
         normalized_input_phone = phone.strip()
         normalized_user_phone = user.contact_number.strip()
 
-        # Check if phone matches the one on record
         if normalized_input_phone != normalized_user_phone:
             return jsonify({'error': 'Phone number does not match our records'}), 401
 
 
-        # # Generate 6-digit OTP
-        # otp = f"{random.randint(100000, 999999)}"
-        otp = 123456
+        # otp = 123456
+        otp = f"{random.randint(100000, 999999)}"
         manila = pytz.timezone("Asia/Manila")
         now_local = datetime.now(manila)
-        expiration = now_local + timedelta(minutes=5)
+        expiration = now_local + timedelta(minutes=15)
 
-        # expiration = datetime.now(timezone.utc) + timedelta(minutes=5)
-        
-        # Store in DB
         user.otp_code = otp
         user.otp_expiration = expiration
         db.session.commit()
 
-        # # Send SMS
-        # message = f'Your OTP is {otp}. It will expire in 5 minutes.'
-        # result = send_verification_sms(phone, message, sender_name='SJP Carmona')
+        # Send SMS
+        message = f'Your OTP is {otp}. It will expire in 15 minutes.'
+        result = send_verification_sms(phone, message, sender_name='SJPCarmona')
 
-        # if result:
-        #     return jsonify({'message': 'OTP sent successfully'}), 200
-        # else:
-        #     return jsonify({'error': 'Failed to send OTP'}), 500
+        if result:
+            return jsonify({'message': 'OTP sent successfully It may take 2-5 minutes to arrive.'}), 200
+        else:
+            return jsonify({'error': 'Failed to send OTP'}), 500
+
         return jsonify({'message': 'OTP sent successfully'}), 200
     except Exception as e:
         print("Error in send_otp:", e)
@@ -451,19 +413,18 @@ def send_otp_email():
             return jsonify({'error': 'User has no email address on record'}), 400
 
         otp = f"{random.randint(100000, 999999)}"
-        # Generate or reuse OTP logic
-        # otp = 123456  # For testing; use: f"{random.randint(100000, 999999)}" in production
+        # otp = 123456 
 
         manila = pytz.timezone("Asia/Manila")
         now_local = datetime.now(manila)
         expiration = now_local + timedelta(minutes=5)
 
-        # Store OTP in DB
+      
         user.otp_code = otp
         user.otp_expiration = expiration
         db.session.commit()
 
-        # Send OTP via Email
+    
         msg = Message(
             subject='Your OTP Code for Account Recovery',
             recipients=[user.email],
@@ -504,7 +465,7 @@ def verify_otp():
         if datetime.now(timezone.utc) > otp_exp:
             return jsonify({'error': 'OTP expired'}), 400
     
-        # Invalidate OTP
+     
         user.otp_code = None
         user.otp_expiration = None
         db.session.commit()
@@ -516,14 +477,10 @@ def verify_otp():
 
 @auth.route('/recover_fido')
 def recover_fido():
-    """This route returns the HTML for the fido-login page. This page can only be accessed if the user has a valid
-    fido-session."""
 
-    # logged-in users don't have to log in
     if flask_login.current_user.is_authenticated:
         return redirect("/home")
 
-    # check if there is a fido-session
     user_id = get_user_id()
     print('USER ID CHECK2')
     print(user_id)

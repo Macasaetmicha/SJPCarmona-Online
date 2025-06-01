@@ -11,7 +11,7 @@ def dashboard():
     print(current_user.role)
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     return render_template("dashboard.html", active_page='dashboard', user=current_user, UserRole=UserRole)
 
 @admin.route('/records', methods=['GET', 'POST'])
@@ -19,7 +19,7 @@ def dashboard():
 def records():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     
     return render_template("records.html", active_page='records', user=current_user, UserRole=UserRole)
 
@@ -28,7 +28,7 @@ def records():
 def preist():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     return render_template("priest.html", active_page='priest', user=current_user, UserRole=UserRole)
 
 @admin.route('/baptism')
@@ -36,7 +36,7 @@ def preist():
 def baptism():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     return render_template("baptism.html", active_page='baptism', user=current_user, UserRole=UserRole)
 
 @admin.route('/confirmation')
@@ -44,7 +44,7 @@ def baptism():
 def confirmation():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     return render_template("confirmation.html", active_page='confirmation', user=current_user, UserRole=UserRole)
 
 @admin.route('/wedding')
@@ -52,7 +52,7 @@ def confirmation():
 def wedding():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     return render_template("wedding.html", active_page='wedding', user=current_user, UserRole=UserRole)
 
 @admin.route('/death')
@@ -60,7 +60,7 @@ def wedding():
 def death():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     return render_template("death.html", active_page='death', user=current_user, UserRole=UserRole)
 
 @admin.route('/requests')
@@ -68,7 +68,7 @@ def death():
 def requests():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     
     return render_template("request.html", active_page='requestAdmin', user=current_user, UserRole=UserRole)
 
@@ -77,7 +77,7 @@ def requests():
 def report():
     if current_user.role not in [UserRole.ADMIN, UserRole.STAFF]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     
     return render_template("reports.html", active_page='report', user=current_user, UserRole=UserRole)
 
@@ -86,7 +86,7 @@ def report():
 def audit_log():
     if current_user.role not in [UserRole.ADMIN]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     logs = AuditLog.query.order_by(AuditLog.changed_at.desc()).all()
     return render_template("audit.html", active_page='audit', logs=logs, user=current_user, UserRole=UserRole)
 
@@ -95,7 +95,7 @@ def audit_log():
 def accounts():
     if current_user.role not in [UserRole.ADMIN]:
         flash('You do not have the credential to access this page.', category='warning')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('auth.login'))
     
     return render_template("accounts.html", active_page='accounts', user=current_user, UserRole=UserRole)
 
