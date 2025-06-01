@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(255), unique=False, nullable=False)
     contact_number = db.Column(db.String(255), unique=True, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
+    password = db.Column(db.String(255), nullable=True)
     fido_info = db.Column(db.Text, default="")
 
     date_created = db.Column(db.DateTime(timezone=True), default=func.now(), nullable=False)

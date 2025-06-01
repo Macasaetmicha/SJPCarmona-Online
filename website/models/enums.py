@@ -66,6 +66,6 @@ class SchedType(enum.Enum):
 
 class SchedStatus(enum.Enum):
     active = "active"
-    canceled = "canceled"
+    cancelled = "cancelled"
     postponed = "postponed"
     holiday = "holiday"
