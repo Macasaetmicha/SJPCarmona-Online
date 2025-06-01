@@ -1505,6 +1505,8 @@ def get_audits():
         for key, value in data_dict.items():
             if key == "fido_info":
                 sanitized[key] = "*****"  
+            elif key == "otp_code":
+                sanitized[key] = "*****"  
             else:
                 sanitized[key] = value
         return sanitized

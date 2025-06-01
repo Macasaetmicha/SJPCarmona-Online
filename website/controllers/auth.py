@@ -305,6 +305,7 @@ def edit_account(user_id):
         lname = data.get("lname", user.last_name)
         username = data.get("username", user.username)
         email = data.get("email", user.email)
+        role = data.get("role", user.role.value)
 
         duplicate_name = User.query.filter(
             User.first_name == fname,
@@ -334,6 +335,7 @@ def edit_account(user_id):
         user.username = username
         user.contact_number = data.get("contact_number", user.contact_number)
         user.email = email
+        user.role = role
 
         db.session.commit()
 
