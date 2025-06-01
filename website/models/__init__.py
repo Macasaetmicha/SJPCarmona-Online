@@ -1,4 +1,4 @@
-print("Importing models...")  # Debugging line
+print("Importing models...") 
 from .. import db
 
 from .user import User
