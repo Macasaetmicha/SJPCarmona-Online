@@ -366,6 +366,10 @@ const accountColumns = [
     {
         data: null,
         render: function (data, type, row) {
+            console.log(row.role)
+            if (row.role === 'ADMIN') {
+                return ''; 
+            }
             return `
                 <button class="btn btn-primary account-edit-btn edit-btn" data-id="${row.id}" data-bs-toggle="modal" data-bs-target="#editAccountModal">
                     <i class="fa-solid fa-edit fa-fw"></i>
